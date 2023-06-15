@@ -20,6 +20,7 @@ import { sliderHandler } from './Umbraco.Slider';
 import { tagsHandler } from './Umbraco.Tags';
 import { radioButtonListHandler } from './Umbraco.RadioButtonList';
 import { checkboxListHandler } from './Umbraco.CheckBoxList';
+import { multiurlPickerHandler } from './Umbraco.MultiUrlPicker';
 
 export type HandlerConfig = {
 	editorAlias: string;
@@ -41,6 +42,7 @@ export const dataTypeMap: {
 	[eyedropperHandler.editorAlias]: eyedropperHandler,
 	[integerHandler.editorAlias]: integerHandler,
 	[labelHandler.editorAlias]: labelHandler,
+	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
 	[noaBlockListHandler.editorAlias]: noaBlockListHandler,
 	[noaDropdownHandler.editorAlias]: noaDropdownHandler,
 	[radioButtonListHandler.editorAlias]: radioButtonListHandler,
