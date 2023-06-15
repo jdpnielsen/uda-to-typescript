@@ -20,6 +20,8 @@ export const documentHandler: HandlerConfig = {
 function build(documentType: DocumentType, artifacts: ArtifactContainer, ): ts.Node[] {
 	const variableIdentifier = pascalCase(documentType.Alias);
 
+	// TODO: Handle cultures
+
 	const properties = [
 		...documentType.PropertyTypes,
 		...documentType.PropertyGroups.flatMap((group) => group.PropertyTypes),

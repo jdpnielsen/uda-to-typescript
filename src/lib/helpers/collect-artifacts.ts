@@ -6,6 +6,7 @@ import { DataType } from '../types/data-type';
 import { DocumentType } from '../types/document-type';
 import { MediaType } from '../types/media-type';
 
+// TODO: Implement culture artifact
 export type ArtifactContainer = {
 	'data-type': Map<string, DataType>;
 	'document-type': Map<string, DocumentType>;
