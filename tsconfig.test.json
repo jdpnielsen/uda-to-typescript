@@ -2,19 +2,14 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"types": [
-			"node",
 			"jest"
 		]
 	},
 	"include": [
 		"*.ts",
 		"*.js",
-		".eslintrc.js",
 		"src/**/*.spec.ts",
 		"**/*.ts",
 		"**/*.js"
 	],
-	"exclude": [
-		"node_modules",
-	]
 }

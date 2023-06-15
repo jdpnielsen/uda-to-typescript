@@ -1,0 +1,30 @@
+{
+  "Name": "Dropdown multiple",
+  "Alias": "",
+  "EditorAlias": "Umbraco.DropDown.Flexible",
+  "DatabaseType": 1,
+  "Configuration": {
+    "multiple": true,
+    "items": [
+      {
+        "id": 1,
+        "value": "first"
+      },
+      {
+        "id": 2,
+        "value": "Second"
+      }
+    ]
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/f38f0ac71d27439c9f3f089cd8825a53",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true,
+      "Mode": 0
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "11.1.0"
+}

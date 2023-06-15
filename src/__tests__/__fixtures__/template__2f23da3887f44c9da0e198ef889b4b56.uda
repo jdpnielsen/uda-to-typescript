@@ -1,0 +1,16 @@
+{
+  "Name": "Preview",
+  "Alias": "Preview",
+  "File": "umb://template-file/Preview.cshtml",
+  "Master": null,
+  "Udi": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+  "Dependencies": [
+    {
+      "Udi": "umb://template-file/Preview.cshtml",
+      "Ordering": true,
+      "Mode": 0
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.TemplateArtifact",
+  "__version": "11.1.0"
+}

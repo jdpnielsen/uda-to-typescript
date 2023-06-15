@@ -1,0 +1,76 @@
+{
+  "Name": "Page",
+  "Alias": "page",
+  "DefaultTemplate": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+  "AllowedTemplates": [
+    "umb://template/2f23da3887f44c9da0e198ef889b4b56"
+  ],
+  "HistoryCleanup": {
+    "preventCleanup": false,
+    "keepAllVersionsNewerThanDays": null,
+    "keepLatestVersionPerDayForDays": null
+  },
+  "Icon": "icon-search color-black",
+  "Thumbnail": "folder.png",
+  "Description": null,
+  "IsContainer": false,
+  "Permissions": {
+    "AllowVaryingByCulture": false,
+    "AllowVaryingBySegment": false,
+    "AllowedAtRoot": false,
+    "IsElementType": false,
+    "AllowedChildContentTypes": []
+  },
+  "Parent": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
+  "CompositionContentTypes": [],
+  "PropertyGroups": [
+    {
+      "Key": "d9c8d650-ae2c-4078-b7bf-f967fe3cfd56",
+      "Name": "Content",
+      "SortOrder": 0,
+      "Type": 0,
+      "Alias": "content",
+      "PropertyTypes": [
+        {
+          "Key": "9bb9b7f5-3ecd-4ac9-9a0a-ff290697b68f",
+          "Alias": "title",
+          "DataType": "umb://data-type/f38f0ac71d27439c9f3f089cd8825a53",
+          "Description": null,
+          "Mandatory": true,
+          "MandatoryMessage": null,
+          "Name": "Title",
+          "SortOrder": 0,
+          "Validation": null,
+          "ValidationMessage": null,
+          "VariesByCulture": false,
+          "VariesBySegment": false,
+          "LabelOnTop": false,
+          "MemberCanEdit": false,
+          "ViewOnProfile": false,
+          "IsSensitive": false
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/1ab5ade5519e42709b4cc554968d97c9",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/f38f0ac71d27439c9f3f089cd8825a53",
+      "Ordering": true,
+      "Mode": 0
+    },
+    {
+      "Udi": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
+      "Ordering": true,
+      "Mode": 0
+    },
+    {
+      "Udi": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+      "Ordering": true,
+      "Mode": 0
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "11.1.1"
+}

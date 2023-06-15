@@ -116,4 +116,5 @@ dist
 .pnp.*
 
 # Compiled code
-lib/
+./lib/
+src/__tests__/__fixtures__/output.ts

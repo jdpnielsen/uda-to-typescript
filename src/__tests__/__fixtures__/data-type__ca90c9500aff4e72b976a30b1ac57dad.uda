@@ -1,0 +1,21 @@
+{
+  "Name": "Richtext editor",
+  "Alias": "",
+  "EditorAlias": "Umbraco.TinyMCE",
+  "DatabaseType": 0,
+  "Configuration": {
+    "hideLabel": false,
+    "ignoreUserStartNodes": false
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dad",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true,
+      "Mode": 0
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "10.1.2"
+}

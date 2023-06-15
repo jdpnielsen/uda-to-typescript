@@ -1,0 +1,18 @@
+{
+  "Name": "Textstring",
+  "Alias": "",
+  "EditorAlias": "Umbraco.TextBox",
+  "DatabaseType": 1,
+  "Configuration": {},
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true,
+      "Mode": 0
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "11.1.0"
+}
