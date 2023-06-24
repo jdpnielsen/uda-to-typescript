@@ -14,11 +14,11 @@ export function build(): ts.Node[] {
 
 export function reference(): ts.TypeNode {
 	/**
-	 * Output: BaseDocumentType | null;
+	 * Output: PickableDocumentType | null;
 	 */
 	return maybeNull(
 		factory.createTypeReferenceNode(
-			factory.createIdentifier('BaseDocumentType'),
+			factory.createIdentifier('PickableDocumentType'),
 		)
 	);
 }

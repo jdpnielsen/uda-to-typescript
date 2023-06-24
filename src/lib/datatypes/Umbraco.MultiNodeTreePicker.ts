@@ -42,11 +42,11 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 
 	if (!config.filter) {
 		/**
-		 * Output: BaseDocumentType[];
+		 * Output: PickableDocumentType[];
 		 */
 		return factory.createArrayTypeNode(
 			factory.createTypeReferenceNode(
-				factory.createIdentifier('BaseDocumentType'),
+				factory.createIdentifier('PickableDocumentType'),
 			)
 		);
 	}

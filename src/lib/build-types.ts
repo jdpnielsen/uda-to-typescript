@@ -1,9 +1,10 @@
-import ts from 'typescript';
+import ts, { factory } from 'typescript';
 
 import { ArtifactContainer } from './helpers/collect-artifacts';
 import { dataTypeMap } from './datatypes';
 import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
+import { getPickableDocumentTypes } from './helpers/pickable-document-type';
 
 export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> {
 	const dataTypes = Array.from(artifacts['data-type'].entries())
@@ -97,9 +98,25 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 		if (nodes) {
 			statements.push(
 				ts.factory.createIdentifier('\n'),
-				...nodes
+				...nodes,
 			);
 		}
+	}
+
+	/** Build union of pickable datatypes */
+	if (documentTypes.length !== 0) {
+		statements.push(
+			ts.factory.createIdentifier('\n'),
+			ts.factory.createTypeAliasDeclaration(
+				[factory.createToken(ts.SyntaxKind.ExportKeyword)],
+				factory.createIdentifier('PickableDocumentType'),
+				undefined,
+				ts.factory.createUnionTypeNode(
+					getPickableDocumentTypes(artifacts)
+						.map((documentType) => documentHandler.reference(documentType, artifacts))
+				),
+			),
+		);
 	}
 
 	return ts.factory.createNodeArray(statements);
