@@ -4,5 +4,12 @@ import type { HandlerConfig } from '.';
 export const tinyMCEHandler: HandlerConfig = {
 	editorAlias: 'Umbraco.TinyMCE',
 	build: () => [],
-	reference: () => factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+	reference: () => factory.createTypeLiteralNode([
+		factory.createPropertySignature(
+			undefined,
+			factory.createIdentifier('markup'),
+			undefined,
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+		)
+	]),
 }
