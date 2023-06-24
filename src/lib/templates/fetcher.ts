@@ -6,15 +6,22 @@ type SortDirection = 'asc' | 'desc';
 
 interface QueryOptions<T extends BaseDocumentType> {
 	expand?: ExpandParam<T>;
-	contentType?: string;
-	name?: string;
+	filter?: {
+		contentType?: string;
+		name?: string;
+	};
+	fetch?: {
+		ancestors?: string;
+		children?: string;
+		descendants?: string;
+	};
 	sort?: {
 		createDate?: SortDirection;
 		updateDate?: SortDirection;
 		level?: SortDirection;
 		name?: SortDirection;
 		sortOrder?: SortDirection;
-	}
+	};
 }
 
 function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) {
@@ -26,12 +33,24 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 		queryParams.append('expand', 'property:' + options.expand.join(','));
 	}
 
-	if (options.contentType) {
-		queryParams.set('filter', 'contentType:' + options.contentType);
+	if (options.fetch?.ancestors) {
+		queryParams.set('fetch', 'ancestors:' + options.fetch.ancestors);
 	}
 
-	if (options.name) {
-		queryParams.set('filter', 'name:' + options.name);
+	if (options.fetch?.descendants) {
+		queryParams.set('fetch', 'descendants:' + options.fetch.descendants);
+	}
+
+	if (options.fetch?.children) {
+		queryParams.set('fetch', '?.children:' + options.fetch?.children);
+	}
+
+	if (options.filter?.contentType) {
+		queryParams.set('filter', 'contentType:' + options.filter.contentType);
+	}
+
+	if (options.filter?.name) {
+		queryParams.set('filter', 'name:' + options.filter.name);
 	}
 
 	if (options.sort) {
