@@ -6,6 +6,9 @@ Inspired by [node-cli-boilerplate](https://github.com/sindresorhus/node-cli-boil
 
 ## Getting started
 
+Test command: 
+npm run start -- --input '../Umbraco-CMS/src/Umbraco.Web.UI/umbraco/Deploy/Revision//*.uda' --output ./dist/output.ts && npx eslint ./dist --fix
+
 ### Set up your repository
 
 **Click the "Use this template" button.**

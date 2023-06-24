@@ -47,28 +47,21 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 				return;
 			}
 
-			return factory.createTypeLiteralNode([
-				factory.createPropertySignature(
-					undefined,
-					factory.createStringLiteral('content'),
-					undefined,
+			return factory.createTypeReferenceNode(
+				factory.createIdentifier('BaseBlockType'),
+				[
 					factory.createTypeReferenceNode(
 						factory.createIdentifier(pascalCase(contentElement.Alias))
-					)
-				),
-				factory.createPropertySignature(
-					undefined,
-					factory.createStringLiteral('settings'),
-					undefined,
+					),
 					settingsElement
 						? factory.createTypeReferenceNode(
 							factory.createIdentifier(pascalCase(settingsElement.Alias))
 						)
 						: factory.createLiteralTypeNode(factory.createNull())
-				)
-			]);
+				]
+			);
 		})
-		.filter((e): e is ts.TypeLiteralNode => !!e);
+		.filter((e): e is ts.TypeReferenceNode => !!e);
 
 	return [
 		factory.createTypeAliasDeclaration(
@@ -88,10 +81,8 @@ function reference(dataType: DataType): ts.TypeNode {
 		undefined
 	);
 
-	return factory.createTypeLiteralNode([factory.createPropertySignature(
-		undefined,
-		factory.createIdentifier('items'),
-		undefined,
-		factory.createArrayTypeNode(baseType)
-	)])
+	return factory.createTypeReferenceNode(
+		factory.createIdentifier('BaseBlockListType'),
+		[baseType],
+	);
 }

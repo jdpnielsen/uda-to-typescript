@@ -1,4 +1,5 @@
 import ts from 'typescript';
+
 import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { DataType } from '../types/data-type';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
@@ -21,6 +22,9 @@ import { tagsHandler } from './Umbraco.Tags';
 import { radioButtonListHandler } from './Umbraco.RadioButtonList';
 import { checkboxListHandler } from './Umbraco.CheckBoxList';
 import { multiurlPickerHandler } from './Umbraco.MultiUrlPicker';
+import { contentPickerHandler } from './Umbraco.ContentPicker';
+import { blockGridHandler } from './Umbraco.BlockGrid';
+import { multiNodePickerHandler } from './Umbraco.MultiNodeTreePicker';
 
 export type HandlerConfig = {
 	editorAlias: string;
@@ -32,9 +36,16 @@ export type HandlerConfig = {
 export const dataTypeMap: {
 	[EditorAlias: string]: HandlerConfig
 } = {
+	// TODO: Umbraco.UploadField
+	// TODO: Umbraco.MediaPicker3
+	// TODO: Umbraco.ImageCropper
+	// TODO: Umbraco.MultipleTextstring
+	// TODO: Umbraco.MarkdownEditor
+	[blockGridHandler.editorAlias]: blockGridHandler,
 	[blockListHandler.editorAlias]: blockListHandler,
 	[checkboxListHandler.editorAlias]: checkboxListHandler,
 	[colorPickerHandler.editorAlias]: colorPickerHandler,
+	[contentPickerHandler.editorAlias]: contentPickerHandler,
 	[dateTimeHandler.editorAlias]: dateTimeHandler,
 	[decimalHandler.editorAlias]: decimalHandler,
 	[dropdownHandler.editorAlias]: dropdownHandler,
@@ -43,6 +54,7 @@ export const dataTypeMap: {
 	[integerHandler.editorAlias]: integerHandler,
 	[labelHandler.editorAlias]: labelHandler,
 	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
+	[multiNodePickerHandler.editorAlias]: multiNodePickerHandler,
 	[noaBlockListHandler.editorAlias]: noaBlockListHandler,
 	[noaDropdownHandler.editorAlias]: noaDropdownHandler,
 	[radioButtonListHandler.editorAlias]: radioButtonListHandler,

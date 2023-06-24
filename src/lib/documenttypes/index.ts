@@ -4,8 +4,6 @@ import { pascalCase } from 'change-case';
 import { dataTypeMap } from '../datatypes';
 import { parseUdi } from '../helpers/parse-udi';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
-import { emptyObjectAST } from '../helpers/ast/empty-object';
-import { exportToken } from '../helpers/ast/export-token';
 
 export type HandlerConfig = {
 	build: (dataType: DocumentType, artifacts: ArtifactContainer,) => ts.Node[];
@@ -17,7 +15,7 @@ export const documentHandler: HandlerConfig = {
 	reference,
 }
 
-function build(documentType: DocumentType, artifacts: ArtifactContainer, ): ts.Node[] {
+function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Node[] {
 	const variableIdentifier = pascalCase(documentType.Alias);
 
 	// TODO: Handle cultures
@@ -63,33 +61,19 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer, ): ts.N
 		})
 
 	return [
-		factory.createInterfaceDeclaration(
-			[exportToken],
+		factory.createTypeAliasDeclaration(
+			[factory.createToken(ts.SyntaxKind.ExportKeyword)],
 			factory.createIdentifier(variableIdentifier),
 			undefined,
-			undefined,
-			[
-				factory.createPropertySignature(
-					undefined,
-					factory.createIdentifier('id'),
-					undefined,
-					factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
-				),
-				factory.createPropertySignature(
-					undefined,
-					factory.createIdentifier('contentType'),
-					undefined,
-					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias))
-				),
-				factory.createPropertySignature(
-					undefined,
-					factory.createIdentifier('properties'),
-					undefined,
+			factory.createTypeReferenceNode(
+				factory.createIdentifier('BaseDocumentType'),
+				[
+					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
 					properties.length === 0
-						? emptyObjectAST
+						? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
 						: factory.createTypeLiteralNode(properties)
-				)
-			]
+				]
+			)
 		)
 	];
 }
