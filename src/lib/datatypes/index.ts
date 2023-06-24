@@ -2,27 +2,27 @@ import ts from 'typescript';
 
 import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { DataType } from '../types/data-type';
-import { dropdownHandler } from './Umbraco.DropDown.Flexible';
-import { integerHandler } from './Umbraco.Integer';
-import { textboxHandler } from './Umbraco.TextBox';
-import { textareaHandler } from './Umbraco.TextArea';
-import { tinyMCEHandler } from './Umbraco.TinyMCE';
+import { blockGridHandler } from './Umbraco.BlockGrid';
 import { blockListHandler } from './Umbraco.BlockList';
-import { dateTimeHandler } from './Umbraco.DateTime';
+import { checkboxListHandler } from './Umbraco.CheckBoxList';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
-import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
+import { contentPickerHandler } from './Umbraco.ContentPicker';
+import { dateTimeHandler } from './Umbraco.DateTime';
 import { decimalHandler } from './Umbraco.Decimal';
+import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { emailAddressHandler } from './Umbraco.EmailAddress';
+import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
+import { integerHandler } from './Umbraco.Integer';
 import { labelHandler } from './Umbraco.Label';
-import { trueFalseHandler } from './Umbraco.TrueFalse';
+import { multiNodePickerHandler } from './Umbraco.MultiNodeTreePicker';
+import { multiurlPickerHandler } from './Umbraco.MultiUrlPicker';
+import { radioButtonListHandler } from './Umbraco.RadioButtonList';
 import { sliderHandler } from './Umbraco.Slider';
 import { tagsHandler } from './Umbraco.Tags';
-import { radioButtonListHandler } from './Umbraco.RadioButtonList';
-import { checkboxListHandler } from './Umbraco.CheckBoxList';
-import { multiurlPickerHandler } from './Umbraco.MultiUrlPicker';
-import { contentPickerHandler } from './Umbraco.ContentPicker';
-import { blockGridHandler } from './Umbraco.BlockGrid';
-import { multiNodePickerHandler } from './Umbraco.MultiNodeTreePicker';
+import { textareaHandler } from './Umbraco.TextArea';
+import { textboxHandler } from './Umbraco.TextBox';
+import { tinyMCEHandler } from './Umbraco.TinyMCE';
+import { trueFalseHandler } from './Umbraco.TrueFalse';
 
 export type HandlerConfig = {
 	editorAlias: string;
@@ -51,8 +51,8 @@ export const dataTypeMap: {
 	[eyedropperHandler.editorAlias]: eyedropperHandler,
 	[integerHandler.editorAlias]: integerHandler,
 	[labelHandler.editorAlias]: labelHandler,
-	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
 	[multiNodePickerHandler.editorAlias]: multiNodePickerHandler,
+	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
 	[radioButtonListHandler.editorAlias]: radioButtonListHandler,
 	[sliderHandler.editorAlias]: sliderHandler,
 	[tagsHandler.editorAlias]: tagsHandler,
