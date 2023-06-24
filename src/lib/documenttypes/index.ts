@@ -79,7 +79,7 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 }
 
 function reference(documentType: DocumentType): ts.TypeReferenceNode {
-	const variableIdentifier = pascalCase(documentType.Name);
+	const variableIdentifier = pascalCase(documentType.Alias);
 
 	return factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier)
