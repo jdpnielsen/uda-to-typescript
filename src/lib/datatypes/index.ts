@@ -14,7 +14,9 @@ import { emailAddressHandler } from './Umbraco.EmailAddress';
 import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
 import { integerHandler } from './Umbraco.Integer';
 import { labelHandler } from './Umbraco.Label';
+import { markdownEditorHandler } from './Umbraco.MarkdownEditor';
 import { multiNodePickerHandler } from './Umbraco.MultiNodeTreePicker';
+import { multipleTextHandler } from './Umbraco.MultipleTextstring';
 import { multiurlPickerHandler } from './Umbraco.MultiUrlPicker';
 import { radioButtonListHandler } from './Umbraco.RadioButtonList';
 import { sliderHandler } from './Umbraco.Slider';
@@ -37,7 +39,6 @@ export const dataTypeMap: {
 	// TODO: Umbraco.UploadField
 	// TODO: Umbraco.MediaPicker3
 	// TODO: Umbraco.ImageCropper
-	// TODO: Umbraco.MultipleTextstring
 	// TODO: Umbraco.MarkdownEditor
 	[blockGridHandler.editorAlias]: blockGridHandler,
 	[blockListHandler.editorAlias]: blockListHandler,
@@ -51,7 +52,9 @@ export const dataTypeMap: {
 	[eyedropperHandler.editorAlias]: eyedropperHandler,
 	[integerHandler.editorAlias]: integerHandler,
 	[labelHandler.editorAlias]: labelHandler,
+	[markdownEditorHandler.editorAlias]: markdownEditorHandler,
 	[multiNodePickerHandler.editorAlias]: multiNodePickerHandler,
+	[multipleTextHandler.editorAlias]: multipleTextHandler,
 	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
 	[radioButtonListHandler.editorAlias]: radioButtonListHandler,
 	[sliderHandler.editorAlias]: sliderHandler,
