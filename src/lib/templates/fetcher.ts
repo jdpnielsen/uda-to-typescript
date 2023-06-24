@@ -1,6 +1,5 @@
 import { BaseDocumentType } from './base-types';
 import { ExpandParam, ExpandResult } from './utils';
-import { Content } from '../../../dist/output';
 
 type SortDirection = 'asc' | 'desc';
 
