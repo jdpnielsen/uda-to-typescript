@@ -8,8 +8,6 @@ import { textboxHandler } from './Umbraco.TextBox';
 import { textareaHandler } from './Umbraco.TextArea';
 import { tinyMCEHandler } from './Umbraco.TinyMCE';
 import { blockListHandler } from './Umbraco.BlockList';
-import { noaDropdownHandler } from './NoA.DropDown';
-import { noaBlockListHandler } from './NoA.BlockList';
 import { dateTimeHandler } from './Umbraco.DateTime';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
@@ -55,8 +53,6 @@ export const dataTypeMap: {
 	[labelHandler.editorAlias]: labelHandler,
 	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
 	[multiNodePickerHandler.editorAlias]: multiNodePickerHandler,
-	[noaBlockListHandler.editorAlias]: noaBlockListHandler,
-	[noaDropdownHandler.editorAlias]: noaDropdownHandler,
 	[radioButtonListHandler.editorAlias]: radioButtonListHandler,
 	[sliderHandler.editorAlias]: sliderHandler,
 	[tagsHandler.editorAlias]: tagsHandler,
