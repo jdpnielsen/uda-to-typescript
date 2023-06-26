@@ -52,7 +52,9 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 			return factory.createPropertySignature(
 				undefined,
 				factory.createIdentifier(propertyType.Alias),
-				undefined,
+				propertyType.Mandatory
+					? undefined
+					: factory.createToken(ts.SyntaxKind.QuestionToken),
 				reference,
 			);
 		})
