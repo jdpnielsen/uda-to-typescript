@@ -1,5 +1,6 @@
 export type ObjectType = Record<string | number | symbol, unknown>;
 export type EmptyObjectType = Record<string | number | symbol, never>;
+
 type ExtractProps<T extends Record<string, unknown>, Key extends string> = {
 	[K in keyof T as K extends Key
 		? Key
@@ -70,19 +71,23 @@ export interface BaseBlockListType<Block extends BaseBlockType = BaseBlockType> 
 	items: Block[];
 }
 
-export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseDocumentType, BaseGridBlockAreaType[]> = BaseGridBlockType> {
+export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, BaseGridBlockAreaType[]> = BaseGridBlockType> {
 	gridColumns: number;
 	items: Block[];
 }
 
-export interface BaseGridBlockType<Content extends BaseDocumentType = BaseDocumentType, Areas extends BaseGridBlockAreaType[] = never[]> extends BaseBlockType<Content> {
+export interface BaseGridBlockType<
+	Content extends BaseDocumentType = BaseDocumentType,
+	Setting extends BaseDocumentType | null = BaseDocumentType | null,
+	Areas extends BaseGridBlockAreaType[] = never[]
+> extends BaseBlockType<Content, Setting> {
 	rowSpan: number;
 	columnSpan: number;
 	areaGridColumns: number,
 	areas: Areas;
 }
 
-export interface BaseGridBlockAreaType<Alias extends string = string, Block extends BaseGridBlockType<BaseDocumentType, never[]> = BaseGridBlockType<BaseDocumentType, never[]>> {
+export interface BaseGridBlockAreaType<Alias extends string = string, Block extends BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, never[]> = BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, never[]>> {
 	alias: Alias;
 	rowSpan: number;
 	columnSpan: number;
