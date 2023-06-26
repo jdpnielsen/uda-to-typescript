@@ -1,4 +1,5 @@
-import { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseMediaType, BaseDocumentType, BaseGridBlockType, EmptyObjectType, MediaPickerItem, ObjectType } from './base-types';
+import { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseMediaType, BaseDocumentType, BaseGridBlockType, EmptyObjectType, ObjectType } from './base-types';
+
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
 	[K in keyof Obj]: NonNullable<Obj[K]> extends BaseType
@@ -18,8 +19,8 @@ type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unknown
  * Unexpands a media type.
  * In practice this means that all properties are removed from the document type.
  */
-type UnexpandMediatType<Doc extends BaseMediaType> = Doc extends unknown
-	? Overwrite<Doc['mediaType'], { properties: EmptyObjectType }>
+type UnexpandMediatType<Media extends BaseMediaType> = Media extends unknown
+	? Overwrite<Media, { properties: EmptyObjectType }>
 	: never;
 
 type MaybeUnexpand<U extends BaseDocumentType | null> = U extends null
@@ -41,21 +42,68 @@ type UnexpandBlockList<BlockList extends BaseBlockListType, BlackListedKeys exte
 	>
 >;
 
-// TODO: Handle settings, UnexpandDocumentType<BlockList['items'][number]['settings']>>
-type UnexpandBlockGrid<BlockGrid extends BaseBlockGridType, BlackListedKeys extends ExpandableDocumentKeys<BlockGrid['items'][number]['content']> | undefined> = BaseBlockGridType<
+type UnexpandBlockGrid<
+	BlockGrid extends BaseBlockGridType,
+	BlackListedContentKeys extends ExpandableDocumentKeys<BlockGrid['items'][number]['content']> | undefined,
+	BlackListedSettingsKeys extends ExpandableDocumentKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined
+> = BaseBlockGridType<
 	BaseGridBlockType<
-		UnexpandDocumentExpandables<BlockGrid['items'][number]['content'], BlackListedKeys>
+		UnexpandDocumentExpandables<BlockGrid['items'][number]['content'], BlackListedContentKeys>,
+		BlockGrid['items'][number]['settings'] extends null
+			? null
+			: UnexpandDocumentExpandables<NonNullable<BlockGrid['items'][number]['settings']>, BlackListedSettingsKeys>
 	>
 >;
 
-type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown ?
-	KeysOfBaseType<Doc['properties'], BaseDocumentType>
-	| KeysOfBaseType<Doc['properties'], BaseDocumentType[]>
-	| KeysOfBaseType<Doc['properties'], BaseBlockListType>
-	| KeysOfBaseType<Doc['properties'], BaseBlockGridType>
-	| KeysOfBaseType<Doc['properties'], MediaPickerItem>
-	| KeysOfBaseType<Doc['properties'], MediaPickerItem[]>
+type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown
+	? ExpandablePropertyKeys<Doc['properties']>
 	: never;
+
+type ExpandablePropertyKeys<Properties extends ObjectType> = Properties extends unknown
+	? KeysOfBaseType<Properties, BaseDocumentType>
+		| KeysOfBaseType<Properties, BaseDocumentType[]>
+		| KeysOfBaseType<Properties, BaseBlockListType>
+		| KeysOfBaseType<Properties, BaseBlockGridType>
+		| KeysOfBaseType<Properties, BaseMediaType>
+		| KeysOfBaseType<Properties, BaseMediaType[]>
+	: never;
+
+type UnexpandNestedProperty<Prop> = Prop extends BaseDocumentType | null
+	// By setting the blacklist to undefined, we can limit the expand to the top level properties.
+	// Note that we are using UnexpandDocumentExpandables here, instead of UnexpandDocumentType.
+	? MaybeUnexpandDoc<Prop, ExpandableDocumentKeys<NonNullable<Prop>>>
+	: Prop extends BaseDocumentType[]
+		? UnexpandDocumentExpandables<Prop[number], ExpandableDocumentKeys<Prop[number]>>[]
+		: Prop extends BaseBlockGridType
+			? UnexpandBlockGrid<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>, ExpandableDocumentKeys<NonNullable<Prop['items'][number]['settings']>>>
+			: Prop extends BaseBlockListType
+				? UnexpandBlockList<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>>
+				: Prop
+
+type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
+	? MaybeUnexpand<Prop>
+	: Prop extends BaseDocumentType[]
+		? UnexpandDocumentType<Prop[number]>[]
+		: Prop extends BaseBlockGridType
+			? UnexpandBlockGrid<Prop, undefined, undefined>
+			: Prop extends BaseBlockListType
+				? UnexpandBlockList<Prop, undefined>
+				: Prop extends BaseMediaType
+					? UnexpandMediatType<Prop>
+					: Prop extends BaseMediaType[]
+						? UnexpandMediatType<Prop[number]>[]
+						: Prop
+
+/**
+ * Unexpands all expandable properties.
+ * @param Doc The document properties to unexpand.
+ * @param BlackListedKeys The keys that should not be unexpanded.
+ */
+type UnexpandPropertyExpandables<Doc extends ObjectType, BlackListedKeys extends ExpandablePropertyKeys<Doc> | undefined> = {
+	[K in keyof Doc]: K extends BlackListedKeys
+		? UnexpandNestedProperty<Doc[K]>
+		: UnexpandProperty<Doc[K]>
+};
 
 /**
  * Unexpands all expandable properties of a document type.
@@ -63,35 +111,7 @@ type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown 
  * @param BlackListedKeys The keys that should not be unexpanded.
  */
 type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys extends ExpandableDocumentKeys<Doc> | undefined> = Doc extends unknown
-	? BaseDocumentType<Doc['contentType'], {
-		[K in keyof Doc['properties']]: K extends BlackListedKeys
-			// Unexpand document's properties
-			? Doc['properties'][K] extends BaseDocumentType | null
-				// By setting the blacklist to undefined, we can limit the expand to the top level properties.
-				// Note that we are using UnexpandDocumentExpandables here, instead of UnexpandDocumentType.
-				? MaybeUnexpandDoc<Doc['properties'][K], ExpandableDocumentKeys<NonNullable<Doc['properties'][K]>>>
-				: Doc['properties'][K] extends BaseDocumentType[]
-					? UnexpandDocumentExpandables<Doc['properties'][K][number], ExpandableDocumentKeys<Doc['properties'][K][number]>>[]
-					: Doc['properties'][K] extends BaseBlockGridType
-						? UnexpandBlockGrid<Doc['properties'][K], ExpandableDocumentKeys<Doc['properties'][K]['items'][number]['content']>>
-						: Doc['properties'][K] extends BaseBlockListType
-							? UnexpandBlockList<Doc['properties'][K], ExpandableDocumentKeys<Doc['properties'][K]['items'][number]['content']>>
-							: Doc['properties'][K]
-			// Unexpand Directly
-			: Doc['properties'][K] extends BaseDocumentType | null
-				? MaybeUnexpand<Doc['properties'][K]>
-				: Doc['properties'][K] extends BaseDocumentType[]
-					? UnexpandDocumentType<Doc['properties'][K][number]>[]
-					: Doc['properties'][K] extends BaseBlockGridType
-						? UnexpandBlockGrid<Doc['properties'][K], undefined>
-						: Doc['properties'][K] extends BaseBlockListType
-							? UnexpandBlockList<Doc['properties'][K], undefined>
-							: Doc['properties'][K] extends BaseMediaType
-								? UnexpandMediatType<Doc['properties'][K]>
-								: Doc['properties'][K] extends BaseMediaType[]
-									? UnexpandMediatType<Doc['properties'][K][number]>[]
-									: Doc['properties'][K]
-	}>
+	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
 	: never;
 
 export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | 'all' | undefined | [];
