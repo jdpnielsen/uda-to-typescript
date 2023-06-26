@@ -40,6 +40,7 @@ export async function main(options: CliOptions): Promise<void> {
 		sourceFile,
 	);
 
+	console.log('Writing output to', output);
 	await writeFile(output, outputFile);
 }
 

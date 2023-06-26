@@ -1,5 +1,11 @@
 export type ObjectType = Record<string | number | symbol, unknown>;
 export type EmptyObjectType = Record<string | number | symbol, never>;
+type ExtractProps<T extends Record<string, unknown>, Key extends string> = {
+	[K in keyof T as K extends Key
+		? Key
+		: never
+	]: T[K];
+};
 
 export interface ContentRoute {
 	path: string;
@@ -7,6 +13,40 @@ export interface ContentRoute {
 		id: string;
 		path: string;
 	};
+}
+
+export interface BaseMediaType<
+	Alias extends string = string,
+	Properties extends ObjectType = ObjectType,
+> {
+	mediaType: Alias;
+	properties: Properties;
+}
+
+export type Crop<Alias extends string = string, Width extends number = number, Height extends number = number> = {
+	alias: Alias;
+	width: Width;
+	height: Height;
+	coordinates: {
+		x1: number;
+		y1: number;
+		x2: number;
+		y2: number;
+	} | null;
+}
+
+export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends Crop[] = []> = BaseMediaType<
+	T['mediaType'],
+	Omit<T['properties'], 'umbracoFile' | 'umbracoExtension' | 'umbracoBytes' | 'umbracoWidth' | 'umbracoHeight'>
+> & {
+	id: string;
+	name: string;
+	url: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: unknown } ? string : null;
+	extension: ExtractProps<T['properties'], 'umbracoExtension'> extends { umbracoExtension: unknown } ? number : null;
+	width: ExtractProps<T['properties'], 'umbracoWidth'> extends { umbracoWidth: unknown } ? number : null;
+	height: ExtractProps<T['properties'], 'umbracoHeight'> extends { umbracoHeight: unknown } ? number : null;
+	bytes: ExtractProps<T['properties'], 'umbracoBytes'> extends { umbracoBytes: unknown } ? number : null;
+	crops: C;
 }
 
 export interface BaseDocumentType<

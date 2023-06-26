@@ -4,7 +4,8 @@ import { ArtifactContainer } from './helpers/collect-artifacts';
 import { dataTypeMap } from './datatypes';
 import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
-import { getPickableDocumentTypes } from './helpers/pickable-document-type';
+import { getPickableTypes } from './helpers/pickable-document-type';
+import { mediaTypeHandler } from './media-types';
 
 export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> {
 	const dataTypes = Array.from(artifacts['data-type'].entries())
@@ -52,6 +53,21 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 						undefined,
 						ts.factory.createIdentifier('BaseBlockGridType')
 					),
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
+						ts.factory.createIdentifier('BaseMediaType')
+					),
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
+						ts.factory.createIdentifier('Crop')
+					),
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
+						ts.factory.createIdentifier('MediaPickerItem')
+					),
 				])
 			),
 			ts.factory.createStringLiteral('./base-types')
@@ -89,6 +105,37 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 	}
 
 	/** Build datatypes */
+	const mediaTypes = Array.from(artifacts['media-type'].entries())
+		.map(([, mediaType]) => (mediaType));
+
+	for (const mediaType of mediaTypes) {
+		const nodes = mediaTypeHandler.build(mediaType, artifacts);
+
+		if (nodes) {
+			statements.push(
+				ts.factory.createIdentifier('\n'),
+				...nodes,
+			);
+		}
+	}
+
+	/** Build union of pickable mediaTypes */
+	if (mediaTypes.length !== 0) {
+		statements.push(
+			ts.factory.createIdentifier('\n'),
+			ts.factory.createTypeAliasDeclaration(
+				[factory.createToken(ts.SyntaxKind.ExportKeyword)],
+				factory.createIdentifier('PickableMediaType'),
+				undefined,
+				ts.factory.createUnionTypeNode(
+					getPickableTypes(mediaTypes)
+						.map((mediaType) => mediaTypeHandler.reference(mediaType, artifacts))
+				),
+			),
+		);
+	}
+
+	/** Build datatypes */
 	const documentTypes = Array.from(artifacts['document-type'].entries())
 		.map(([, documentType]) => (documentType));
 
@@ -112,7 +159,7 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 				factory.createIdentifier('PickableDocumentType'),
 				undefined,
 				ts.factory.createUnionTypeNode(
-					getPickableDocumentTypes(artifacts)
+					getPickableTypes(documentTypes)
 						.map((documentType) => documentHandler.reference(documentType, artifacts))
 				),
 			),

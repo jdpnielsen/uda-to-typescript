@@ -1,5 +1,5 @@
 import ts, { factory } from 'typescript';
-import { DocumentType } from '../types/document-type';
+import { MediaType } from '../types/media-type';
 import { pascalCase } from 'change-case';
 import { dataTypeMap } from '../datatypes';
 import { parseUdi } from '../helpers/parse-udi';
@@ -7,20 +7,19 @@ import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { collectProperties } from '../helpers/build-properties';
 
 export type HandlerConfig = {
-	build: (dataType: DocumentType, artifacts: ArtifactContainer,) => ts.Node[];
-	reference: (dataType: DocumentType, artifacts: ArtifactContainer,) => ts.TypeReferenceNode;
+	build: (dataType: MediaType, artifacts: ArtifactContainer,) => ts.Node[];
+	reference: (dataType: MediaType, artifacts: ArtifactContainer,) => ts.TypeReferenceNode;
 }
 
-export const documentHandler: HandlerConfig = {
+export const mediaTypeHandler: HandlerConfig = {
 	build,
 	reference,
 }
 
-function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Node[] {
-	const variableIdentifier = pascalCase(documentType.Alias);
+function build(MediaType: MediaType, artifacts: ArtifactContainer): ts.Node[] {
+	const variableIdentifier = pascalCase(MediaType.Alias);
 
-	// TODO: Handle cultures
-	const properties = collectProperties(documentType)
+	const properties = collectProperties(MediaType)
 		.map(propertyType => {
 			const { id: dataTypeId } = parseUdi(propertyType.DataType);
 			const dataType = artifacts['data-type'].get(dataTypeId);
@@ -63,9 +62,9 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 			factory.createIdentifier(variableIdentifier),
 			undefined,
 			factory.createTypeReferenceNode(
-				factory.createIdentifier('BaseDocumentType'),
+				factory.createIdentifier('BaseMediaType'),
 				[
-					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
+					factory.createLiteralTypeNode(factory.createStringLiteral(MediaType.Alias)),
 					properties.length === 0
 						? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
 						: factory.createTypeLiteralNode(properties)
@@ -75,8 +74,8 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 	];
 }
 
-function reference(documentType: DocumentType): ts.TypeReferenceNode {
-	const variableIdentifier = pascalCase(documentType.Alias);
+function reference(MediaType: MediaType): ts.TypeReferenceNode {
+	const variableIdentifier = pascalCase(MediaType.Alias);
 
 	return factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier)

@@ -12,9 +12,11 @@ import { decimalHandler } from './Umbraco.Decimal';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { emailAddressHandler } from './Umbraco.EmailAddress';
 import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
+import { imageCropperHandler } from './Umbraco.ImageCropper';
 import { integerHandler } from './Umbraco.Integer';
 import { labelHandler } from './Umbraco.Label';
 import { markdownEditorHandler } from './Umbraco.MarkdownEditor';
+import { mediaPickerHandler } from './Umbraco.MediaPicker3';
 import { multiNodePickerHandler } from './Umbraco.MultiNodeTreePicker';
 import { multipleTextHandler } from './Umbraco.MultipleTextstring';
 import { multiurlPickerHandler } from './Umbraco.MultiUrlPicker';
@@ -25,6 +27,7 @@ import { textareaHandler } from './Umbraco.TextArea';
 import { textboxHandler } from './Umbraco.TextBox';
 import { tinyMCEHandler } from './Umbraco.TinyMCE';
 import { trueFalseHandler } from './Umbraco.TrueFalse';
+import { uploadFieldHandler } from './Umbraco.UploadField';
 
 export type HandlerConfig = {
 	editorAlias: string;
@@ -36,10 +39,6 @@ export type HandlerConfig = {
 export const dataTypeMap: {
 	[EditorAlias: string]: HandlerConfig
 } = {
-	// TODO: Umbraco.UploadField
-	// TODO: Umbraco.MediaPicker3
-	// TODO: Umbraco.ImageCropper
-	// TODO: Umbraco.MarkdownEditor
 	[blockGridHandler.editorAlias]: blockGridHandler,
 	[blockListHandler.editorAlias]: blockListHandler,
 	[checkboxListHandler.editorAlias]: checkboxListHandler,
@@ -50,9 +49,11 @@ export const dataTypeMap: {
 	[dropdownHandler.editorAlias]: dropdownHandler,
 	[emailAddressHandler.editorAlias]: emailAddressHandler,
 	[eyedropperHandler.editorAlias]: eyedropperHandler,
+	[imageCropperHandler.editorAlias]: imageCropperHandler,
 	[integerHandler.editorAlias]: integerHandler,
 	[labelHandler.editorAlias]: labelHandler,
 	[markdownEditorHandler.editorAlias]: markdownEditorHandler,
+	[mediaPickerHandler.editorAlias]: mediaPickerHandler,
 	[multiNodePickerHandler.editorAlias]: multiNodePickerHandler,
 	[multipleTextHandler.editorAlias]: multipleTextHandler,
 	[multiurlPickerHandler.editorAlias]: multiurlPickerHandler,
@@ -63,4 +64,5 @@ export const dataTypeMap: {
 	[textboxHandler.editorAlias]: textboxHandler,
 	[tinyMCEHandler.editorAlias]: tinyMCEHandler,
 	[trueFalseHandler.editorAlias]: trueFalseHandler,
+	[uploadFieldHandler.editorAlias]: uploadFieldHandler,
 };

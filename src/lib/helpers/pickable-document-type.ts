@@ -1,22 +1,19 @@
 import { UDI } from '../types/utils';
-import { ArtifactContainer } from './collect-artifacts';
 import { DocumentType } from '../types/document-type';
+import { MediaType } from '../types/media-type';
 
-export function getPickableDocumentTypes(artifacts: ArtifactContainer) {
-	const documentTypes = Array.from(artifacts['document-type'].entries())
-		.map(([, documentType]) => (documentType));
-
-	return documentTypes.filter((documentType) => {
-		if (documentType.Permissions.AllowedAtRoot) {
+export function getPickableTypes<T extends DocumentType | MediaType>(types: T[]) {
+	return types.filter((type) => {
+		if (type.Permissions.AllowedAtRoot) {
 			return true;
 		}
 
-		return isAllowedChildContentTypes(documentType.Udi, documentTypes);
+		return isAllowedChildContentTypes(type.Udi, types);
 	});
 }
 
-export function isAllowedChildContentTypes(udi: UDI, documentTypes: DocumentType[]) {
-	return documentTypes.some((documentType) => {
-		return documentType.Permissions.AllowedChildContentTypes.includes(udi);
+export function isAllowedChildContentTypes<T extends DocumentType | MediaType>(udi: UDI, types: T[]) {
+	return types.some((type) => {
+		return type.Permissions.AllowedChildContentTypes.includes(udi);
 	});
 }

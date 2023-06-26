@@ -1,5 +1,5 @@
-import { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseDocumentType, BaseGridBlockType, EmptyObjectType, ObjectType } from './base-types';
-
+import { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseMediaType, BaseDocumentType, BaseGridBlockType, EmptyObjectType, MediaPickerItem, ObjectType } from './base-types';
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
 	[K in keyof Obj]: NonNullable<Obj[K]> extends BaseType
 		? K
@@ -12,6 +12,14 @@ type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
  */
 type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unknown
 	? BaseDocumentType<Doc['contentType'], EmptyObjectType, Doc['cultures']>
+	: never;
+
+/**
+ * Unexpands a media type.
+ * In practice this means that all properties are removed from the document type.
+ */
+type UnexpandMediatType<Doc extends BaseMediaType> = Doc extends unknown
+	? Overwrite<Doc['mediaType'], { properties: EmptyObjectType }>
 	: never;
 
 type MaybeUnexpand<U extends BaseDocumentType | null> = U extends null
@@ -45,6 +53,8 @@ type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown 
 	| KeysOfBaseType<Doc['properties'], BaseDocumentType[]>
 	| KeysOfBaseType<Doc['properties'], BaseBlockListType>
 	| KeysOfBaseType<Doc['properties'], BaseBlockGridType>
+	| KeysOfBaseType<Doc['properties'], MediaPickerItem>
+	| KeysOfBaseType<Doc['properties'], MediaPickerItem[]>
 	: never;
 
 /**
@@ -76,7 +86,11 @@ type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys e
 						? UnexpandBlockGrid<Doc['properties'][K], undefined>
 						: Doc['properties'][K] extends BaseBlockListType
 							? UnexpandBlockList<Doc['properties'][K], undefined>
-							: Doc['properties'][K]
+							: Doc['properties'][K] extends BaseMediaType
+								? UnexpandMediatType<Doc['properties'][K]>
+								: Doc['properties'][K] extends BaseMediaType[]
+									? UnexpandMediatType<Doc['properties'][K][number]>[]
+									: Doc['properties'][K]
 	}>
 	: never;
 
