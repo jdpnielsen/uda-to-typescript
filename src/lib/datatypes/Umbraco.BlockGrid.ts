@@ -23,6 +23,7 @@ interface Block {
 	allowInAreas: boolean;
 	areas: Area[];
 	contentElementTypeKey: GUID;
+	settingsElementTypeKey?: GUID;
 	view: string;
 	label: string;
 	editorSize: string;
@@ -56,6 +57,9 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 	(config.blocks || [])
 		.forEach(block => {
 			const contentElement = artifacts['document-type'].get(convertGuidToId(block.contentElementTypeKey));
+			const settingsElement = block.settingsElementTypeKey
+				? artifacts['document-type'].get(convertGuidToId(block.settingsElementTypeKey))
+				: undefined;
 
 			if (!contentElement) {
 				console.warn(`Could not find document type with id ${block.contentElementTypeKey}`);
@@ -82,7 +86,15 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 					factory.createTypeReferenceNode(
 						factory.createIdentifier(pascalCase(contentElement.Alias))
 					),
-					...(areas.length !== 0 ? [factory.createArrayTypeNode(factory.createUnionTypeNode(areas))] : [])
+					settingsElement
+						? factory.createTypeReferenceNode(
+							factory.createIdentifier(pascalCase(settingsElement.Alias))
+						)
+						: factory.createLiteralTypeNode(factory.createNull()),
+					...(areas.length !== 0
+						? [factory.createArrayTypeNode(factory.createUnionTypeNode(areas))]
+						: []
+					)
 				]
 			);
 
