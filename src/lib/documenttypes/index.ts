@@ -5,6 +5,7 @@ import { dataTypeMap } from '../datatypes';
 import { parseUdi } from '../helpers/parse-udi';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { collectProperties } from '../helpers/build-properties';
+import { exportToken } from '../helpers/ast/export-token';
 
 export type HandlerConfig = {
 	build: (dataType: DocumentType, artifacts: ArtifactContainer,) => ts.Node[];
@@ -61,7 +62,7 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 
 	return [
 		factory.createTypeAliasDeclaration(
-			[factory.createToken(ts.SyntaxKind.ExportKeyword)],
+			[exportToken],
 			factory.createIdentifier(variableIdentifier),
 			undefined,
 			factory.createTypeReferenceNode(
