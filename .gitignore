@@ -46,5 +46,5 @@ jspm_packages/
 
 # Compiled code
 dist
-lib
+/lib
 src/__tests__/__fixtures__/output.ts
