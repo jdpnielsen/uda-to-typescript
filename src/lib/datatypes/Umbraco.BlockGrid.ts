@@ -39,7 +39,9 @@ interface Area {
 	columnSpan: number;
 	rowSpan: number;
 	minAllowed: number;
-	specifiedAllowance: unknown[];
+	specifiedAllowance: {
+		elementTypeKey: GUID;
+	}[];
 }
 
 export const blockGridHandler: HandlerConfig = {
@@ -64,41 +66,51 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 				: undefined;
 
 			if (!contentElement) {
-				console.warn(`Could not find document type with id ${block.contentElementTypeKey}`);
-				return;
+				throw new Error(`Could not find document type with id: ${block.contentElementTypeKey}`);
 			}
 
 			const areas = block.areas.map((area) => {
+				const specifiedAllowances = area.specifiedAllowance
+					.map((allowance) => {
+						const blockEl = (config.blocks || [])
+							.find((e) => e.contentElementTypeKey === allowance.elementTypeKey);
+
+						if (!blockEl) {
+							throw new Error(`Could not find block with element type key: ${allowance.elementTypeKey}`);
+						}
+
+						const contentEl = artifacts['document-type'].get(convertGuidToId(blockEl.contentElementTypeKey));
+						if (!contentEl) {
+							throw new Error(`Could not find document type with id: ${allowance.elementTypeKey}`);
+						}
+
+						const settingsEl = blockEl.settingsElementTypeKey
+							? artifacts['document-type'].get(convertGuidToId(blockEl.settingsElementTypeKey))
+							: undefined;
+
+						return buildBlock(
+							contentEl,
+							settingsEl,
+							[]
+						);
+					});
+
 				return factory.createTypeReferenceNode(
 					factory.createIdentifier('BaseGridBlockAreaType'),
 					[
 						factory.createLiteralTypeNode(
 							factory.createStringLiteral(area.alias)
 						),
-						factory.createTypeReferenceNode(
-							factory.createIdentifier(variableWithoutAreasIdentifier),
-						)
+						area.specifiedAllowance.length === 0
+							? factory.createTypeReferenceNode(
+								factory.createIdentifier(variableWithoutAreasIdentifier),
+							)
+							: factory.createUnionTypeNode(specifiedAllowances),
 					]
 				);
 			})
 
-			const blockNode = factory.createTypeReferenceNode(
-				factory.createIdentifier('BaseGridBlockType'),
-				[
-					factory.createTypeReferenceNode(
-						factory.createIdentifier(pascalCase(contentElement.Alias))
-					),
-					settingsElement
-						? factory.createTypeReferenceNode(
-							factory.createIdentifier(pascalCase(settingsElement.Alias))
-						)
-						: factory.createLiteralTypeNode(factory.createNull()),
-					...(areas.length !== 0
-						? [factory.createArrayTypeNode(factory.createUnionTypeNode(areas))]
-						: []
-					)
-				]
-			);
+			const blockNode = buildBlock(contentElement, settingsElement, areas);
 
 			if (areas.length === 0) {
 				blocksWithoutArea.push(blockNode);
@@ -138,4 +150,24 @@ function reference(dataType: DataType): ts.TypeNode {
 		factory.createIdentifier(variableIdentifier),
 		undefined
 	);
+}
+
+function buildBlock(contentElement: DocumentType, settingsElement?: DocumentType | undefined, areas: ts.TypeReferenceNode[] = []): ts.TypeReferenceNode {
+	return factory.createTypeReferenceNode(
+		factory.createIdentifier('BaseGridBlockType'),
+		[
+			factory.createTypeReferenceNode(
+				factory.createIdentifier(pascalCase(contentElement.Alias))
+			),
+			settingsElement
+				? factory.createTypeReferenceNode(
+					factory.createIdentifier(pascalCase(settingsElement.Alias))
+				)
+				: factory.createLiteralTypeNode(factory.createNull()),
+			...(areas.length !== 0
+				? [factory.createArrayTypeNode(factory.createUnionTypeNode(areas))]
+				: []
+			)
+		]
+	)
 }
