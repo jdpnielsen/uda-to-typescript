@@ -1,15 +1,14 @@
 import execa from 'execa';
 import { stat, unlink } from 'fs/promises';
 import { resolve } from 'path';
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-const version = require('../../../package.json').version;
+import { version } from '../../../package.json';
 
 const bin = resolve(__dirname, './bin.js');
 
 describe('uda-to-typescript', () => {
 	beforeEach(async () => {
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		await unlink('./src/__tests__/__fixtures__/output.ts').catch(() => {});
+		await unlink('./dist/output.ts').catch(() => {});
 	});
 
 	it('should display the help contents', async () => {
@@ -25,8 +24,8 @@ describe('uda-to-typescript', () => {
 	});
 
 	it('should output types', async () => {
-		await execa(bin, ['--input', './files/*.uda', '--output', './src/__tests__/__fixtures__/output.ts']);
-		const val = await stat('./src/__tests__/__fixtures__/output.ts');
+		await execa(bin, ['--input', './files/*.uda', '--output', './dist/output.ts']);
+		const val = await stat('./dist/output.ts');
 		expect(val).toBeDefined();
 	});
 });

@@ -1,5 +1,5 @@
 {
-  "name": "typescript-npm-cli-template",
+  "name": "@jdpnielsen/uda-to-typescript",
   "version": "1.0.0",
   "description": "CLI to convert Umbraco UDA files to typescript definitions",
   "files": [
@@ -8,8 +8,9 @@
     "bin/**/*"
   ],
   "bin": {
-    "my-command": "./bin/index.js"
+    "uda-to-typescript": "./bin/index.js"
   },
+  "main": "./lib/src/lib/main.js",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf ./lib/",
@@ -24,33 +25,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ryansonshine/typescript-npm-cli-template.git"
+    "url": "git+https://github.com/jdpnielsen/uda-to-typescript.git"
   },
   "license": "MIT",
   "author": {
-    "name": "Ryan Sonshine",
-    "email": "ryansonshine@users.noreply.github.com",
-    "url": "https://github.com/ryansonshine"
+    "name": "Joshua Nielsen",
+    "email": "jdpnielsen@gmail.com",
+    "url": "https://github.com/jdpnielsen"
   },
   "engines": {
-    "node": ">=12.0"
+    "node": ">=20.0"
   },
   "keywords": [
-    "boilerplate",
-    "cli",
-    "template",
     "typescript",
-    "vscode",
-    "jest",
-    "husky",
-    "commitizen",
-    "semantic-release",
-    "codecov"
+    "umbraco",
+    "uda",
+    "generator"
   ],
   "bugs": {
-    "url": "https://github.com/ryansonshine/typescript-npm-cli-template/issues"
+    "url": "https://github.com/jdpnielsen/uda-to-typescript/issues"
   },
-  "homepage": "https://github.com/ryansonshine/typescript-npm-cli-template#readme",
+  "homepage": "https://github.com/jdpnielsen/uda-to-typescript#readme",
   "dependencies": {
     "async-parallel": "^1.2.3",
     "change-case": "^4.1.2",
@@ -58,14 +53,13 @@
     "glob": "^10.2.7"
   },
   "devDependencies": {
-    "@ryansonshine/commitizen": "^4.2.8",
-    "@ryansonshine/cz-conventional-changelog": "^3.3.4",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.2.5",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
-    "chalk": "^4.1.1",
+    "commitizen": "^4.3.0",
     "conventional-changelog-conventionalcommits": "^5.0.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.25.0",
     "eslint-plugin-node": "^11.1.0",
     "execa": "^5.1.1",
@@ -79,7 +73,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/@ryansonshine/cz-conventional-changelog"
+      "path": "./node_modules/cz-conventional-changelog"
     }
   },
   "lint-staged": {
