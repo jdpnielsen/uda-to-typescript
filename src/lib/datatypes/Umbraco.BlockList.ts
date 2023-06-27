@@ -5,6 +5,7 @@ import { pascalCase } from 'change-case';
 import { GUID } from '../types/utils';
 import { DataType } from '../types/data-type';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
+import { exportToken } from '../helpers/ast/export-token';
 
 type BlockConfiguration = {
 	blocks?: Block[];
@@ -65,10 +66,13 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 
 	return [
 		factory.createTypeAliasDeclaration(
-			undefined,
+			[exportToken],
 			factory.createIdentifier(variableIdentifier),
 			undefined,
-			factory.createUnionTypeNode(blocks)
+			factory.createTypeReferenceNode(
+				factory.createIdentifier('BaseBlockListType'),
+				[factory.createUnionTypeNode(blocks)],
+			)
 		)
 	];
 }
@@ -81,8 +85,5 @@ function reference(dataType: DataType): ts.TypeNode {
 		undefined
 	);
 
-	return factory.createTypeReferenceNode(
-		factory.createIdentifier('BaseBlockListType'),
-		[baseType],
-	);
+	return baseType;
 }

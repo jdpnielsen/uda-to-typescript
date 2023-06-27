@@ -5,6 +5,8 @@ import { pascalCase } from 'change-case';
 import { GUID } from '../types/utils';
 import { DataType } from '../types/data-type';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
+import { DocumentType } from '../types/document-type';
+import { exportToken } from '../helpers/ast/export-token';
 
 type BlockConfiguration = {
 	blocks?: Block[];
@@ -113,15 +115,18 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 			factory.createUnionTypeNode(blocksWithoutArea)
 		),
 		factory.createTypeAliasDeclaration(
-			undefined,
+			[exportToken],
 			factory.createIdentifier(variableIdentifier),
 			undefined,
-			factory.createUnionTypeNode([
-				factory.createTypeReferenceNode(
-					factory.createIdentifier(variableWithoutAreasIdentifier),
-				),
-				...blocksWithArea,
-			])
+			factory.createTypeReferenceNode(
+				factory.createIdentifier('BaseBlockGridType'),
+				[factory.createUnionTypeNode([
+					factory.createTypeReferenceNode(
+						factory.createIdentifier(variableWithoutAreasIdentifier),
+					),
+					...blocksWithArea,
+				])],
+			)
 		)
 	];
 }
@@ -129,13 +134,8 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 function reference(dataType: DataType): ts.TypeNode {
 	const variableIdentifier = pascalCase(dataType.Name);
 
-	const baseType = factory.createTypeReferenceNode(
+	return factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
 		undefined
-	);
-
-	return factory.createTypeReferenceNode(
-		factory.createIdentifier('BaseBlockGridType'),
-		[baseType],
 	);
 }
