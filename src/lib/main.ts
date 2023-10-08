@@ -51,9 +51,11 @@ async function cloneTemplates(source: PathLike, destination: PathLike) {
 		const templateSource = path.resolve(source.toString(), templateFile);
 		const templateDestination = path.resolve(destination.toString(), templateFile);
 
-		console.log('Copying', templateSource, 'to', templateDestination);
+		if (templateFile.endsWith('.ts') && !templateFile.endsWith('.d.ts')) {
+			console.log('Copying', templateSource, 'to', templateDestination);
 
-		// TODO: support template syntax (ejs? handlebars?)
-		await copyFile(templateSource, templateDestination);
+			// TODO: support template syntax (ejs? handlebars?)
+			await copyFile(templateSource, templateDestination);
+		}
 	}
 }
