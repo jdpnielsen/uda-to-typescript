@@ -8,8 +8,9 @@ import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 
 export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> {
-	const dataTypes = Array.from(artifacts['data-type'].entries())
-		.map(([, dataType]) => (dataType));
+	const dataTypes = Array
+		.from(artifacts['data-type'].values())
+		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	const statements: ts.Node[] = [
 		ts.factory.createImportDeclaration(
@@ -77,7 +78,8 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 
 	/** Initialize datatypes */
 	const configuredEditors = Array
-		.from(new Set(dataTypes.map((dataType) => dataType.EditorAlias)).values());
+		.from(new Set(dataTypes.map((dataType) => dataType.EditorAlias)).values())
+		.sort((a, b) => a.localeCompare(b));
 
 	for (const editorAlias of configuredEditors) {
 		const handler = dataTypeMap[editorAlias];
@@ -105,8 +107,9 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 	}
 
 	/** Build datatypes */
-	const mediaTypes = Array.from(artifacts['media-type'].entries())
-		.map(([, mediaType]) => (mediaType));
+	const mediaTypes = Array
+		.from(artifacts['media-type'].values())
+		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	for (const mediaType of mediaTypes) {
 		const nodes = mediaTypeHandler.build(mediaType, artifacts);
@@ -136,8 +139,9 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 	}
 
 	/** Build datatypes */
-	const documentTypes = Array.from(artifacts['document-type'].entries())
-		.map(([, documentType]) => (documentType));
+	const documentTypes = Array
+		.from(artifacts['document-type'].values())
+		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	for (const documentType of documentTypes) {
 		const nodes = documentHandler.build(documentType, artifacts);
