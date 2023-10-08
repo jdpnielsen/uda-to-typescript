@@ -1,7 +1,11 @@
-import { DocumentType } from '../types/document-type';
-import { MediaType } from '../types/media-type';
+import { PropertyGroup, PropertyType } from '../types/shared';
 
-export function collectProperties<T extends MediaType | DocumentType>(type: T) {
+type Collectable = {
+	PropertyGroups: PropertyGroup[];
+	PropertyTypes: PropertyType[];
+}
+
+export function collectProperties<T extends Collectable>(type: T): PropertyType[] {
 	const properties = [
 		...type.PropertyTypes,
 		...type.PropertyGroups.flatMap((group) => group.PropertyTypes),
