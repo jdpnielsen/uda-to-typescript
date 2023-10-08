@@ -1,3 +1,4 @@
+/** @type {import('jest').Config} */
 module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
@@ -10,10 +11,10 @@ module.exports = {
 		'!<rootDir>/src/cli.ts',
 	],
 	collectCoverage: true,
-	globals: {
-		'ts-jest': {
-			diagnostics: false,
-			isolatedModules: true,
-		},
+	transform: {
+		'^.+\\.ts$': ['ts-jest', {
+			babel: true,
+			tsconfig: 'tsconfig.test.json',
+		}]
 	},
 };
