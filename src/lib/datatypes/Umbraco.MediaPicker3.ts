@@ -1,15 +1,16 @@
 import ts, { factory } from 'typescript'
+import { pascalCase } from 'change-case';
+
 
 import { DataType } from '../types/data-type';
-
-import type { HandlerConfig } from '.';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
-import { MediaType } from '../types/media-type';
 import { collectProperties } from '../helpers/build-properties';
 import { parseUdi } from '../helpers/parse-udi';
-import { ImageCropperConfig } from './Umbraco.ImageCropper';
-import { pascalCase } from 'change-case';
 import { buildCrops } from '../helpers/ast/media-object';
+import { ImageCropperConfig } from './Umbraco.ImageCropper';
+import { MediaType } from '../types/media-type';
+
+import type { HandlerConfig } from '.';
 
 type mediaPickerConfig = {
 	/**
