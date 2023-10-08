@@ -82,11 +82,11 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 		);
 	});
 
-	if (allowedMediaTypes.length === 0) {
-		return mediaPickerItems[0];
-	}
+	const type = allowedMediaTypes.length === 1
+		? mediaPickerItems[0]
+		: factory.createUnionTypeNode(mediaPickerItems);
 
-	return factory.createUnionTypeNode(mediaPickerItems);
+	return factory.createArrayTypeNode(type);
 }
 
 function getAllowedMediaTypes(artifacts: ArtifactContainer, filter: string | undefined): MediaType[] {
