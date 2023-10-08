@@ -121,7 +121,7 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 
 	return [
 		factory.createTypeAliasDeclaration(
-			undefined,
+			[exportToken],
 			factory.createIdentifier(variableWithoutAreasIdentifier),
 			undefined,
 			factory.createUnionTypeNode(blocksWithoutArea)
