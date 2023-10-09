@@ -13,11 +13,11 @@ type SliderConfig = {
 	step: number
 };
 
-export const sliderHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.Slider',
+export const sliderHandler = {
+	editorAlias: 'Umbraco.Slider' as const,
 	build: () => [],
 	reference,
-}
+} satisfies HandlerConfig
 
 export function reference(dataType: DataType): ts.TypeNode {
 	const config = dataType.Configuration as SliderConfig;

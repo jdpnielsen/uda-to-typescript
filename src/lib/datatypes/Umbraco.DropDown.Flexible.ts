@@ -11,11 +11,11 @@ type DropdownConfig = {
 	items: { id: number, value: string }[]
 };
 
-export const dropdownHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.DropDown.Flexible',
+export const dropdownHandler = {
+	editorAlias: 'Umbraco.DropDown.Flexible' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);

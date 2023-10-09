@@ -13,11 +13,11 @@ export type ImageCropperConfig = {
 	}[];
 };
 
-export const imageCropperHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.ImageCropper',
+export const imageCropperHandler = {
+	editorAlias: 'Umbraco.ImageCropper' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig
 
 export function build(): ts.Node[] {
 	return [];

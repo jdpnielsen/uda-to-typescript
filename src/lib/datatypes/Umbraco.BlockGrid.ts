@@ -44,11 +44,11 @@ interface Area {
 	}[];
 }
 
-export const blockGridHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.BlockGrid',
+export const blockGridHandler = {
+	editorAlias: 'Umbraco.BlockGrid' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig;
 
 function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 	const config = dataType.Configuration as BlockConfiguration;

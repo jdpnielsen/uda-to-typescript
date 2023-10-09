@@ -11,11 +11,11 @@ type RadioButtonListConfig = {
 	items: { id: number, value: string }[]
 };
 
-export const radioButtonListHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.RadioButtonList',
+export const radioButtonListHandler = {
+	editorAlias: 'Umbraco.RadioButtonList' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);

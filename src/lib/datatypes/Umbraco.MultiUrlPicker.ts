@@ -2,12 +2,12 @@ import ts, { factory } from 'typescript'
 
 import type { HandlerConfig } from '.';
 
-export const multiurlPickerHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.MultiUrlPicker',
+export const multiurlPickerHandler = {
+	editorAlias: 'Umbraco.MultiUrlPicker' as const,
 	init,
 	build: () => [],
 	reference,
-}
+} satisfies HandlerConfig
 
 const UrlItem = `
 export interface UrlItem {

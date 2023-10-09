@@ -1,8 +1,8 @@
 import ts, { factory } from 'typescript';
 import type { HandlerConfig } from '.';
 
-export const dateTimeHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.DateTime',
+export const dateTimeHandler = {
+	editorAlias: 'Umbraco.DateTime' as const,
 	build: () => [],
 	reference: () => factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-}
+} satisfies HandlerConfig

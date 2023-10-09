@@ -15,11 +15,11 @@ type DecodedColorPickerValue = {
 	label: string;
 }
 
-export const colorPickerHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.ColorPicker',
+export const colorPickerHandler = {
+	editorAlias: 'Umbraco.ColorPicker' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);

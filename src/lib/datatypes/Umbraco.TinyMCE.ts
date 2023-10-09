@@ -1,8 +1,8 @@
 import ts, { factory } from 'typescript';
 import type { HandlerConfig } from '.';
 
-export const tinyMCEHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.TinyMCE',
+export const tinyMCEHandler = {
+	editorAlias: 'Umbraco.TinyMCE' as const,
 	build: () => [],
 	reference: () => factory.createTypeLiteralNode([
 		factory.createPropertySignature(
@@ -12,4 +12,4 @@ export const tinyMCEHandler: HandlerConfig = {
 			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
 		)
 	]),
-}
+} satisfies HandlerConfig

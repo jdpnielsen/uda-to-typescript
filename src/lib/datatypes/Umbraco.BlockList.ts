@@ -26,11 +26,11 @@ interface Block {
 	forceHideContentEditorInOverlay?: boolean
 }
 
-export const blockListHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.BlockList',
+export const blockListHandler = {
+	editorAlias: 'Umbraco.BlockList' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig;
 
 function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 	const config = dataType.Configuration as BlockConfiguration;

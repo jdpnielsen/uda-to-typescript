@@ -10,11 +10,11 @@ type CheckboxListConfig = {
 	items: { id: number, value: string }[]
 };
 
-export const checkboxListHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.CheckBoxList',
+export const checkboxListHandler = {
+	editorAlias: 'Umbraco.CheckBoxList' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig;
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);

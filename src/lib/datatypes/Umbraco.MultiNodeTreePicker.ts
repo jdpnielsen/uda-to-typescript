@@ -18,11 +18,11 @@ type MultiNodeTreePickerConfiguration = {
 	filter?: string;
 }
 
-export const multiNodePickerHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.MultiNodeTreePicker',
+export const multiNodePickerHandler = {
+	editorAlias: 'Umbraco.MultiNodeTreePicker' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig
 
 export function build(): ts.Node[] {
 	return [];

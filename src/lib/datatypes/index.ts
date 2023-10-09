@@ -67,4 +67,4 @@ export const dataTypeMap = {
 	[tinyMCEHandler.editorAlias]: tinyMCEHandler,
 	[trueFalseHandler.editorAlias]: trueFalseHandler,
 	[uploadFieldHandler.editorAlias]: uploadFieldHandler,
-};
+} satisfies DataTypeConfig;

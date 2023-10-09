@@ -35,11 +35,11 @@ interface Crop {
 	height: number;
 }
 
-export const mediaPickerHandler: HandlerConfig = {
-	editorAlias: 'Umbraco.MediaPicker3',
+export const mediaPickerHandler = {
+	editorAlias: 'Umbraco.MediaPicker3' as const,
 	build,
 	reference,
-}
+} satisfies HandlerConfig
 
 export function build(): ts.Node[] {
 	return [];
