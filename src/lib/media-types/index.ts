@@ -1,25 +1,24 @@
 import ts, { factory } from 'typescript';
 import { MediaType } from '../types/media-type';
 import { pascalCase } from 'change-case';
-import { dataTypeMap } from '../datatypes';
 import { parseUdi } from '../helpers/parse-udi';
-import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { collectProperties } from '../helpers/build-properties';
+import type { HandlerContext } from '../build-types';
 
-export type HandlerConfig = {
-	build: (dataType: MediaType, artifacts: ArtifactContainer,) => ts.Node[];
-	reference: (dataType: MediaType, artifacts: ArtifactContainer,) => ts.TypeReferenceNode;
+export type MediaTypeHandler = {
+	build: (dataType: MediaType, context: HandlerContext) => ts.Node[];
+	reference: (dataType: MediaType, context: HandlerContext) => ts.TypeReferenceNode;
 }
 
-export const mediaTypeHandler: HandlerConfig = {
+export const mediaTypeHandler: MediaTypeHandler = {
 	build,
 	reference,
 }
 
-function build(MediaType: MediaType, artifacts: ArtifactContainer): ts.Node[] {
-	const variableIdentifier = pascalCase(MediaType.Alias);
+function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerContext): ts.Node[] {
+	const variableIdentifier = pascalCase(mediaType.Alias);
 
-	const properties = collectProperties(MediaType)
+	const properties = collectProperties(mediaType)
 		.map(propertyType => {
 			const { id: dataTypeId } = parseUdi(propertyType.DataType);
 			const dataType = artifacts['data-type'].get(dataTypeId);
@@ -35,7 +34,7 @@ function build(MediaType: MediaType, artifacts: ArtifactContainer): ts.Node[] {
 				);
 			}
 
-			if (!dataTypeMap[dataType.EditorAlias]) {
+			if (!dataTypeHandlers[dataType.EditorAlias]) {
 				console.warn(`Could not find handler for data type ${dataType.EditorAlias}`);
 
 				return factory.createPropertySignature(
@@ -46,7 +45,7 @@ function build(MediaType: MediaType, artifacts: ArtifactContainer): ts.Node[] {
 				);
 			}
 
-			const reference = dataTypeMap[dataType.EditorAlias].reference(dataType, artifacts);
+			const reference = dataTypeHandlers[dataType.EditorAlias].reference(dataType, artifacts);
 
 			return factory.createPropertySignature(
 				undefined,
@@ -64,7 +63,7 @@ function build(MediaType: MediaType, artifacts: ArtifactContainer): ts.Node[] {
 			factory.createTypeReferenceNode(
 				factory.createIdentifier('BaseMediaType'),
 				[
-					factory.createLiteralTypeNode(factory.createStringLiteral(MediaType.Alias)),
+					factory.createLiteralTypeNode(factory.createStringLiteral(mediaType.Alias)),
 					properties.length === 0
 						? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
 						: factory.createTypeLiteralNode(properties)

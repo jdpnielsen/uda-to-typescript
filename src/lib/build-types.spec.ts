@@ -8,7 +8,10 @@ describe('buildTypes', () => {
 	it('Should handle a glob with no files', async () => {
 		const artifacts = await collectArtifacts('./__bad_path/*.uda');
 
-		const output = buildTypes(artifacts, dataTypeMap);
+		const output = buildTypes({
+			artifacts,
+			dataTypeHandlers: dataTypeMap
+		});
 		const expected = ts.createPrinter()
 			.printList(
 				ts.ListFormat.SingleLine,
@@ -24,7 +27,11 @@ describe('buildTypes', () => {
 		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/*.uda');
 		const expected = await readFile('./src/__tests__/__fixtures__/output.txt');
 
-		const output = buildTypes(artifacts, dataTypeMap);
+		const output = buildTypes({
+			artifacts,
+			dataTypeHandlers: dataTypeMap
+		});
+
 		const actual = ts.createPrinter()
 			.printList(
 				ts.ListFormat.MultiLine,

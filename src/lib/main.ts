@@ -20,9 +20,9 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 
 	const { dir, name } = path.parse(resolvedOutput);
 
-	const fileDict = await collectArtifacts(resolvedInput);
+	const artifacts = await collectArtifacts(resolvedInput);
 
-	const nodes = buildTypes(fileDict, dataTypes);
+	const nodes = buildTypes({ artifacts, dataTypeHandlers: dataTypes });
 
 	const sourceFile = ts.createSourceFile(
 		output,

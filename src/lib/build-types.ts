@@ -7,7 +7,13 @@ import { newLineAST } from './helpers/ast/newline';
 import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 
-export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTypeConfig): ts.NodeArray<ts.Node> {
+export type HandlerContext = {
+	artifacts: ArtifactContainer;
+	dataTypeHandlers: DataTypeConfig;
+}
+
+export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
+	const { artifacts, dataTypeHandlers } = context;
 	const dataTypes = Array
 		.from(artifacts['data-type'].values())
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
@@ -82,7 +88,7 @@ export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTyp
 		.sort((a, b) => a.localeCompare(b));
 
 	for (const editorAlias of configuredEditors) {
-		const handler = dataTypeConfig[editorAlias];
+		const handler = dataTypeHandlers[editorAlias];
 
 		if (handler && handler.init) {
 			const nodes = handler.init(artifacts);
@@ -95,7 +101,7 @@ export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTyp
 
 	/** Build datatype instances */
 	for (const dataType of dataTypes) {
-		const handler = dataTypeConfig[dataType.EditorAlias];
+		const handler = dataTypeHandlers[dataType.EditorAlias];
 
 		if (handler) {
 			const nodes = handler.build(dataType, artifacts);
@@ -112,7 +118,7 @@ export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTyp
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	for (const mediaType of mediaTypes) {
-		const nodes = mediaTypeHandler.build(mediaType, artifacts);
+		const nodes = mediaTypeHandler.build(mediaType, context);
 
 		if (nodes) {
 			statements.push(
@@ -132,7 +138,7 @@ export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTyp
 				undefined,
 				ts.factory.createUnionTypeNode(
 					getPickableTypes(mediaTypes)
-						.map((mediaType) => mediaTypeHandler.reference(mediaType, artifacts))
+						.map((mediaType) => mediaTypeHandler.reference(mediaType, context))
 				),
 			),
 		);
@@ -144,7 +150,7 @@ export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTyp
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	for (const documentType of documentTypes) {
-		const nodes = documentHandler.build(documentType, artifacts);
+		const nodes = documentHandler.build(documentType, context);
 
 		if (nodes) {
 			statements.push(
@@ -164,7 +170,7 @@ export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTyp
 				undefined,
 				ts.factory.createUnionTypeNode(
 					getPickableTypes(documentTypes)
-						.map((documentType) => documentHandler.reference(documentType, artifacts))
+						.map((documentType) => documentHandler.reference(documentType, context))
 				),
 			),
 		);

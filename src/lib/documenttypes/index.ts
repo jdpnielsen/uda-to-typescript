@@ -1,15 +1,14 @@
 import ts, { factory } from 'typescript';
 import { DocumentType } from '../types/document-type';
 import { pascalCase } from 'change-case';
-import { dataTypeMap } from '../datatypes';
 import { parseUdi } from '../helpers/parse-udi';
-import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { collectProperties } from '../helpers/build-properties';
 import { exportToken } from '../helpers/ast/export-token';
+import { HandlerContext } from '../build-types';
 
 export type HandlerConfig = {
-	build: (dataType: DocumentType, artifacts: ArtifactContainer,) => ts.Node[];
-	reference: (dataType: DocumentType, artifacts: ArtifactContainer,) => ts.TypeReferenceNode;
+	build: (dataType: DocumentType, context: HandlerContext) => ts.Node[];
+	reference: (dataType: DocumentType, context: HandlerContext) => ts.TypeReferenceNode;
 }
 
 export const documentHandler: HandlerConfig = {
@@ -17,16 +16,16 @@ export const documentHandler: HandlerConfig = {
 	reference,
 }
 
-function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Node[] {
+function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: HandlerContext): ts.Node[] {
 	const variableIdentifier = pascalCase(documentType.Alias);
 
 	// TODO: Handle cultures
 	const properties = collectProperties(documentType)
 		.map(propertyType => {
 			const { id: dataTypeId } = parseUdi(propertyType.DataType);
-			const dataType = artifacts['data-type'].get(dataTypeId);
+			const artifact = artifacts['data-type'].get(dataTypeId);
 
-			if (!dataType) {
+			if (!artifact) {
 				console.warn(`Could not find data type with id ${dataTypeId}`);
 
 				return factory.createPropertySignature(
@@ -37,8 +36,8 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 				);
 			}
 
-			if (!dataTypeMap[dataType.EditorAlias]) {
-				console.warn(`Could not find handler for data type ${dataType.EditorAlias}`);
+			if (!dataTypeHandlers[artifact.EditorAlias]) {
+				console.warn(`Could not find handler for data type ${artifact.EditorAlias}`);
 
 				return factory.createPropertySignature(
 					undefined,
@@ -48,7 +47,7 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 				);
 			}
 
-			const reference = dataTypeMap[dataType.EditorAlias].reference(dataType, artifacts);
+			const reference = dataTypeHandlers[artifact.EditorAlias].reference(artifact, artifacts);
 
 			return factory.createPropertySignature(
 				undefined,
@@ -58,7 +57,7 @@ function build(documentType: DocumentType, artifacts: ArtifactContainer): ts.Nod
 					: factory.createToken(ts.SyntaxKind.QuestionToken),
 				reference,
 			);
-		})
+		});
 
 	return [
 		factory.createTypeAliasDeclaration(
