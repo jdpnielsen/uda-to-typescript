@@ -1,7 +1,8 @@
 import { Command } from 'commander';
 
 import { version } from '../package.json';
-import { CliOptions, main } from './lib/main';
+import { main } from './lib/main';
+import { dataTypeMap } from './lib/datatypes';
 
 const program = new Command();
 
@@ -15,9 +16,15 @@ program
 	.parse(process.argv);
 
 // Function code for CLI goes here
-const opts = program.opts() as CliOptions;
+const opts = program.opts() as {
+	/** Input glob */
+	input: string;
 
-main(opts)
+	/** Output file */
+	output: string;
+};
+
+main({ ...opts, dataTypes: dataTypeMap })
 	.catch((err) => {
 		console.error(err);
 		process.exit(1);

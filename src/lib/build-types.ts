@@ -1,13 +1,13 @@
 import ts, { factory } from 'typescript';
 
 import { ArtifactContainer } from './helpers/collect-artifacts';
-import { dataTypeMap } from './datatypes';
+import { DataTypeConfig } from './datatypes';
 import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
 import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 
-export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> {
+export function buildTypes(artifacts: ArtifactContainer, dataTypeConfig: DataTypeConfig): ts.NodeArray<ts.Node> {
 	const dataTypes = Array
 		.from(artifacts['data-type'].values())
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
@@ -82,7 +82,7 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 		.sort((a, b) => a.localeCompare(b));
 
 	for (const editorAlias of configuredEditors) {
-		const handler = dataTypeMap[editorAlias];
+		const handler = dataTypeConfig[editorAlias];
 
 		if (handler && handler.init) {
 			const nodes = handler.init(artifacts);
@@ -95,7 +95,7 @@ export function buildTypes(artifacts: ArtifactContainer): ts.NodeArray<ts.Node> 
 
 	/** Build datatype instances */
 	for (const dataType of dataTypes) {
-		const handler = dataTypeMap[dataType.EditorAlias];
+		const handler = dataTypeConfig[dataType.EditorAlias];
 
 		if (handler) {
 			const nodes = handler.build(dataType, artifacts);

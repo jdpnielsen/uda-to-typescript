@@ -36,9 +36,11 @@ export type HandlerConfig = {
 	reference: (dataType: DataType, artifacts: ArtifactContainer) => ts.TypeNode;
 }
 
-export const dataTypeMap: {
+export type DataTypeConfig = {
 	[EditorAlias: string]: HandlerConfig
-} = {
+};
+
+export const dataTypeMap = {
 	[blockGridHandler.editorAlias]: blockGridHandler,
 	[blockListHandler.editorAlias]: blockListHandler,
 	[checkboxListHandler.editorAlias]: checkboxListHandler,

@@ -4,22 +4,26 @@ import { buildTypes } from './build-types';
 import ts from 'typescript';
 import path from 'path';
 import { PathLike } from 'fs';
+import { DataTypeConfig } from './datatypes';
 
-export interface CliOptions {
+export interface MainOptions {
 	/** Input glob */
 	input: string;
 
 	/** Output file */
 	output: string;
+
+	dataTypes: DataTypeConfig;
 }
 
-export async function main(options: CliOptions): Promise<void> {
-	const { input, output } = options;
+export async function main(options: MainOptions): Promise<void> {
+	const { input, output, dataTypes: dataTypes } = options;
 
 	const { dir, name } = path.parse(output);
 
 	const fileDict = await collectArtifacts(input);
-	const nodes = buildTypes(fileDict);
+
+	const nodes = buildTypes(fileDict, dataTypes);
 
 	const sourceFile = ts.createSourceFile(
 		output,
