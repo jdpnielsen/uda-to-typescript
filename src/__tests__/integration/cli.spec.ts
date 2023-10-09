@@ -1,5 +1,5 @@
 import execa from 'execa';
-import { stat, unlink } from 'fs/promises';
+import { rm, stat } from 'fs/promises';
 import { resolve } from 'path';
 import { version } from '../../../package.json';
 
@@ -8,7 +8,7 @@ const bin = resolve(__dirname, './bin.js');
 describe('uda-to-typescript', () => {
 	beforeEach(async () => {
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		await unlink('./dist/output.ts').catch(() => {});
+		await rm('./dist', { recursive: true }).catch(() => {});
 	});
 
 	it('should display the help contents', async () => {
