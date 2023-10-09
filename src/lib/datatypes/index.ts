@@ -31,9 +31,9 @@ import { uploadFieldHandler } from './Umbraco.UploadField';
 
 export type HandlerConfig = {
 	editorAlias: string;
-	init?: (artifacts: ArtifactContainer) => ts.Node[];
-	build: (dataType: DataType, artifacts: ArtifactContainer) => ts.Node[];
-	reference: (dataType: DataType, artifacts: ArtifactContainer) => ts.TypeNode;
+	init?: (artifacts: ArtifactContainer) => string | ts.Node[];
+	build: (dataType: DataType, artifacts: ArtifactContainer) => string | ts.Node[];
+	reference: (dataType: DataType, artifacts: ArtifactContainer) => string | ts.TypeNode;
 }
 
 export type DataTypeConfig = {

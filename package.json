@@ -11,7 +11,7 @@
     "uda-to-typescript": "./bin/index.js"
   },
   "main": "./lib/index.js",
-	"types": "./lib/index.d.ts",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf ./lib/",
@@ -71,7 +71,7 @@
     "semantic-release": "^21.0.1",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.2.1",
-    "typescript": "^5.1.3"
+    "typescript": "^5.2.2"
   },
   "config": {
     "commitizen": {

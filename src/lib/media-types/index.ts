@@ -4,6 +4,7 @@ import { pascalCase } from 'change-case';
 import { parseUdi } from '../helpers/parse-udi';
 import { collectProperties } from '../helpers/build-properties';
 import type { HandlerContext } from '../build-types';
+import { parseStringStatements } from '../helpers/ast/parse-string';
 
 export type MediaTypeHandler = {
 	build: (dataType: MediaType, context: HandlerContext) => ts.Node[];
@@ -45,7 +46,10 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 				);
 			}
 
-			const reference = dataTypeHandlers[dataType.EditorAlias].reference(dataType, artifacts);
+			const referenceOutput = dataTypeHandlers[dataType.EditorAlias].reference(dataType, artifacts);
+			const reference =	typeof referenceOutput === 'string'
+				? parseStringStatements(referenceOutput)[0] as ts.TypeNode
+				: referenceOutput;
 
 			return factory.createPropertySignature(
 				undefined,

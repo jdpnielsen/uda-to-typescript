@@ -37,7 +37,9 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 		ts.ScriptKind.TS
 	)
 
-	const printer = ts.createPrinter({})
+	const printer = ts.createPrinter({
+		omitTrailingSemicolon: true,
+	})
 
 	// TODO: support custom templates
 	await cloneTemplates(path.resolve(__dirname, '../../templates'), dir);
@@ -48,6 +50,7 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 		sourceFile,
 	);
 
+	console.log('Writing types to ', resolvedOutput);
 	await writeFile(resolvedOutput, outputFile);
 }
 

@@ -6,6 +6,7 @@ import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
 import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
+import { parseStringStatements } from './helpers/ast/parse-string';
 
 export type HandlerContext = {
 	artifacts: ArtifactContainer;
@@ -92,8 +93,9 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 
 		if (handler && handler.init) {
 			const nodes = handler.init(artifacts);
-
-			if (nodes) {
+			if (typeof nodes === 'string') {
+				statements.push(...parseStringStatements(nodes));
+			} else {
 				statements.push(...nodes);
 			}
 		}
@@ -106,7 +108,9 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 		if (handler) {
 			const nodes = handler.build(dataType, artifacts);
 
-			if (nodes) {
+			if (typeof nodes === 'string') {
+				statements.push(...parseStringStatements(nodes));
+			} else {
 				statements.push(...nodes);
 			}
 		}
