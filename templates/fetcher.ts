@@ -107,7 +107,7 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, 
 	return async <T extends ExpandParam<Doc> = undefined>(opts?: QueryOptions<Doc>) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/api/v1/content`, host);
+		const url = new URL(`${host}/umbraco/delivery/api/v1/content`, host);
 		url.search = queryParams.toString();
 
 		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url });
@@ -134,7 +134,7 @@ export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: stri
 	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/api/v1/content/item/${id}`, host);
+		const url = new URL(`${host}/umbraco/delivery/api/v1/content/item/${id}`, host);
 		url.search = queryParams.toString();
 
 		return fetchFunction<ExpandResult<Doc, T>>({ url });
