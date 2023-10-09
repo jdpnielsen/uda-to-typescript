@@ -2,12 +2,13 @@ import { collectArtifacts } from './helpers/collect-artifacts';
 import { buildTypes } from './build-types';
 import ts from 'typescript';
 import { readFile } from 'fs/promises';
+import { dataTypeMap } from './datatypes';
 
 describe('buildTypes', () => {
 	it('Should handle a glob with no files', async () => {
 		const artifacts = await collectArtifacts('./__bad_path/*.uda');
 
-		const output = buildTypes(artifacts);
+		const output = buildTypes(artifacts, dataTypeMap);
 		const expected = ts.createPrinter()
 			.printList(
 				ts.ListFormat.SingleLine,
@@ -23,7 +24,7 @@ describe('buildTypes', () => {
 		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/*.uda');
 		const expected = await readFile('./src/__tests__/__fixtures__/output.txt');
 
-		const output = buildTypes(artifacts);
+		const output = buildTypes(artifacts, dataTypeMap);
 		const actual = ts.createPrinter()
 			.printList(
 				ts.ListFormat.MultiLine,

@@ -10,7 +10,7 @@
   "bin": {
     "uda-to-typescript": "./bin/index.js"
   },
-  "main": "./lib/src/lib/main.js",
+  "main": "./lib/src/index.js",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf ./lib/",
@@ -50,6 +50,7 @@
     "async-parallel": "^1.2.3",
     "change-case": "^4.1.2",
     "commander": "^7.2.0",
+    "cosmiconfig": "^8.3.6",
     "glob": "^10.2.7"
   },
   "devDependencies": {

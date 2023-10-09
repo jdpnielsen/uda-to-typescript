@@ -4,24 +4,23 @@ import { buildTypes } from './build-types';
 import ts from 'typescript';
 import path from 'path';
 import { PathLike } from 'fs';
-import { DataTypeConfig } from './datatypes';
+import { UDAConvertConfiguration } from './define-config';
+import { dataTypeMap } from './datatypes';
+import { cwd } from 'process';
 
-export interface MainOptions {
-	/** Input glob */
-	input: string;
+export async function main(options: UDAConvertConfiguration, workingDirectory = cwd()): Promise<void> {
+	const {
+		input,
+		output,
+		dataTypes = dataTypeMap
+	} = options;
 
-	/** Output file */
-	output: string;
+	const resolvedOutput = path.resolve(workingDirectory, output);
+	const resolvedInput = path.resolve(workingDirectory, input);
 
-	dataTypes: DataTypeConfig;
-}
+	const { dir, name } = path.parse(resolvedOutput);
 
-export async function main(options: MainOptions): Promise<void> {
-	const { input, output, dataTypes: dataTypes } = options;
-
-	const { dir, name } = path.parse(output);
-
-	const fileDict = await collectArtifacts(input);
+	const fileDict = await collectArtifacts(resolvedInput);
 
 	const nodes = buildTypes(fileDict, dataTypes);
 
@@ -44,8 +43,7 @@ export async function main(options: MainOptions): Promise<void> {
 		sourceFile,
 	);
 
-	console.log('Writing output to', output);
-	await writeFile(output, outputFile);
+	await writeFile(resolvedOutput, outputFile);
 }
 
 async function cloneTemplates(source: PathLike, destination: PathLike) {
