@@ -1,7 +1,6 @@
 import { Command } from 'commander';
 import { cosmiconfigSync } from 'cosmiconfig';
 
-import { version } from '../package.json';
 import { main } from './lib/main';
 import { UDAConvertConfiguration } from './lib/define-config';
 import { cwd } from 'process';
@@ -10,7 +9,7 @@ import path from 'path';
 const program = new Command();
 
 program
-	.version(version)
+	.version('1.0.0')
 	.name('uda-to-typescript')
 	.description('CLI to convert Umbraco UDA files to typescript definitions')
 	.option('-c, --config <string>', 'Path for config file. Example: --config ./udaconvert.config.ts')
