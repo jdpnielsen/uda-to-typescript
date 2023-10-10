@@ -39,16 +39,18 @@ Examples:
 ### Without config
 
 ```bash
-  $ uda-to-typescript --input ../umbraco-boilerplate/src/UmbracoProject/umbraco/Deploy/Revision/*.uda --output ./umbraco-sdk/types.ts
+  $ uda-to-typescript --input ../your-umbraco-project/src/UmbracoProject/umbraco/Deploy/Revision/*.uda --output ./umbraco-sdk/types.ts
 ```
 
 ### With config
 
 ```bash
- $ uda-to-typescript --config ./udaconvert.config.js
- # or
  $ uda-to-typescript
+ # or
+ $ uda-to-typescript --config ./udaconvert.config.ts
 ```
+
+**Note:** *uda-to-typescript uses [cosmic-config](https://github.com/cosmiconfig/cosmiconfig) to locate config files.*
 
 **File udaconvert.config.ts**
 
@@ -56,17 +58,6 @@ Examples:
 import { defineConfig } from '@jdpnielsen/uda-to-typescript';
 
 export default defineConfig({
-  input: './petstore.yaml',
-  output: './src/petstore.ts',
-});
-```
-
-**File udaconvert.config.js**
-
-```ts
-const { defineConfig } = require('@jdpnielsen/uda-to-typescript');
-
-module.exports = defineConfig({
   input: './petstore.yaml',
   output: './src/petstore.ts',
 });
