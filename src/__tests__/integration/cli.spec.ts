@@ -24,8 +24,9 @@ describe('uda-to-typescript', () => {
 	});
 
 	it('should output types', async () => {
-		await execa(bin, ['--input', './files/*.uda', '--output', './dist/output.ts']);
+		await execa(bin, ['--input', './src/__tests__/__fixtures__/*.uda', '--output', './dist/output.ts']);
+
 		const val = await stat('./dist/output.ts');
-		expect(val).toBeDefined();
+		expect(val.isFile()).toBeTruthy();
 	});
 });
