@@ -49,7 +49,8 @@ export function build(): ts.Node[] {
 export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.TypeNode {
 	const config = dataType.Configuration as mediaPickerConfig;
 
-	const allowedMediaTypes = getAllowedMediaTypes(artifacts, config.filter);
+	const allowedMediaTypes = getAllowedMediaTypes(artifacts, config.filter)
+		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	const mediaPickerItems = allowedMediaTypes.map((mediaType) => {
 		const mediaTypeCrops = collectProperties(mediaType)
