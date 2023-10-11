@@ -41,7 +41,7 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	}
 
 	if (options.fetch?.children) {
-		queryParams.set('fetch', '?.children:' + options.fetch?.children);
+		queryParams.set('fetch', 'children:' + options.fetch?.children);
 	}
 
 	if (options.filter?.contentType) {
