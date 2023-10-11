@@ -19,7 +19,7 @@ type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unknown
  * Unexpands a media type.
  * In practice this means that all properties are removed from the document type.
  */
-type UnexpandMediatType<Media extends BaseMediaType> = Media extends unknown
+export type UnexpandMediatType<Media extends BaseMediaType> = Media extends unknown
 	? Overwrite<Media, { properties: EmptyObjectType }>
 	: never;
 
@@ -33,7 +33,7 @@ type MaybeUnexpandDoc<Doc extends BaseDocumentType | null, BlackListedKeys exten
 		? BaseDocumentType<string, EmptyObjectType, EmptyObjectType>
 		: UnexpandDocumentExpandables<NonNullable<Doc>, BlackListedKeys>;
 
-type UnexpandBlockList<BlockList extends BaseBlockListType, BlackListedKeys extends ExpandableDocumentKeys<BlockList['items'][number]['content']> | undefined> = BaseBlockListType<
+export type UnexpandBlockList<BlockList extends BaseBlockListType, BlackListedKeys extends ExpandableDocumentKeys<BlockList['items'][number]['content']> | undefined> = BaseBlockListType<
 	BaseBlockType<
 		UnexpandDocumentExpandables<BlockList['items'][number]['content'], BlackListedKeys>,
 		BlockList['items'][number]['settings'] extends null
@@ -42,7 +42,7 @@ type UnexpandBlockList<BlockList extends BaseBlockListType, BlackListedKeys exte
 	>
 >;
 
-type UnexpandBlockGrid<
+export type UnexpandBlockGrid<
 	BlockGrid extends BaseBlockGridType,
 	BlackListedContentKeys extends ExpandableDocumentKeys<BlockGrid['items'][number]['content']> | undefined,
 	BlackListedSettingsKeys extends ExpandableDocumentKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined
