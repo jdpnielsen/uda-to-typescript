@@ -104,7 +104,7 @@ const defaultFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => 
  */
 export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(opts?: QueryOptions<Doc>) => {
+	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
 		const url = new URL(`${host}/umbraco/delivery/api/v1/content`, host);
