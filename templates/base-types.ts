@@ -57,6 +57,9 @@ export interface BaseDocumentType<
 > {
 	id: string;
 	name: string;
+	createDate: string;
+	updateDate: string;
+	route: ContentRoute;
 	contentType: Alias;
 	cultures: Cultures;
 	properties: Properties;
