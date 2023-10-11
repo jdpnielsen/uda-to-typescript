@@ -77,7 +77,7 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
  * }
  * ```
  */
-type FetchFunction = <T>({ url }: { url: URL }) => Promise<T>;
+export type FetchFunction = <T>({ url }: { url: URL }) => Promise<T>;
 
 const defaultFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
 	const response = await fetch(url);
