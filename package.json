@@ -5,7 +5,8 @@
   "files": [
     "!lib/__tests__/**/*",
     "lib/**/*",
-    "bin/**/*"
+    "bin/**/*",
+    "templates/**/*"
   ],
   "bin": {
     "uda-to-typescript": "bin/index.js"
