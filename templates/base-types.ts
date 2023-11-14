@@ -43,7 +43,9 @@ export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends C
 	id: string;
 	name: string;
 	url: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: unknown } ? string : null;
-	extension: ExtractProps<T['properties'], 'umbracoExtension'> extends { umbracoExtension: unknown } ? number : null;
+	extension: ExtractProps<T['properties'], 'umbracoExtension'> extends { umbracoExtension: unknown }
+		? ExtractProps<T['properties'], 'umbracoExtension'>['umbracoExtension']
+		: string;
 	width: ExtractProps<T['properties'], 'umbracoWidth'> extends { umbracoWidth: unknown } ? number : null;
 	height: ExtractProps<T['properties'], 'umbracoHeight'> extends { umbracoHeight: unknown } ? number : null;
 	bytes: ExtractProps<T['properties'], 'umbracoBytes'> extends { umbracoBytes: unknown } ? number : null;
