@@ -50,11 +50,11 @@ export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends C
 	focalPoint: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: { focalPoint: unknown } }
 		? ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['focalPoint']
 		: never;
-	crops: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: { crops: unknown } }
+	crops: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: { crops: Crop[] } }
 		? (
 			// Test that local crops are provided
 			C extends Crop[]
-				? ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops'] & C
+				? [...ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops'], ...C]
 				: ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops']
 		)
 		: C;
