@@ -11,7 +11,7 @@ type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
  * Unexpands a document type.
  * In practice this means that all properties are removed from the document type.
  */
-type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unknown
+export type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unknown
 	? BaseDocumentType<Doc['contentType'], EmptyObjectType, Doc['cultures']>
 	: never;
 
@@ -55,11 +55,43 @@ export type UnexpandBlockGrid<
 	>
 >;
 
-type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown
+/**
+ * Gets all expandable properties of a document type.
+ * @param Doc The Docutment to get the expandable keys from.
+ * @returns The expandable keys.
+ * @example
+ * ```ts
+ * type Page = BaseDocumentType<'page', {
+ * 	foo: BaseDocumentType;
+ * 	bar: BaseDocumentType[];
+ * 	baz: string;
+ * }>;
+ *
+ * type ExpandableKeys = ExpandableDocumentKeys<Page>;
+ * // type ExpandableKeys = 'foo' | 'bar';
+ * ```
+ */
+export type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown
 	? ExpandablePropertyKeys<Doc['properties']>
 	: never;
 
-type ExpandablePropertyKeys<Properties extends ObjectType> = Properties extends unknown
+/**
+ * Gets all expandable properties of an object.
+ * @param Properties The properties to get the expandable keys from.
+ * @returns The expandable keys.
+ * @example
+ * ```ts
+ * type PropObject = {
+ * 	foo: BaseDocumentType;
+ * 	bar: BaseDocumentType[];
+ * 	baz: string;
+ * };
+ *
+ * type ExpandableKeys = ExpandablePropertyKeys<PropObject>;
+ * // type ExpandableKeys = 'foo' | 'bar';
+ * ```
+ */
+export type ExpandablePropertyKeys<Properties extends ObjectType> = Properties extends unknown
 	? KeysOfBaseType<Properties, BaseDocumentType>
 		| KeysOfBaseType<Properties, BaseDocumentType[]>
 		| KeysOfBaseType<Properties, BaseBlockListType>
@@ -99,7 +131,7 @@ type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
  * @param Doc The document properties to unexpand.
  * @param BlackListedKeys The keys that should not be unexpanded.
  */
-type UnexpandPropertyExpandables<Doc extends ObjectType, BlackListedKeys extends ExpandablePropertyKeys<Doc> | undefined> = {
+export type UnexpandPropertyExpandables<Doc extends ObjectType, BlackListedKeys extends ExpandablePropertyKeys<Doc> | undefined> = {
 	[K in keyof Doc]: K extends BlackListedKeys
 		? UnexpandNestedProperty<Doc[K]>
 		: UnexpandProperty<Doc[K]>
@@ -110,7 +142,7 @@ type UnexpandPropertyExpandables<Doc extends ObjectType, BlackListedKeys extends
  * @param Doc The document type to unexpand.
  * @param BlackListedKeys The keys that should not be unexpanded.
  */
-type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys extends ExpandableDocumentKeys<Doc> | undefined> = Doc extends unknown
+export type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys extends ExpandableDocumentKeys<Doc> | undefined> = Doc extends unknown
 	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
 	: never;
 
