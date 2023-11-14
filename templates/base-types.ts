@@ -47,6 +47,9 @@ export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends C
 	width: ExtractProps<T['properties'], 'umbracoWidth'> extends { umbracoWidth: unknown } ? number : null;
 	height: ExtractProps<T['properties'], 'umbracoHeight'> extends { umbracoHeight: unknown } ? number : null;
 	bytes: ExtractProps<T['properties'], 'umbracoBytes'> extends { umbracoBytes: unknown } ? number : null;
+	focalPoint: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: { focalPoint: unknown } }
+		? ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['focalPoint']
+		: never;
 	crops: C;
 }
 
