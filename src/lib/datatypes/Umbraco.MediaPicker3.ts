@@ -4,10 +4,7 @@ import { pascalCase } from 'change-case';
 
 import { DataType } from '../types/data-type';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
-import { collectProperties } from '../helpers/build-properties';
-import { parseUdi } from '../helpers/parse-udi';
 import { buildCrops } from '../helpers/ast/media-object';
-import { ImageCropperConfig } from './Umbraco.ImageCropper';
 import { MediaType } from '../types/media-type';
 
 import type { HandlerConfig } from '.';
@@ -53,21 +50,7 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
 	const mediaPickerItems = allowedMediaTypes.map((mediaType) => {
-		const mediaTypeCrops = collectProperties(mediaType)
-			.reduce((acc, propertyType) => {
-				const { id: dataTypeId } = parseUdi(propertyType.DataType);
-				const dataType = artifacts['data-type'].get(dataTypeId);
-				if (dataType?.EditorAlias !== 'Umbraco.ImageCropper') return acc;
-
-				const config = dataType.Configuration as ImageCropperConfig;
-				if (Array.isArray(config.crops)) {
-					acc.push(...config.crops);
-				}
-
-				return acc;
-			}, [] as ImageCropperConfig['crops'])
-
-		const crops = [...(config.crops || []) , ...mediaTypeCrops];
+		const crops = config.crops || [];
 
 		return factory.createTypeReferenceNode(
 			factory.createIdentifier('MediaPickerItem'),
