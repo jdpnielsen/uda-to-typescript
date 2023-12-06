@@ -1,4 +1,4 @@
-import { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseMediaType, BaseDocumentType, BaseGridBlockType, EmptyObjectType, ObjectType } from './base-types';
+import type { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseDocumentType, BaseGridBlockType, BaseMediaType, EmptyObjectType, ObjectType } from './base-types';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
@@ -33,13 +33,20 @@ type MaybeUnexpandDoc<Doc extends BaseDocumentType | null, BlackListedKeys exten
 		? BaseDocumentType<string, EmptyObjectType, EmptyObjectType>
 		: UnexpandDocumentExpandables<NonNullable<Doc>, BlackListedKeys>;
 
-export type UnexpandBlockList<BlockList extends BaseBlockListType, BlackListedKeys extends ExpandableDocumentKeys<BlockList['items'][number]['content']> | undefined> = BaseBlockListType<
-	BaseBlockType<
-		UnexpandDocumentExpandables<BlockList['items'][number]['content'], BlackListedKeys>,
-		BlockList['items'][number]['settings'] extends null
-			? null
-			: UnexpandDocumentExpandables<NonNullable<BlockList['items'][number]['settings']>, BlackListedKeys>
+export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends ExpandableDocumentKeys<NonNullable<Block['content']>> | undefined> = Block extends unknown
+	? BaseBlockType<
+		UnexpandDocumentExpandables<Block['content'], BlackListedKeys>,
+		Block['settings'] extends BaseDocumentType
+			? UnexpandDocumentExpandables<Block['settings'], BlackListedKeys>
+			: null
 	>
+	: never;
+
+export type UnexpandBlockList<
+	BlockList extends BaseBlockListType,
+	BlackListedKeys extends ExpandableDocumentKeys<BlockList['items'][number]['content']> | undefined,
+> = BaseBlockListType<
+	UnexpandBlock<BlockList['items'][number], BlackListedKeys>
 >;
 
 export type UnexpandBlockGrid<
@@ -112,7 +119,7 @@ type UnexpandNestedProperty<Prop> = Prop extends BaseDocumentType | null
 				? UnexpandBlockList<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>>
 				: Prop
 
-type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
+export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
 	? MaybeUnexpand<Prop>
 	: Prop extends BaseDocumentType[]
 		? UnexpandDocumentType<Prop[number]>[]
