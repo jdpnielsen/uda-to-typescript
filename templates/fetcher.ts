@@ -21,6 +21,8 @@ interface QueryOptions<T extends BaseDocumentType> {
 		name?: SortDirection;
 		sortOrder?: SortDirection;
 	};
+	take?: number;
+	skip?: number;
 }
 
 function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) {
@@ -58,6 +60,14 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 			.forEach(([key, value]) => {
 				queryParams.set('orderBy', `${key}:${value}`);
 			});
+	}
+
+	if (options.take) {
+		queryParams.set('take', options.take.toString());
+	}
+
+	if (options.skip) {
+		queryParams.set('skip', options.skip.toString());
 	}
 
 	return queryParams;
