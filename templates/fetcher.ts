@@ -116,7 +116,7 @@ const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: U
  * 	return response.json() as T;
  * }
  *
- * const getContent = buildContentFetcher<Content>('https://example.com/umbraco/delivery', customFetchFunction);
+ * const getContent = buildContentFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
 export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
@@ -124,7 +124,7 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, 
 	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/umbraco/delivery/api/v1/content`, host);
+		const url = new URL(`${host}/umbraco/delivery/api/v2/content`, host);
 		url.search = queryParams.toString();
 
 		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions});
@@ -143,7 +143,7 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, 
  * 	return response.json() as T;
  * }
  *
- * const getContentById = buildContentItemFetcher<Content>('https://example.com/umbraco/delivery', customFetchFunction);
+ * const getContentById = buildContentItemFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
 export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
@@ -151,9 +151,36 @@ export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: stri
 	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/umbraco/delivery/api/v1/content/item/${id}`, host);
+		const url = new URL(`${host}/umbraco/delivery/api/v2/content/item/${id}`, host);
 		url.search = queryParams.toString();
 
 		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
+	}
+}
+
+/**
+ * Builds a typed fetch function for getting content by ids.
+ * @example
+ * ```ts
+ * const customFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
+ * 	const response = await fetch(url);
+ * 	if (!response.ok) {
+ * 		throw new Error(response.statusText);
+ * 	}
+ * 	return response.json() as T;
+ * }
+ *
+ * const getContentById = buildContentItemFetcher<Content>('https://example.com', customFetchFunction);
+ * ```
+ */
+export function buildContentItemsFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
+	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
+	return async <T extends ExpandParam<Doc> = undefined>(opts?: { ids: string[], expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
+		const queryParams = buildQueryParams<Doc>(opts || {});
+
+		const url = new URL(`${host}/umbraco/delivery/api/v2/content/items`, host);
+		url.search = queryParams.toString();
+
+		return fetchFunction<ExpandResult<Doc, T>[]>({ url, options: fetchOptions });
 	}
 }
