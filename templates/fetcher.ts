@@ -73,6 +73,13 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	return queryParams;
 }
 
+type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
+	'Preview'?: 'true' | 'false' | boolean;
+	'Api-Key'?: string;
+	'Start-Item'?: string;
+	'Accept-Language'?: string;
+}
+
 /**
  * A function that fetches data from a url.
  * Takes a generic type parameter to specify the return type.
@@ -87,7 +94,7 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
  * }
  * ```
  */
-export type FetchFunction<O = RequestInit> = <T>({ url, options }: { url: URL, options?: O }) => Promise<T>;
+export type FetchFunction<O = RequestInit & { headers?: UmbracoHeaders }> = <T>({ url, options }: { url: URL, options?: O }) => Promise<T>;
 
 const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: URL, options?: RequestInit }) => {
 	const response = await fetch(url, options);
