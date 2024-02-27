@@ -1,0 +1,58 @@
+{
+  "Name": "Advanced richtext editor",
+  "Alias": "",
+  "EditorAlias": "Umbraco.TinyMCE",
+  "Configuration": {
+    "editor": {
+      "toolbar": [
+        "ace",
+        "styles",
+        "bold",
+        "italic",
+        "alignleft",
+        "aligncenter",
+        "alignright",
+        "bullist",
+        "numlist",
+        "outdent",
+        "indent",
+        "link",
+        "umbmediapicker",
+        "umbblockpicker",
+        "umbembeddialog"
+      ],
+      "stylesheets": [],
+      "maxImageSize": 500,
+      "mode": "inline",
+      "dimensions": {
+        "width": null
+      }
+    },
+    "blocks": [
+      {
+        "contentElementTypeKey": "7a09a5cf-86c2-4794-a57e-b6a38640f2d9",
+        "label": "Media test",
+        "editorSize": "medium",
+        "forceHideContentEditorInOverlay": false,
+        "displayInline": true
+      }
+    ],
+    "useLiveEditing": false,
+    "overlaySize": "small",
+    "hideLabel": false,
+    "ignoreUserStartNodes": false
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dcc",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/7a09a5cf86c24794a57eb6a38640f2d9"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "13.0.4"
+}

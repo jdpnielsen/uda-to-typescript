@@ -1,6 +1,13 @@
 import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
 
 export type TestPageBlocksBlockList = BaseBlockListType<BaseBlockType<RichtextBlock, null>>;
+export type RichtextEditor = {
+    markup: string;
+};
+export type AdvancedRichtextEditor = {
+    markup: string;
+    blocks: (BaseBlockType<MediaBlock, null>)[];
+};
 export const DropdownMultiple = {
     First: "first",
     Second: "Second"
@@ -27,9 +34,11 @@ export type Root = BaseDocumentType<"root", {
 }>;
 
 export type RichtextBlock = BaseDocumentType<"richtextBlock", {
-    content?: {
-        markup: string;
-    };
+    content?: RichtextEditor;
+}>;
+
+export type MediaBlock = BaseDocumentType<"mediaBlock", {
+    Media: unknown;
 }>;
 
 export type TestPage = BaseDocumentType<"testPage", {
