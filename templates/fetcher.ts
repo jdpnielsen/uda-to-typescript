@@ -87,10 +87,10 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
  * }
  * ```
  */
-export type FetchFunction = <T>({ url }: { url: URL }) => Promise<T>;
+export type FetchFunction<O = RequestInit> = <T>({ url, options }: { url: URL, options?: O }) => Promise<T>;
 
-const defaultFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
-	const response = await fetch(url);
+const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: URL, options?: RequestInit }) => {
+	const response = await fetch(url, options);
 	if (!response.ok) {
 		throw new Error(response.statusText);
 	}
@@ -114,13 +114,13 @@ const defaultFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => 
  */
 export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>) => {
+	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
 		const url = new URL(`${host}/umbraco/delivery/api/v1/content`, host);
 		url.search = queryParams.toString();
 
-		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url });
+		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions});
 	}
 }
 
@@ -141,12 +141,12 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, 
  */
 export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }) => {
+	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
 		const url = new URL(`${host}/umbraco/delivery/api/v1/content/item/${id}`, host);
 		url.search = queryParams.toString();
 
-		return fetchFunction<ExpandResult<Doc, T>>({ url });
+		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
 	}
 }
