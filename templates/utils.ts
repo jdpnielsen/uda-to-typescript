@@ -153,10 +153,10 @@ export type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListe
 	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
 	: never;
 
-export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | 'all' | undefined | [];
+export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | '$all' | undefined | [];
 export type ExpandResult<Doc extends BaseDocumentType, Param extends ExpandParam<Doc>> = Param extends [] | undefined
 	? UnexpandDocumentExpandables<Doc, undefined>
-	: Param extends 'all'
+	: Param extends '$all'
 		? UnexpandDocumentExpandables<Doc, ExpandableDocumentKeys<Doc>>
 		: Param extends ExpandableDocumentKeys<Doc>[]
 			? Param[number] extends never

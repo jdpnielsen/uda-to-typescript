@@ -28,8 +28,8 @@ interface QueryOptions<T extends BaseDocumentType> {
 function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) {
 	const queryParams = new URLSearchParams();
 
-	if (options.expand === 'all') {
-		queryParams.set('expand', 'all');
+	if (options.expand === '$all') {
+		queryParams.set('expand', '$all');
 	} else if (Array.isArray(options.expand)) {
 		queryParams.append('expand', 'property:' + options.expand.join(','));
 	}
