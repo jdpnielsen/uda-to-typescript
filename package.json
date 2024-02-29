@@ -85,7 +85,8 @@
   },
   "release": {
     "branches": [
-      "main"
+      "main",
+      "beta"
     ],
     "plugins": [
       [
