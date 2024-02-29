@@ -13,7 +13,7 @@ export interface DocumentType {
 	IsContainer: boolean;
 	Permissions: Permissions;
 	Parent: UDI;
-	CompositionContentTypes: string[];
+	CompositionContentTypes: UDI[];
 	PropertyGroups: PropertyGroup[];
 	PropertyTypes: PropertyType[];
 	Udi: UDI;

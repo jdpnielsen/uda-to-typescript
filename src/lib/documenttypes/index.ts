@@ -63,6 +63,31 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 			);
 		});
 
+	const compositions = documentType.CompositionContentTypes.map((udi) => {
+		const compositionDocument = artifacts['document-type'].get(parseUdi(udi).id);
+
+		if (!compositionDocument) {
+			throw new Error(`Could not find composition type with UDI "${udi}" for document type "${documentType.Alias}" (${documentType.Udi})`);
+		}
+
+		const compositionIdentifier = pascalCase(compositionDocument.Alias);
+
+		return factory.createIndexedAccessTypeNode(
+			factory.createTypeReferenceNode(
+				factory.createIdentifier(compositionIdentifier),
+				undefined
+			),
+			factory.createLiteralTypeNode(factory.createStringLiteral('properties'))
+		);
+	});
+
+	const documentProperties = factory.createIntersectionTypeNode([
+		...compositions,
+		properties.length === 0
+			? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
+			: factory.createTypeLiteralNode(properties)
+	])
+
 	return [
 		factory.createTypeAliasDeclaration(
 			[exportToken],
@@ -72,9 +97,7 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 				factory.createIdentifier('BaseDocumentType'),
 				[
 					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
-					properties.length === 0
-						? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
-						: factory.createTypeLiteralNode(properties)
+					documentProperties
 				]
 			)
 		)

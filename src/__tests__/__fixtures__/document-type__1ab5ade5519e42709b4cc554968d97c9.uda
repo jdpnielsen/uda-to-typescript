@@ -22,7 +22,9 @@
     "AllowedChildContentTypes": []
   },
   "Parent": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
-  "CompositionContentTypes": [],
+  "CompositionContentTypes": [
+    "umb://document-type/7b69656f52b34755a3a2eb6f10964a7e"
+  ],
   "PropertyGroups": [
     {
       "Key": "d9c8d650-ae2c-4078-b7bf-f967fe3cfd56",

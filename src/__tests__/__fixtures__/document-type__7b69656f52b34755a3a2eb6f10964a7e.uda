@@ -1,0 +1,74 @@
+{
+  "Name": "Metadata",
+  "Alias": "metadata",
+  "AllowedTemplates": [],
+  "HistoryCleanup": {},
+  "Icon": "icon-defrag",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "AllowVaryingByCulture": true,
+    "IsElementType": true,
+    "AllowedChildContentTypes": []
+  },
+  "Parent": "umb://document-type-container/6973ef9518e143c29d23d701320121fe",
+  "CompositionContentTypes": [],
+  "PropertyGroups": [
+    {
+      "Key": "1eb06c64-e683-4892-8044-bb012d6f2e44",
+      "Name": "Metadata",
+      "SortOrder": 99,
+      "Type": 1,
+      "Alias": "metadata",
+      "PropertyTypes": [
+        {
+          "Key": "077becda-207d-4939-9e59-1bfe43ffbefa",
+          "Alias": "meta_description",
+          "DataType": "umb://data-type/9276cd2bb795472d86d24e1e48e9f71a",
+          "Description": "A meta description is an HTML tag that summarizes the webpage's content. It's the snippet of text, often around 160 characters long, that appears under your page title in search engine result pages.",
+          "Name": "Meta description",
+          "SortOrder": 1,
+          "VariesByCulture": true
+        },
+        {
+          "Key": "79babdf1-6dc8-49cc-ad56-7f77d405211e",
+          "Alias": "meta_image",
+          "DataType": "umb://data-type/65e27cac416e41cb937787fe49442715",
+          "Description": "The image used as preview for social media share (og:image).\n\nUse images with a 1.91:1 ratio and minimum recommended dimensions of 1200x630 for optimal clarity across all devices.",
+          "Name": "Meta image",
+          "SortOrder": 2,
+          "VariesByCulture": true
+        },
+        {
+          "Key": "f7a98bd1-2fd6-4bbf-8957-419f994ec204",
+          "Alias": "meta_title",
+          "DataType": "umb://data-type/526ba275423e4362ab18c71377b10e92",
+          "Description": "A meta title, also known as a title tag, refers to the text that is displayed on search engine result pages and browser tabs to indicate the topic of a webpage. Limit length to about 60 characters",
+          "Name": "Meta title",
+          "VariesByCulture": true
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/7b69656f52b34755a3a2eb6f10964a7e",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/526ba275423e4362ab18c71377b10e92",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/65e27cac416e41cb937787fe49442715",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/9276cd2bb795472d86d24e1e48e9f71a",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type-container/6973ef9518e143c29d23d701320121fe",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "13.0.4"
+}

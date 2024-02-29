@@ -25,7 +25,7 @@ export type Image = BaseMediaType<"Image", {
 
 export type PickableMediaType = Image;
 
-export type Page = BaseDocumentType<"page", {
+export type Page = BaseDocumentType<"page", Metadata["properties"] & {
     title: DropdownMultiple[];
 }>;
 
@@ -39,6 +39,12 @@ export type RichtextBlock = BaseDocumentType<"richtextBlock", {
 
 export type MediaBlock = BaseDocumentType<"mediaBlock", {
     Media: unknown;
+}>;
+
+export type Metadata = BaseDocumentType<"metadata", {
+    Meta description: unknown;
+    Meta image: unknown;
+    Meta title: unknown;
 }>;
 
 export type TestPage = BaseDocumentType<"testPage", {

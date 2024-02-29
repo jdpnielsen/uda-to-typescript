@@ -5,7 +5,7 @@ describe('collectArtifacts', () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/*.uda');
 
 		expect(output['data-type'].size).toBe(6);
-		expect(output['document-type'].size).toBe(5);
+		expect(output['document-type'].size).toBe(6);
 		expect(output['media-type'].size).toBe(1);
 	});
 
