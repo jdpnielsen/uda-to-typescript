@@ -83,9 +83,10 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 
 	const documentProperties = factory.createIntersectionTypeNode([
 		...compositions,
-		properties.length === 0
-			? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
-			: factory.createTypeLiteralNode(properties)
+		...(properties.length !== 0 ? [factory.createTypeLiteralNode(properties)] : []),
+		...(properties.length === 0 && compositions.length === 0
+			? [factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))]
+			: []),
 	])
 
 	return [
