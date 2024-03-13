@@ -46,7 +46,11 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 		 */
 		return factory.createArrayTypeNode(
 			factory.createTypeReferenceNode(
-				factory.createIdentifier('PickableDocumentType'),
+				factory.createIdentifier('ReferencedDocument'),
+				[factory.createTypeReferenceNode(
+					factory.createIdentifier('PickableDocumentType'),
+					undefined
+				)]
 			)
 		);
 	}
@@ -76,7 +80,11 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 		 */
 		return factory.createArrayTypeNode(
 			factory.createTypeReferenceNode(
-				factory.createIdentifier(pascalCase(documentTypes[0].Alias)),
+				factory.createIdentifier('ReferencedDocument'),
+				[factory.createTypeReferenceNode(
+					factory.createIdentifier(pascalCase(documentTypes[0].Alias)),
+					undefined
+				)]
 			)
 		);
 	}
@@ -84,13 +92,14 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 	/**
 	 * Output: (Alias1 | Alias2)[];
 	 */
-	return factory.createArrayTypeNode(
-		factory.createUnionTypeNode(
+	return factory.createArrayTypeNode(factory.createTypeReferenceNode(
+		factory.createIdentifier('ReferencedDocument'),
+		[factory.createUnionTypeNode(
 			documentTypes.map(docType =>
 				factory.createTypeReferenceNode(
 					factory.createIdentifier(pascalCase(docType.Alias)),
 				)
-			)
-		)
-	);
+			),
+		)]
+	));
 }

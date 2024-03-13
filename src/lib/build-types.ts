@@ -76,6 +76,11 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 						undefined,
 						ts.factory.createIdentifier('MediaPickerItem')
 					),
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
+						ts.factory.createIdentifier('ReferencedDocument')
+					),
 				])
 			),
 			ts.factory.createStringLiteral('./base-types')

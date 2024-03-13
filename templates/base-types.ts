@@ -77,6 +77,8 @@ export interface BaseDocumentType<
 	properties: Properties;
 }
 
+export type ReferencedDocument<Doc extends BaseDocumentType> = BaseDocumentType<Doc['contentType'], EmptyObjectType> & { _hidden: Doc };
+
 export interface BaseBlockType<Content extends BaseDocumentType = BaseDocumentType, Setting extends BaseDocumentType | null = BaseDocumentType | null> {
 	content: Content;
 	settings: Setting;

@@ -18,7 +18,11 @@ export function reference(): ts.TypeNode {
 	 */
 	return maybeNull(
 		factory.createTypeReferenceNode(
-			factory.createIdentifier('PickableDocumentType'),
+			factory.createIdentifier('ReferencedDocument'),
+			[factory.createTypeReferenceNode(
+				factory.createIdentifier('PickableDocumentType'),
+				undefined
+			)]
 		)
 	);
 }
