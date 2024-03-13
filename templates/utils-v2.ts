@@ -87,8 +87,8 @@ type ExpandField<T, K extends ExpandableNestedPropertyKeys<T>> = T extends unkno
 			? T extends ReferencedDocument<BaseDocumentType>[]
 				? ForwardOptionalByBase<T, ExpandDoc<T[number]['_hidden'], K>>
 				: ForwardOptionalByBase<T, ExpandDoc<T[number], K>[]>
-			: 'No expansion found 1'
-	: 'No expansion found 2'
+			: '1 No expansion found'
+	: '2 No expansion found'
 
 type ExpandableNestedPropertyKeys<T> = T extends unknown
 	? T extends BaseDocumentType
@@ -225,9 +225,11 @@ export type ExpandNestedProperty<T extends BaseDocumentType, K extends Expandabl
 							? K[P] extends AllFields
 								? ExpandNestedPropertyByKey<ExpandDoc<T, P>, NonNullable<ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>>
 								// 'prop' -> 'prop'
-								: K[P] extends ExpandableNestedPropertyKeys<T>
-									? ExpandNestedPropertyByKey<ExpandDoc<T, P>, ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>
-									: `hmm?${P}, ${K[P]}`
+								: P extends ExpandableNestedPropertyKeys<T>
+									? K[P] extends ExpandableNestedPropertyKeys<NonNullable<T['properties'][P]>>
+										? ExpandNestedDocByKey<T, P, K[P]>
+										: `K[P] not expandable${P}, ${K[P]}`
+									: `P not expandable${P}, ${K[P]}`
 							: ExpandDoc<T, undefined>['properties'][P]
 						: T['properties'][P]
 				}>
@@ -280,53 +282,6 @@ type ExpandNestedNested<T, Y extends ExpandableNestedNestedKeys<T>> = T extends 
 			: never
 	: never;
 
-/* type ExpandableNestedDocumentKeys2<T extends BaseDocumentType> = T extends unknown
-	? {
-		[K in ExpandableTopLevelDocumentKeys<T>]?: AllFields | (
-			NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-			// This handles BaseDocumentType
-				? ExpandableNestedDocumentKeys2<NonNullable<T['properties'][K]>['_hidden']>
-				: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-				// This handles BaseDocumentType[]
-					? ExpandableNestedDocumentKeys2<NonNullable<T['properties'][K]>[number]['_hidden']>
-					: never
-				);
-	// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
-	} | {
-		$all: AllFields | {
-			[K in keyof T['properties']]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-				// This handles BaseDocumentType
-				? ExpandableNestedDocumentKeys2<NonNullable<T['properties'][K]>['_hidden']>
-				: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-				// This handles BaseDocumentType[]
-					? ExpandableNestedDocumentKeys2<NonNullable<T['properties'][K]>[number]['_hidden']>
-					: never;
-		}[keyof T['properties']]
-	}
-	: never; */
-
-type Keys = ExpandableNestedPropertyKeys<NonNullable<APage['properties']['aPage_single']>>;
-
-// OverwriteNested<T['properties'][P], ExpandNestedPropertyByKey<NonNullable<T['properties'][P]>, K[AllFields]>>
-type Test = OverwriteNested<APage['properties']['aPage_single'], ExpandNestedPropertyByKey<NonNullable<ReferencedDocument<BPage>>, 'bPage_single'>>
-type Test2 = OverwriteNested<APage['properties']['aPage_single'], ExpandDoc<ReferencedDocument<BPage>, 'bPage_single'>>
-
-// TODO $all.$all -> prop -- YOU ARE HERE
-// Figure out how to resolve only a specific child expandable while expanding the top level
-// Would make sense to mirror ExpandDoc, but allow the various inputs: base | base[] inputs
-type T = APage;
-type K = { $all: 'bPage_single' };
-
-type AllAllProp = OverwriteDocument<ExpandDoc<T, ExpandableDocumentKeys<T>>, {
-	[E in 'aPage_single']: ExpandOrCleanDocumentByKey<NonNullable<T['properties'][E]>, 'bPage_single'>
-}>;
-
-type AllProp = OverwriteDocument<ExpandDoc<T, ExpandableDocumentKeys<T>>, {
-	[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
-		? OverwriteNested<T['properties'][P], ExpandField<T['properties'][P], K[AllFields]>>
-		: T['properties'][P]
-}>
-
 type ExpandNestedDocByKey<
 	T extends BaseDocumentType,
 	K extends ExpandableNestedPropertyKeys<T>,
@@ -334,22 +289,21 @@ type ExpandNestedDocByKey<
 	Base extends ExpandOrCleanDocumentByKey<T, K> = ExpandOrCleanDocumentByKey<T, K>
 > = OverwriteDocument<Base, {
 	[E in keyof Base['properties']]: E extends K
-		? OverwriteDocument<Base, {
-			// Hmm would be nice to forward the optional key if possible here.
-			// I managed it above using the E in keyof syntax.
-			[B in N]: ExpandField<T['properties'][K], B>
-		}>
+		? ExpandField<NonNullable<T['properties'][E]>, N>
 		: Base['properties'][E];
 }>
 
+// TODO $all.$all -> prop -- YOU ARE HERE
+// Figure out how to resolve only a specific child expandable while expanding the top level
+// Would make sense to mirror ExpandDoc, but allow the various inputs: base | base[] inputs
+// Update - this is now done (ExpandNestedDocByKey), but i think its not being applied correctly:
+type AllAllProp = ExpandNestedProperty<APage, {
+	$all: 'bPage_single',
+}>;
 
-type First = ExpandNestedDocByKey<APage, 'aPage_single', 'bPage_single'>;
-
-const allAllProp: First = {} as First;
-allAllProp.properties.aPage_single?.properties.
-allAllProp.properties.properties.aPage_multi?.[0].properties
-allAllProp.properties.aPage_single.aPage_single?.properties.bPage_multi?.[0].properties.cPage_single?.properties satisfies EmptyObjectType | undefined
-// allAllProp.properties.aPage_single?.properties.bPage_single?.properties.cPage_single?.properties satisfies EmptyObjectType | undefined
+const allAllProp: AllAllProp = {} as AllAllProp;
+allAllProp.properties.aPage_single?.properties.bPage_single?.properties.cPage_single?.properties satisfies EmptyObjectType | undefined
+allAllProp.properties.aPage_single?.properties.bPage_multi?.[0].properties satisfies EmptyObjectType | undefined
 allAllProp.properties.aPage_multi?.[0].properties satisfies EmptyObjectType | undefined
 
 /* type AllProp = ExpandNestedProperty<ContentPage, {
