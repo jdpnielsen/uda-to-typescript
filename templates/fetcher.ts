@@ -82,7 +82,7 @@ export function buildFieldQuery<T extends BaseDocumentType = BaseDocumentType>(f
 	if (typeof fields === 'string') {
 		return fields;
 	} else if (Array.isArray(fields)) {
-		return fields.map((e) => buildFieldQuery<T>(e)).join(',');
+		return fields.map((e) => buildFieldQuery<T>(e as string | Fields<T>)).join(',');
 	} else {
 		return Object
 			.entries(fields)
