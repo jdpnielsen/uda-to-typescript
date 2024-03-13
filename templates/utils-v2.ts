@@ -58,6 +58,9 @@ type ForwardOptional<T> = T extends unknown | undefined
 	? T | undefined
 	: T;
 
+type ForwardOptionalByBase<Base, T> = Base extends unknown | undefined
+	? T | undefined
+	: T;
 
 type ExpandDoc<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> | undefined> = T extends unknown
 	? Overwrite<T, {
@@ -74,6 +77,18 @@ type ExpandDoc<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> |
 		}>
 	}>
 	: never;
+
+type ExpandField<T, K extends ExpandableNestedPropertyKeys<T>> = T extends unknown
+	? T extends BaseDocumentType
+		? T extends ReferencedDocument<BaseDocumentType>
+			? ForwardOptionalByBase<T, ExpandDoc<T['_hidden'], K>>
+			: ForwardOptionalByBase<T, ExpandDoc<T, K>>
+		: T extends BaseDocumentType[]
+			? T extends ReferencedDocument<BaseDocumentType>[]
+				? ForwardOptionalByBase<T, ExpandDoc<T[number]['_hidden'], K>>
+				: ForwardOptionalByBase<T, ExpandDoc<T[number], K>[]>
+			: 'No expansion found 1'
+	: 'No expansion found 2'
 
 type ExpandableNestedPropertyKeys<T> = T extends unknown
 	? T extends BaseDocumentType
@@ -290,11 +305,7 @@ type ExpandNestedNested<T, Y extends ExpandableNestedNestedKeys<T>> = T extends 
 	}
 	: never; */
 
-type First = OverwriteDocument<APage, {
-	[E in 'aPage_single']: ExpandNestedPropertyByKey<APage, E>
-}>
-
-type Keys = ExpandableNestedPropertyKeys<APage>;
+type Keys = ExpandableNestedPropertyKeys<NonNullable<APage['properties']['aPage_single']>>;
 
 // OverwriteNested<T['properties'][P], ExpandNestedPropertyByKey<NonNullable<T['properties'][P]>, K[AllFields]>>
 type Test = OverwriteNested<APage['properties']['aPage_single'], ExpandNestedPropertyByKey<NonNullable<ReferencedDocument<BPage>>, 'bPage_single'>>
@@ -312,17 +323,34 @@ type AllAllProp = OverwriteDocument<ExpandDoc<T, ExpandableDocumentKeys<T>>, {
 
 type AllProp = OverwriteDocument<ExpandDoc<T, ExpandableDocumentKeys<T>>, {
 	[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
-		? OverwriteNested<T['properties'][P], ExpandDoc<T['properties'][P], K[AllFields]>>
+		? OverwriteNested<T['properties'][P], ExpandField<T['properties'][P], K[AllFields]>>
 		: T['properties'][P]
 }>
 
-const allAllProp: AllAllProp = {} as AllAllProp;
+type ExpandNestedDocByKey<
+	T extends BaseDocumentType,
+	K extends ExpandableNestedPropertyKeys<T>,
+	N extends ExpandableNestedPropertyKeys<NonNullable<T['properties'][K]>>,
+	Base extends ExpandOrCleanDocumentByKey<T, K> = ExpandOrCleanDocumentByKey<T, K>
+> = OverwriteDocument<Base, {
+	[E in keyof Base['properties']]: E extends K
+		? OverwriteDocument<Base, {
+			// Hmm would be nice to forward the optional key if possible here.
+			// I managed it above using the E in keyof syntax.
+			[B in N]: ExpandField<T['properties'][K], B>
+		}>
+		: Base['properties'][E];
+}>
 
-allAllProp.properties.aPage_single?.properties.bPage_single?.properties.cPage_single?.properties satisfies EmptyObjectType | undefined
-allAllProp.properties.aPage_single?.properties.bPage_multi?.[0].properties.cPage_single?.properties satisfies EmptyObjectType | undefined
+
+type First = ExpandNestedDocByKey<APage, 'aPage_single', 'bPage_single'>;
+
+const allAllProp: First = {} as First;
+allAllProp.properties.aPage_single?.properties.
+allAllProp.properties.properties.aPage_multi?.[0].properties
+allAllProp.properties.aPage_single.aPage_single?.properties.bPage_multi?.[0].properties.cPage_single?.properties satisfies EmptyObjectType | undefined
 // allAllProp.properties.aPage_single?.properties.bPage_single?.properties.cPage_single?.properties satisfies EmptyObjectType | undefined
-allAllProp.properties.aPage_multi?.[0].properties.bPage_single?.properties.propValue satisfies 'CPage' | undefined
-allAllProp.properties.aPage_multi?.[0].properties.bPage_multi?.[0].properties satisfies EmptyObjectType | undefined
+allAllProp.properties.aPage_multi?.[0].properties satisfies EmptyObjectType | undefined
 
 /* type AllProp = ExpandNestedProperty<ContentPage, {
 	$all: 'ref'
