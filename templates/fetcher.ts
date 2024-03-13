@@ -30,9 +30,9 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	const queryParams = new URLSearchParams();
 
 	if (options.expand === '$all') {
-		queryParams.set('expand', '$all');
+		queryParams.set('expand', 'properties[$all]');
 	} else if (Array.isArray(options.expand)) {
-		queryParams.append('expand', 'property:' + options.expand.join(','));
+		queryParams.append('expand', 'properties[' + options.expand.join(',') + ']');
 	}
 
 	if (options.fetch?.ancestors) {
