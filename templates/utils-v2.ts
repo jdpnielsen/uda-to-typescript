@@ -7,7 +7,7 @@ type OverwriteDocument<T extends BaseDocumentType, U> = Overwrite<T, {
 	properties: Overwrite<T['properties'], U>
 }>;
 
-type ExpandableTopLevelDocumentKeys<T extends BaseDocumentType> = NonNullable<{
+type ExpandableDocumentKeys<T extends BaseDocumentType> = NonNullable<{
 	// TODO: Handle media and form
 	[K in keyof T['properties']]: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
 		? K
@@ -23,10 +23,10 @@ type ExpandableNestedDocumentKeys<T extends BaseDocumentType> = {
 	| {
 		[K in keyof T['properties']]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
 			// This handles BaseDocumentType
-			? ExpandableTopLevelDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
+			? ExpandableDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
 			: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
 				// This handles BaseDocumentType[]
-				? ExpandableTopLevelDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
+				? ExpandableDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
 				: never;
 		// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
 	}[keyof T['properties']]
@@ -41,12 +41,12 @@ type ExpandableNestedDocumentKeys<T extends BaseDocumentType> = {
 		// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
 	}[keyof T['properties']]
 } & {
-	[K in (ExpandableTopLevelDocumentKeys<T>)]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
+	[K in (ExpandableDocumentKeys<T>)]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
 		// This handles BaseDocumentType
-		? AllFields | ExpandableTopLevelDocumentKeys<NonNullable<T['properties'][K]>['_hidden']> | ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
+		? AllFields | ExpandableDocumentKeys<NonNullable<T['properties'][K]>['_hidden']> | ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
 		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
 			// This handles BaseDocumentType[]
-			? AllFields | ExpandableTopLevelDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']> | ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
+			? AllFields | ExpandableDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']> | ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
 			: never;
 	// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
 };
@@ -59,17 +59,17 @@ type ForwardOptional<T> = T extends unknown | undefined
 	: T;
 
 
-type ExpandDoc<T extends BaseDocumentType, K extends ExpandableTopLevelDocumentKeys<T> | undefined> = T extends unknown
+type ExpandDoc<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> | undefined> = T extends unknown
 	? Overwrite<T, {
 		properties: Overwrite<T['properties'], {
-			[P in keyof T['properties']]: K extends ExpandableTopLevelDocumentKeys<T>
+			[P in keyof T['properties']]: K extends ExpandableDocumentKeys<T>
 				? P extends K
-					? ForwardOptional<ExpandTopLevelProperty<T, P>>
-					: P extends ExpandableTopLevelDocumentKeys<T>
-						? ForwardOptional<CleanTopLevelProperty<T, P>>
+					? ForwardOptional<ExpandPropertyByKey<T, P>>
+					: P extends ExpandableDocumentKeys<T>
+						? ForwardOptional<CleanPropertyByKey<T, P>>
 						: T['properties'][K]
-				: P extends ExpandableTopLevelDocumentKeys<T>
-					? ForwardOptional<CleanTopLevelProperty<T, P>>
+				: P extends ExpandableDocumentKeys<T>
+					? ForwardOptional<CleanPropertyByKey<T, P>>
 					: T['properties'][P]
 		}>
 	}>
@@ -78,46 +78,46 @@ type ExpandDoc<T extends BaseDocumentType, K extends ExpandableTopLevelDocumentK
 type ExpandableNestedPropertyKeys<T> = T extends unknown
 	? T extends BaseDocumentType
 		? T extends ReferencedDocument<BaseDocumentType>// ExpandableTopLevelDocumentKeys<T>
-			? ExpandableTopLevelDocumentKeys<T['_hidden']>
-			: ExpandableTopLevelDocumentKeys<T>
+			? ExpandableDocumentKeys<T['_hidden']>
+			: ExpandableDocumentKeys<T>
 		: T extends BaseDocumentType[]
 			? T extends ReferencedDocument<BaseDocumentType>[]
-				? ExpandableTopLevelDocumentKeys<T[number]['_hidden']>
-				: ExpandableTopLevelDocumentKeys<T[number]>
+				? ExpandableDocumentKeys<T[number]['_hidden']>
+				: ExpandableDocumentKeys<T[number]>
 			: never
 	: never;
 
-type ExpandTopLevelProperty<T extends BaseDocumentType, K extends keyof T['properties']> = T extends unknown
+type ExpandPropertyByKey<T extends BaseDocumentType, K extends keyof T['properties']> = T extends unknown
 	? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-		? ExpandField<NonNullable<T['properties'][K]>>
+		? ExpandReferencedDocument<NonNullable<T['properties'][K]>>
 		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-			? ExpandField<NonNullable<T['properties'][K]>[number]>[]
+			? ExpandReferencedDocument<NonNullable<T['properties'][K]>[number]>[]
 			: NonNullable<T['properties'][K]>
 	: never;
 
-type ExpandField<T extends ReferencedDocument<BaseDocumentType>> = T extends unknown
+type ExpandReferencedDocument<T extends ReferencedDocument<BaseDocumentType>> = T extends unknown
 	? T extends ReferencedDocument<BaseDocumentType>
-		? ExpandOrCleanProperties<T['_hidden'], undefined>
+		? ExpandOrCleanDocumentByKey<T['_hidden'], undefined>
 		: never
 	: never;
 
-type CleanTopLevelProperty<T extends BaseDocumentType, K extends keyof T['properties']> = T extends unknown
+type CleanPropertyByKey<T extends BaseDocumentType, K extends keyof T['properties']> = T extends unknown
 	? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-		? CleanField<NonNullable<T['properties'][K]>>
+		? CleanReferencedDocument<NonNullable<T['properties'][K]>>
 		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-			? CleanField<NonNullable<T['properties'][K]>[number]>[]
+			? CleanReferencedDocument<NonNullable<T['properties'][K]>[number]>[]
 			: T['properties'][K]
 	: never;
 
-type CleanField<T extends ReferencedDocument<BaseDocumentType>> = T extends ReferencedDocument<BaseDocumentType>
+type CleanReferencedDocument<T extends ReferencedDocument<BaseDocumentType>> = T extends ReferencedDocument<BaseDocumentType>
 	? Omit<T, '_hidden'>
 	: never;
 
-type ExpandOrCleanProperties<T extends BaseDocumentType, K extends ExpandableTopLevelDocumentKeys<T> | undefined> = OverwriteDocument<T, {
-	[P in keyof T['properties']]: P extends ExpandableTopLevelDocumentKeys<T>
+type ExpandOrCleanDocumentByKey<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> | undefined> = OverwriteDocument<T, {
+	[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 		? P extends K
-			? ExpandTopLevelProperty<T, P>
-			: CleanTopLevelProperty<T, P>
+			? ExpandPropertyByKey<T, P>
+			: CleanPropertyByKey<T, P>
 		: T['properties'][P]
 }>
 
@@ -127,10 +127,10 @@ type CleanNestedPropertyByKey<T, K extends ExpandableNestedPropertyKeys<T>> = T 
 		? K extends keyof T['properties']
 			// Nested is BaseDocumentType
 			? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-				? ExpandOrCleanProperties<NonNullable<T['properties'][K]>['_hidden'], undefined>
+				? ExpandOrCleanDocumentByKey<NonNullable<T['properties'][K]>['_hidden'], undefined>
 				// Nested is BaseDocumentType[]
 				: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-					? ExpandOrCleanProperties<NonNullable<T['properties'][K]>[number]['_hidden'], undefined>[]
+					? ExpandOrCleanDocumentByKey<NonNullable<T['properties'][K]>[number]['_hidden'], undefined>[]
 					: 'nay'
 			: 'b'
 		// Toplevel is BaseDocumentType[]
@@ -148,9 +148,9 @@ type ExpandNestedPropertyByKey<T, K extends ExpandableNestedPropertyKeys<T>> = T
 		? K extends keyof T['properties']
 			? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
 				// TODO: Clean nested properties
-				? ExpandOrCleanProperties<NonNullable<T['properties'][K]>['_hidden'], ExpandableTopLevelDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>>
+				? ExpandOrCleanDocumentByKey<NonNullable<T['properties'][K]>['_hidden'], ExpandableDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>>
 				: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-					? ExpandOrCleanProperties<NonNullable<T['properties'][K]>[number]['_hidden'], ExpandableTopLevelDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>>[]
+					? ExpandOrCleanDocumentByKey<NonNullable<T['properties'][K]>[number]['_hidden'], ExpandableDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>>[]
 					: 'aa'
 			: 'b'
 		: T extends BaseDocumentType[]
@@ -162,14 +162,14 @@ type ExpandNestedPropertyByKey<T, K extends ExpandableNestedPropertyKeys<T>> = T
 			: `7 ${K}`
 	: never;
 
-type ExpandNestedProperty<T extends BaseDocumentType, K extends ExpandableNestedDocumentKeys<T>> = T extends unknown
+export type ExpandNestedProperty<T extends BaseDocumentType, K extends ExpandableNestedDocumentKeys<T>> = T extends unknown
 	? K extends Record<string, Record<string, unknown>>
 		// x.x -> x
 		? keyof K extends AllFields
 			// '$all.$all -> x'
 			? K[AllFields] extends ExpandableNestedDocumentKeys<T>
 				? OverwriteDocument<T, {
-					[P in keyof T['properties']]: P extends ExpandableTopLevelDocumentKeys<T>
+					[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 						// ? ExpandNestedProperty<T, K[AllFields]>
 						? K[AllFields] extends ExpandableNestedNestedKeys<T['properties'][P]>
 							? ExpandNestedNested<NonNullable<T['properties'][P]>, K[AllFields]>
@@ -183,13 +183,13 @@ type ExpandNestedProperty<T extends BaseDocumentType, K extends ExpandableNested
 			? K[AllFields] extends AllFields
 				// 'all -> all'
 				? OverwriteDocument<T, {
-					[P in keyof T['properties']]: P extends ExpandableTopLevelDocumentKeys<T>
+					[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 						? ExpandNestedPropertyByKey<ExpandDoc<T, P>, NonNullable<ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>>
 						: T['properties'][P]
 				}>
 				// 'all -> prop'
 				: OverwriteDocument<T, {
-					[P in keyof T['properties']]: P extends ExpandableTopLevelDocumentKeys<T>
+					[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 						? P extends ExpandableNestedPropertyKeys<T>
 							? ExpandNestedPropertyByKey<T, P>
 							: CleanNestedPropertyByKey<ExpandDoc<T, P>, NonNullable<ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>>
@@ -202,9 +202,9 @@ type ExpandNestedProperty<T extends BaseDocumentType, K extends ExpandableNested
 						: T['properties'][P]
 				}>
 			// 'prop -> prop | all'
-			: keyof K extends ExpandableTopLevelDocumentKeys<T>
+			: keyof K extends ExpandableDocumentKeys<T>
 				? OverwriteDocument<T, {
-					[P in keyof T['properties']]: P extends ExpandableTopLevelDocumentKeys<T>
+					[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 						? P extends keyof K
 							// 'prop' -> 'all'
 							? K[P] extends AllFields
@@ -222,12 +222,12 @@ type ExpandNestedProperty<T extends BaseDocumentType, K extends ExpandableNested
 type ExpandableNestedPropertyKeys2<T> = T extends unknown
 	? T extends BaseDocumentType
 		? T extends ReferencedDocument<BaseDocumentType>// ExpandableTopLevelDocumentKeys<T>
-			? ExpandableTopLevelDocumentKeys<T['_hidden']>
-			: ExpandableTopLevelDocumentKeys<T>
+			? ExpandableDocumentKeys<T['_hidden']>
+			: ExpandableDocumentKeys<T>
 		: T extends BaseDocumentType[]
 			? T extends ReferencedDocument<BaseDocumentType>[]
-				? ExpandableTopLevelDocumentKeys<T[number]['_hidden']>
-				: ExpandableTopLevelDocumentKeys<T[number]>
+				? ExpandableDocumentKeys<T[number]['_hidden']>
+				: ExpandableDocumentKeys<T[number]>
 			: never
 	: never;
 
@@ -306,12 +306,12 @@ type Test2 = OverwriteNested<APage['properties']['aPage_single'], ExpandDoc<Refe
 type T = APage;
 type K = { $all: 'bPage_single' };
 
-type AllAllProp = OverwriteDocument<ExpandDoc<T, ExpandableTopLevelDocumentKeys<T>>, {
-	[E in 'aPage_single']: ExpandOrCleanProperties<NonNullable<T['properties'][E]>, 'bPage_single'>
+type AllAllProp = OverwriteDocument<ExpandDoc<T, ExpandableDocumentKeys<T>>, {
+	[E in 'aPage_single']: ExpandOrCleanDocumentByKey<NonNullable<T['properties'][E]>, 'bPage_single'>
 }>;
 
-type AllProp = OverwriteDocument<ExpandDoc<T, ExpandableTopLevelDocumentKeys<T>>, {
-	[P in keyof T['properties']]: P extends ExpandableTopLevelDocumentKeys<T>
+type AllProp = OverwriteDocument<ExpandDoc<T, ExpandableDocumentKeys<T>>, {
+	[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 		? OverwriteNested<T['properties'][P], ExpandDoc<T['properties'][P], K[AllFields]>>
 		: T['properties'][P]
 }>
