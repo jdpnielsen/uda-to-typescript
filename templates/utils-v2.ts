@@ -85,7 +85,7 @@ type ExpandField<T, K extends ExpandableNestedPropertyKeys<T>> = T extends unkno
 			: ForwardOptionalByBase<T, ExpandDoc<T, K>>
 		: T extends BaseDocumentType[]
 			? T extends ReferencedDocument<BaseDocumentType>[]
-				? ForwardOptionalByBase<T, ExpandDoc<T[number]['_hidden'], K>>
+				? ForwardOptionalByBase<T, ExpandDoc<T[number]['_hidden'], K>[]>
 				: ForwardOptionalByBase<T, ExpandDoc<T[number], K>[]>
 			: '1 No expansion found'
 	: '2 No expansion found'
@@ -203,19 +203,9 @@ export type ExpandNestedProperty<T extends BaseDocumentType, K extends Expandabl
 						: T['properties'][P]
 				}>
 				// 'all -> prop'
-				: OverwriteDocument<T, {
-					[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
-						? P extends ExpandableNestedPropertyKeys<T>
-							? ExpandNestedPropertyByKey<T, P>
-							: CleanNestedPropertyByKey<ExpandDoc<T, P>, NonNullable<ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>>
-
-
-					// `${P} -> ${K[AllFields]}`
-						/* extends K[AllFields]
-							? ExpandNestedPropertyByKey<ExpandDoc<T, P>, NonNullable<ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>>
-							: CleanNestedPropertyByKey<ExpandDoc<T, P>, NonNullable<ExpandableNestedPropertyKeys<ExpandDoc<T, P>>>> */
-						: T['properties'][P]
-				}>
+				: K[AllFields] extends ExpandableNestedPropertyKeys<NonNullable<T['properties'][ExpandableNestedPropertyKeys<T>]>>
+					? ExpandNestedDocByKey<T, ExpandableNestedPropertyKeys<T>, K[AllFields]>
+					: 'K[AllFields] could not be expanded'
 			// 'prop -> prop | all'
 			: keyof K extends ExpandableDocumentKeys<T>
 				? OverwriteDocument<T, {
@@ -304,7 +294,9 @@ type AllAllProp = ExpandNestedProperty<APage, {
 const allAllProp: AllAllProp = {} as AllAllProp;
 allAllProp.properties.aPage_single?.properties.bPage_single?.properties.cPage_single?.properties satisfies EmptyObjectType | undefined
 allAllProp.properties.aPage_single?.properties.bPage_multi?.[0].properties satisfies EmptyObjectType | undefined
-allAllProp.properties.aPage_multi?.[0].properties satisfies EmptyObjectType | undefined
+// allAllProp.properties.aPage_multi
+allAllProp.properties.aPage_multi?.[0].properties.bPage_multi?.[0].properties satisfies EmptyObjectType | undefined
+allAllProp.properties.aPage_multi?.[0].properties.bPage_single?.properties.cPage_single?.properties satisfies EmptyObjectType | undefined
 
 /* type AllProp = ExpandNestedProperty<ContentPage, {
 	$all: 'ref'
