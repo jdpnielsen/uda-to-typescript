@@ -20,4 +20,10 @@ export type CPage = BaseDocumentType<'cPage', {
 
 export type DPage = BaseDocumentType<'dPage', {
 	propValue: 'Dpage';
+	ePage_single?: ReferencedDocument<EPage>;
+	ePage_multi?: ReferencedDocument<EPage>[];
+}>;
+
+export type EPage = BaseDocumentType<'ePage', {
+	propValue: 'Epage';
 }>;
