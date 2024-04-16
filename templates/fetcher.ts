@@ -63,7 +63,7 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 		Object
 			.entries(options.sort)
 			.forEach(([key, value]) => {
-				queryParams.set('orderBy', `${key}:${value}`);
+				queryParams.set('sort', `${key}:${value}`);
 			});
 	}
 
