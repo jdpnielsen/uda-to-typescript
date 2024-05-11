@@ -187,9 +187,9 @@ export type ExpandNestedProperty<T extends BaseDocumentType, K extends Expandabl
 						: T['properties'][P]
 				}>
 				// 'all -> prop'
-				: K[AllFields] extends ExpandableNestedPropertyKeys<NonNullable<T['properties'][ExpandableNestedPropertyKeys<T>]>>
+				: K[AllFields] extends ExpandableNestedPropertyKeys<NonNullable<T['properties'][NonNullable<ExpandableNestedPropertyKeys<T>>]>>
 					? ExpandNestedDocByKey<T, ExpandableNestedPropertyKeys<T>, K[AllFields]>
-					: 'never all -> prop'
+					: never
 			// 'prop -> prop | all'
 			: keyof K extends ExpandableDocumentKeys<T>
 				? OverwriteDocument<T, {
