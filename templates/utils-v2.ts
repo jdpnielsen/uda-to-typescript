@@ -1,4 +1,5 @@
 import { BaseExpandable, ReferencedExpandable } from './base-types';
+import { FormPickerType } from './form';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
@@ -7,12 +8,14 @@ type OverwriteDocument<T extends BaseExpandable, U> = Overwrite<T, {
 }>;
 
 type ExpandableDocumentKeys<T extends BaseExpandable> = NonNullable<{
-	// TODO: Handle form, BlockList, BlockGrid
+	// TODO: Handle BlockList, BlockGrid
 	[K in keyof T['properties']]: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
 		? K
 		: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
 			? K
-			: never;
+			: NonNullable<T['properties'][K]> extends FormPickerType
+				? K
+				: never;
 }[keyof T['properties']]>;
 
 type AllFields = '$all';
@@ -120,7 +123,9 @@ type CleanPropertyByKey<T extends BaseExpandable, K extends keyof T['properties'
 		? CleanReferencedDocument<NonNullable<T['properties'][K]>>
 		: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
 			? CleanReferencedDocument<NonNullable<T['properties'][K]>[number]>[]
-			: T['properties'][K]
+			: NonNullable<T['properties'][K]> extends FormPickerType
+				? Overwrite<FormPickerType, { form: null }>
+				: T['properties'][K]
 	: never;
 
 type CleanReferencedDocument<T extends ReferencedExpandable<BaseExpandable>> = T extends ReferencedExpandable<BaseExpandable>

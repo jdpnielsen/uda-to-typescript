@@ -28,6 +28,7 @@ import { textboxHandler } from './Umbraco.TextBox';
 import { tinyMCEHandler } from './Umbraco.TinyMCE';
 import { trueFalseHandler } from './Umbraco.TrueFalse';
 import { uploadFieldHandler } from './Umbraco.UploadField';
+import { formPickerHandler } from './UmbracoForms.FormPicker';
 
 export type HandlerConfig = {
 	editorAlias: string;
@@ -67,4 +68,5 @@ export const dataTypeMap = {
 	[tinyMCEHandler.editorAlias]: tinyMCEHandler,
 	[trueFalseHandler.editorAlias]: trueFalseHandler,
 	[uploadFieldHandler.editorAlias]: uploadFieldHandler,
+	[formPickerHandler.editorAlias]: formPickerHandler,
 } satisfies DataTypeConfig;

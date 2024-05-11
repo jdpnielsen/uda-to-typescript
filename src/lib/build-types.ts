@@ -85,6 +85,21 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 			),
 			ts.factory.createStringLiteral('./base-types')
 		),
+		ts.factory.createImportDeclaration(
+			undefined,
+			ts.factory.createImportClause(
+				false,
+				undefined,
+				ts.factory.createNamedImports([
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
+						ts.factory.createIdentifier('FormPickerType')
+					),
+				])
+			),
+			ts.factory.createStringLiteral('./form')
+		),
 		newLineAST,
 	];
 
