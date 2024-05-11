@@ -1,54 +1,53 @@
-import { BaseDocumentType, EmptyObjectType, ReferencedDocument } from './base-types';
-import { APage } from './test-types';
+import { BaseExpandable, ReferencedExpandable } from './base-types';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
-type OverwriteDocument<T extends BaseDocumentType, U> = Overwrite<T, {
+type OverwriteDocument<T extends BaseExpandable, U> = Overwrite<T, {
 	properties: Overwrite<T['properties'], U>
 }>;
 
-type ExpandableDocumentKeys<T extends BaseDocumentType> = NonNullable<{
-	// TODO: Handle media and form
-	[K in keyof T['properties']]: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
+type ExpandableDocumentKeys<T extends BaseExpandable> = NonNullable<{
+	// TODO: Handle form, BlockList, BlockGrid
+	[K in keyof T['properties']]: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
 		? K
-		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
+		: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
 			? K
 			: never;
 }[keyof T['properties']]>;
 
 type AllFields = '$all';
 
-type ExpandableNestedDocumentKeys<T extends BaseDocumentType> = {
+type ExpandableNestedDocumentKeys<T extends BaseExpandable> = {
 	'$all'?:  AllFields
 	| {
-		[K in keyof T['properties']]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-			// This handles BaseDocumentType
+		[K in keyof T['properties']]?: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
+			// This handles BaseExpandable
 			? ExpandableDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
-			: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-				// This handles BaseDocumentType[]
+			: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
+				// This handles BaseExpandable[]
 				? ExpandableDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
 				: never;
-		// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
+		// TODO Handle BlockList, BlockGrid & Form.
 	}[keyof T['properties']]
 	| {
-		[K in keyof T['properties']]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-			// This handles BaseDocumentType
+		[K in keyof T['properties']]?: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
+			// This handles BaseExpandable
 			? ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
-			: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-				// This handles BaseDocumentType[]
+			: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
+				// This handles BaseExpandable[]
 				? ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
 				: never;
-		// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
+		// TODO Handle BlockList, BlockGrid & Form.
 	}[keyof T['properties']]
 } & {
-	[K in (ExpandableDocumentKeys<T>)]?: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
-		// This handles BaseDocumentType
+	[K in (ExpandableDocumentKeys<T>)]?: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
+		// This handles BaseExpandable
 		? AllFields | ExpandableDocumentKeys<NonNullable<T['properties'][K]>['_hidden']> | ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>
-		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
-			// This handles BaseDocumentType[]
+		: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
+			// This handles BaseExpandable[]
 			? AllFields | ExpandableDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']> | ExpandableNestedDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>
 			: never;
-	// TODO Handle BlockList, BlockGrid, Media, Media[] & Form.
+	// TODO Handle BlockList, BlockGrid & Form.
 };
 
 /**
@@ -62,7 +61,7 @@ type ForwardOptionalByBase<Base, T> = Base extends unknown | undefined
 	? T | undefined
 	: T;
 
-type ExpandDoc<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> | undefined> = T extends unknown
+type ExpandDoc<T extends BaseExpandable, K extends ExpandableDocumentKeys<T> | undefined> = T extends unknown
 	? Overwrite<T, {
 		properties: Overwrite<T['properties'], {
 			[P in keyof T['properties']]: K extends ExpandableDocumentKeys<T>
@@ -79,56 +78,56 @@ type ExpandDoc<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> |
 	: never;
 
 type ExpandField<T, K extends ExpandableNestedPropertyKeys<T>> = T extends unknown
-	? T extends BaseDocumentType
-		? T extends ReferencedDocument<BaseDocumentType>
+	? T extends BaseExpandable
+		? T extends ReferencedExpandable<BaseExpandable>
 			? ForwardOptionalByBase<T, ExpandDoc<T['_hidden'], K>>
 			: ForwardOptionalByBase<T, ExpandDoc<T, K>>
-		: T extends BaseDocumentType[]
-			? T extends ReferencedDocument<BaseDocumentType>[]
+		: T extends BaseExpandable[]
+			? T extends ReferencedExpandable<BaseExpandable>[]
 				? ForwardOptionalByBase<T, ExpandDoc<T[number]['_hidden'], K>[]>
 				: ForwardOptionalByBase<T, ExpandDoc<T[number], K>[]>
 			: '1 No expansion found'
 	: '2 No expansion found'
 
 type ExpandableNestedPropertyKeys<T> = T extends unknown
-	? T extends BaseDocumentType
-		? T extends ReferencedDocument<BaseDocumentType>// ExpandableTopLevelDocumentKeys<T>
+	? T extends BaseExpandable
+		? T extends ReferencedExpandable<BaseExpandable>// ExpandableTopLevelDocumentKeys<T>
 			? ExpandableDocumentKeys<T['_hidden']>
 			: ExpandableDocumentKeys<T>
-		: T extends BaseDocumentType[]
-			? T extends ReferencedDocument<BaseDocumentType>[]
+		: T extends BaseExpandable[]
+			? T extends ReferencedExpandable<BaseExpandable>[]
 				? ExpandableDocumentKeys<T[number]['_hidden']>
 				: ExpandableDocumentKeys<T[number]>
 			: never
 	: never;
 
-type ExpandPropertyByKey<T extends BaseDocumentType, K extends keyof T['properties']> = T extends unknown
-	? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
+type ExpandPropertyByKey<T extends BaseExpandable, K extends keyof T['properties']> = T extends unknown
+	? NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
 		? ExpandReferencedDocument<NonNullable<T['properties'][K]>>
-		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
+		: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
 			? ExpandReferencedDocument<NonNullable<T['properties'][K]>[number]>[]
 			: NonNullable<T['properties'][K]>
 	: never;
 
-type ExpandReferencedDocument<T extends ReferencedDocument<BaseDocumentType>> = T extends unknown
-	? T extends ReferencedDocument<BaseDocumentType>
+type ExpandReferencedDocument<T extends ReferencedExpandable<BaseExpandable>> = T extends unknown
+	? T extends ReferencedExpandable<BaseExpandable>
 		? ExpandOrCleanDocumentByKey<T['_hidden'], undefined>
 		: never
 	: never;
 
-type CleanPropertyByKey<T extends BaseDocumentType, K extends keyof T['properties']> = T extends unknown
-	? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
+type CleanPropertyByKey<T extends BaseExpandable, K extends keyof T['properties']> = T extends unknown
+	? NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
 		? CleanReferencedDocument<NonNullable<T['properties'][K]>>
-		: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
+		: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
 			? CleanReferencedDocument<NonNullable<T['properties'][K]>[number]>[]
 			: T['properties'][K]
 	: never;
 
-type CleanReferencedDocument<T extends ReferencedDocument<BaseDocumentType>> = T extends ReferencedDocument<BaseDocumentType>
+type CleanReferencedDocument<T extends ReferencedExpandable<BaseExpandable>> = T extends ReferencedExpandable<BaseExpandable>
 	? Omit<T, '_hidden'>
 	: never;
 
-type ExpandOrCleanDocumentByKey<T extends BaseDocumentType, K extends ExpandableDocumentKeys<T> | undefined> = OverwriteDocument<T, {
+type ExpandOrCleanDocumentByKey<T extends BaseExpandable, K extends ExpandableDocumentKeys<T> | undefined> = OverwriteDocument<T, {
 	[P in keyof T['properties']]: P extends ExpandableDocumentKeys<T>
 		? P extends K
 			? ExpandPropertyByKey<T, P>
@@ -137,25 +136,25 @@ type ExpandOrCleanDocumentByKey<T extends BaseDocumentType, K extends Expandable
 }>
 
 type ExpandNestedPropertyByKey<T, K extends ExpandableNestedPropertyKeys<T>> = T extends unknown
-	? T extends BaseDocumentType
+	? T extends BaseExpandable
 		? K extends keyof T['properties']
-			? NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>
+			? NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>
 				// TODO: Clean nested properties
 				? ExpandOrCleanDocumentByKey<NonNullable<T['properties'][K]>['_hidden'], ExpandableDocumentKeys<NonNullable<T['properties'][K]>['_hidden']>>
-				: NonNullable<T['properties'][K]> extends ReferencedDocument<BaseDocumentType>[]
+				: NonNullable<T['properties'][K]> extends ReferencedExpandable<BaseExpandable>[]
 					? ExpandOrCleanDocumentByKey<NonNullable<T['properties'][K]>[number]['_hidden'], ExpandableDocumentKeys<NonNullable<T['properties'][K]>[number]['_hidden']>>[]
 					: 'aa'
 			: 'b'
-		: T extends BaseDocumentType[]
+		: T extends BaseExpandable[]
 			? K extends keyof T[number]['properties']
-				? NonNullable<T[number]['properties'][K]> extends ReferencedDocument<BaseDocumentType>
+				? NonNullable<T[number]['properties'][K]> extends ReferencedExpandable<BaseExpandable>
 					? '3' //ExpandField<NonNullable<T[number]['properties'][K]>>
 					: '5'
 				: '6'
-			: `7 ${K}`
+			: '7'
 	: never;
 
-export type ExpandNestedProperty<T extends BaseDocumentType, K extends ExpandableNestedDocumentKeys<T>> = T extends unknown
+export type ExpandNestedProperty<T extends BaseExpandable, K extends ExpandableNestedDocumentKeys<T>> = T extends unknown
 	? K extends Record<string, Record<string, unknown>>
 		// x.x -> x
 		? keyof K extends AllFields
@@ -211,31 +210,31 @@ export type ExpandNestedProperty<T extends BaseDocumentType, K extends Expandabl
 	: never;
 
 type ExpandableNestedNestedKeys<T> = T extends unknown
-	? T extends BaseDocumentType
-		? T extends ReferencedDocument<BaseDocumentType>// ExpandableTopLevelDocumentPKeys<T>
+	? T extends BaseExpandable
+		? T extends ReferencedExpandable<BaseExpandable>// ExpandableTopLevelDocumentPKeys<T>
 			? ExpandableNestedDocumentKeys<T['_hidden']>
 			: ExpandableNestedDocumentKeys<T>
-		: T extends BaseDocumentType[]
-			? T extends ReferencedDocument<BaseDocumentType>[]
+		: T extends BaseExpandable[]
+			? T extends ReferencedExpandable<BaseExpandable>[]
 				? ExpandableNestedDocumentKeys<T[number]['_hidden']>
 				: ExpandableNestedDocumentKeys<T[number]>
 			: never
 	: never;
 
 type ExpandNestedNested<T, Y extends ExpandableNestedNestedKeys<T>> = T extends unknown
-	? T extends BaseDocumentType
-		? T extends ReferencedDocument<BaseDocumentType>// ExpandableTopLevelDocumentKeys<T>
+	? T extends BaseExpandable
+		? T extends ReferencedExpandable<BaseExpandable>// ExpandableTopLevelDocumentKeys<T>
 			? ExpandNestedProperty<T['_hidden'], Y>
 			: ExpandNestedProperty<T, Y>
-		: T extends BaseDocumentType[]
-			? T extends ReferencedDocument<BaseDocumentType>[]
+		: T extends BaseExpandable[]
+			? T extends ReferencedExpandable<BaseExpandable>[]
 				? ExpandNestedProperty<T[number]['_hidden'], Y>[]
 				: ExpandNestedProperty<T[number], Y>[]
 			: never
 	: never;
 
 type ExpandNestedDocByKey<
-	T extends BaseDocumentType,
+	T extends BaseExpandable,
 	K extends ExpandableNestedPropertyKeys<T>,
 	N extends ExpandableNestedPropertyKeys<NonNullable<T['properties'][K]>>,
 	Base extends ExpandOrCleanDocumentByKey<T, K> = ExpandOrCleanDocumentByKey<T, K>
@@ -244,134 +243,3 @@ type ExpandNestedDocByKey<
 		? ExpandField<NonNullable<T['properties'][E]>, N>
 		: Base['properties'][E];
 }>
-
-// TODO $all.$all -> prop -- YOU ARE HERE
-type AllAllProp = ExpandNestedProperty<APage, {
-	$all: 'bPage_single'
-}>;
-
-const allAllProp: AllAllProp = {} as AllAllProp;
-
-
-// hmm. Closer now!
-allAllProp.properties.aPage_single?.properties.bPage_single?.contentType satisfies 'cPage' | undefined;
-allAllProp.properties.aPage_single?.properties.bPage_multi?.[0].contentType satisfies 'cPage' | undefined;
-allAllProp.properties.aPage_single?.properties.bPage_multi?.[0].properties satisfies EmptyObjectType | undefined
-
-allAllProp.properties.aPage_multi?.[0].properties.bPage_multi?.[0].properties satisfies EmptyObjectType | undefined
-allAllProp.properties.aPage_multi?.[0].properties.bPage_single?.properties.cPage_single?.properties.propValue satisfies string | undefined
-allAllProp.properties.aPage_multi?.[0].properties.bPage_single?.properties.cPage_single?.properties.ePage_single?.properties.propValue satisfies string | undefined
-
-/* type AllProp = ExpandNestedProperty<ContentPage, {
-	$all: 'ref'
-}>;
-
-const allProp: AllProp = {} as AllProp;
-
-allProp.properties.meta_description satisfies string | undefined
-allProp.properties.ref?.properties.meta_description satisfies string | undefined
-allProp.properties.ref?.properties.ref?.properties.meta_description satisfies string | undefined
-allProp.properties.ref?.properties.ref?.properties.ref?.properties satisfies EmptyObjectType | undefined
-allProp.properties.ref?.properties.test?.[0].properties.ref?.properties satisfies EmptyObjectType | undefined
-allProp.properties.test?.[0].properties.test?.[0].properties satisfies EmptyObjectType | undefined
- */
-/*
-// $all.$all -> $all
-type AllAllAll = ExpandNestedProperty<ContentPage, {
-	$all: {
-		'$all': '$all'
-	}
-}>;
-
-const allAllAll: AllAllAll = {} as AllAllAll;
-
-allAllAll.properties.test?.[0].properties
-
-allAllAll.properties.ref?.properties.meta_title satisfies string | undefined
-allAllAll.properties.ref?.properties.ref?.properties.meta_title satisfies string | undefined
-allAllAll.properties.ref?.properties.ref?.properties.ref?.properties.ref?.properties satisfies EmptyObjectType | undefined
-allAllAll.properties.ref?.properties.test?.[0].properties.ref?.properties?.ref?.properties satisfies EmptyObjectType | undefined
-allAllAll.properties.ref?.properties.test?.[0].properties.test?.[0].properties.ref?.properties satisfies EmptyObjectType | undefined
- */
-
-/*
-// prop -> [Prop]
-type PropProp = ExpandNestedProperty<ContentPage, {
-	ref: 'test'
-}>;
-
-const propProp: PropProp = {} as PropProp;
-
-propProp.properties.ref
-propProp.properties.ref?.properties.ref?.properties.meta_title satisfies string | undefined
-propProp.properties.ref?.properties.ref?.properties.ref?.properties satisfies EmptyObjectType | undefined
-propProp.properties.ref?.properties.test?.[0].properties.ref?.properties satisfies EmptyObjectType | undefined
-propProp.properties.ref?.properties.test?.[0].properties.test?.[0].properties satisfies EmptyObjectType | undefined
-propProp.properties.test?.[0]?.properties satisfies EmptyObjectType | undefined
-// test.properties.ref = undefined
-// test.properties.[0].properties.ref[0].properties.ref[0].properties.meta_title;
-
-propProp.properties.meta_description satisfies string | undefined
-propProp.properties.ref?.properties.meta_description satisfies string | undefined
-propProp.properties.ref?.properties.ref?.properties.meta_description satisfies string | undefined
-propProp.properties.ref?.properties.ref?.properties.ref?.properties satisfies EmptyObjectType | undefined
-propProp.properties.ref?.properties.test?.[0].properties.ref?.properties satisfies EmptyObjectType | undefined
-propProp.properties.test?.[0].properties satisfies EmptyObjectType | undefined
-
-// prop -> All
-type PropAll = ExpandNestedProperty<ContentPage, {
-	'ref': '$all'
-}>;
-
-const propAll: PropAll = {} as PropAll;
-propAll.properties.test?.[0].properties
-propAll.properties.test?.[0]?.properties satisfies EmptyObjectType | undefined
-// test.properties.ref = undefined
-// test.properties.[0].properties.ref[0].properties.ref[0].properties.meta_title;
-
-if (propAll.properties.test?.[0].properties.test?.[0] && propAll.properties.ref?.properties.ref?.properties.ref?.properties) {
-
-	propAll.properties.meta_description satisfies string | undefined
-	propAll.properties.ref.properties.meta_description satisfies string | undefined
-	propAll.properties.ref.properties.ref.properties.meta_description satisfies string | undefined
-	propAll.properties.ref.properties.ref.properties.ref.properties satisfies EmptyObjectType
-	propAll.properties.ref.properties.test?.[0].properties.ref?.properties satisfies EmptyObjectType | undefined
-	propAll.properties.test[0].properties satisfies EmptyObjectType
-}
-
-// all -> Prop
-type AllProp = ExpandNestedProperty<ContentPage, {
-	$all: 'ref'
-}>;
-
-const allProp: AllProp = {} as AllProp;
-
-// test.properties.ref = undefined
-// test.properties.[0].properties.ref[0].properties.ref[0].properties.meta_title;
-
-if (allProp.properties.test?.[0].properties.test?.[0] && allProp.properties.ref?.properties.ref?.properties.ref?.properties) {
-
-	allProp.properties.meta_description satisfies string | undefined
-	allProp.properties.ref.properties.meta_description satisfies string | undefined
-	allProp.properties.ref.properties.ref.properties.meta_description satisfies string | undefined
-	allProp.properties.ref.properties.ref.properties.ref.properties satisfies EmptyObjectType
-	allProp.properties.test[0].properties.test?.[0].properties satisfies EmptyObjectType
-}
-
-// all -> all
-type AllAll = ExpandNestedProperty<ContentPage, {
-	$all: '$all'
-}>;
-
-const allAll: AllAll = {} as AllAll;
-
-// test.properties.ref = undefined
-// test.properties.[0].properties.ref[0].properties.ref[0].properties.meta_title;
-
-if (allAll.properties.ref?.properties.ref?.properties.ref?.properties.meta_title) {
-	allAll.properties.meta_description satisfies string | undefined
-	allAll.properties.ref.properties.meta_description satisfies string | undefined
-	allAll.properties.ref.properties.ref.properties.meta_description satisfies string | undefined
-	allAll.properties.ref.properties.ref.properties.ref.properties satisfies EmptyObjectType
-}
- */

@@ -8,20 +8,19 @@ type ExtractProps<T extends Record<string, unknown>, Key extends string> = {
 	]: T[K];
 };
 
-export interface ContentRoute {
-	path: string;
-	startItem: {
-		id: string;
-		path: string;
-	};
+export interface BaseExpandable<
+	Properties extends object = ObjectType,
+> {
+	properties: Properties;
 }
 
-export interface BaseMediaType<
+export type ReferencedExpandable<T extends BaseExpandable> = BaseExpandable<EmptyObjectType> & { _hidden: T } & Omit<T, 'properties'>;
+
+export type BaseMediaType<
 	Alias extends string = string,
 	Properties extends ObjectType = ObjectType,
-> {
+> = BaseExpandable<Properties> & {
 	mediaType: Alias;
-	properties: Properties;
 }
 
 export type Crop<Alias extends string = string, Width extends number = number, Height extends number = number> = {
@@ -62,24 +61,35 @@ export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends C
 		: C;
 }
 
-export interface BaseDocumentType<
+export type BaseElementType<
+	Alias extends string = string,
+	Properties extends object = ObjectType,
+> = BaseExpandable<Properties> & {
+	id: string;
+	contentType: Alias;
+}
+
+export interface ContentRoute {
+	path: string;
+	startItem: {
+		id: string;
+		path: string;
+	};
+}
+
+export type BaseDocumentType<
 	Alias extends string = string,
 	Properties extends ObjectType = ObjectType,
 	Cultures extends { [culture: string]: ContentRoute; } = EmptyObjectType
-> {
-	id: string;
+> = BaseElementType<Alias, Properties> & {
 	name: string;
 	createDate: string;
 	updateDate: string;
 	route: ContentRoute;
-	contentType: Alias;
 	cultures: Cultures;
-	properties: Properties;
 }
 
-export type ReferencedDocument<Doc extends BaseDocumentType> = BaseDocumentType<Doc['contentType'], EmptyObjectType> & { _hidden: Doc };
-
-export interface BaseBlockType<Content extends BaseDocumentType = BaseDocumentType, Setting extends BaseDocumentType | null = BaseDocumentType | null> {
+export interface BaseBlockType<Content extends BaseElementType = BaseElementType, Setting extends BaseElementType | null = BaseElementType | null> {
 	content: Content;
 	settings: Setting;
 }
@@ -88,14 +98,14 @@ export interface BaseBlockListType<Block extends BaseBlockType = BaseBlockType> 
 	items: Block[];
 }
 
-export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, BaseGridBlockAreaType[]> = BaseGridBlockType> {
+export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseElementType, BaseElementType | null, BaseGridBlockAreaType[]> = BaseGridBlockType> {
 	gridColumns: number;
 	items: Block[];
 }
 
 export interface BaseGridBlockType<
-	Content extends BaseDocumentType = BaseDocumentType,
-	Setting extends BaseDocumentType | null = BaseDocumentType | null,
+	Content extends BaseElementType = BaseElementType,
+	Setting extends BaseElementType | null = BaseElementType | null,
 	Areas extends BaseGridBlockAreaType[] = never[]
 > extends BaseBlockType<Content, Setting> {
 	rowSpan: number;
@@ -104,7 +114,7 @@ export interface BaseGridBlockType<
 	areas: Areas;
 }
 
-export interface BaseGridBlockAreaType<Alias extends string = string, Block extends BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, never[]> = BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, never[]>> {
+export interface BaseGridBlockAreaType<Alias extends string = string, Block extends BaseGridBlockType<BaseElementType, BaseElementType | null, never[]> = BaseGridBlockType<BaseElementType, BaseElementType | null, never[]>> {
 	alias: Alias;
 	rowSpan: number;
 	columnSpan: number;
