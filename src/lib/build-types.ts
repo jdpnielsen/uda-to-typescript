@@ -79,7 +79,7 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('ReferencedDocument')
+						ts.factory.createIdentifier('ReferencedExpandable')
 					),
 				])
 			),
