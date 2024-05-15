@@ -1,5 +1,5 @@
 import { BaseDocumentType } from './base-types';
-import { ExpandParam, ExpandResult } from './utils';
+import { ExpandParam, ExpandResult, Fields, OmitFields } from './utils';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -21,6 +21,7 @@ interface QueryOptions<T extends BaseDocumentType> {
 		name?: SortDirection;
 		sortOrder?: SortDirection;
 	};
+	fields?: Fields<T>;
 	take?: number;
 	skip?: number;
 }
@@ -28,8 +29,8 @@ interface QueryOptions<T extends BaseDocumentType> {
 function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) {
 	const queryParams = new URLSearchParams();
 
-	if (options.expand === 'all') {
-		queryParams.set('expand', 'all');
+	if (options.expand === '$all') {
+		queryParams.set('expand', '$all');
 	} else if (Array.isArray(options.expand)) {
 		queryParams.append('expand', 'property:' + options.expand.join(','));
 	}
@@ -54,6 +55,10 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 		queryParams.set('filter', 'name:' + options.filter.name);
 	}
 
+	if (options.fields) {
+		queryParams.set('fields', `properties[${buildFieldQuery(options.fields)}]`);
+	}
+
 	if (options.sort) {
 		Object
 			.entries(options.sort)
@@ -71,6 +76,21 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	}
 
 	return queryParams;
+}
+
+export function buildFieldQuery<T extends BaseDocumentType = BaseDocumentType>(fields: string | Fields<T>): string {
+	if (typeof fields === 'string') {
+		return fields;
+	} else if (Array.isArray(fields)) {
+		return fields.map((e) => buildFieldQuery<T>(e)).join(',');
+	} else {
+		return Object
+			.entries(fields)
+			.map(([key, value]) => {
+				return `${key}[properties[${buildFieldQuery(value as Fields<BaseDocumentType>)}]]`;
+			})
+			.join(',')
+	}
 }
 
 type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
@@ -116,18 +136,18 @@ const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: U
  * 	return response.json() as T;
  * }
  *
- * const getContent = buildContentFetcher<Content>('https://example.com/umbraco/delivery', customFetchFunction);
+ * const getContent = buildContentFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
 export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
+	return async <F extends Fields<Doc> = ['$all'], T extends ExpandParam<OmitFields<Doc, F>> = undefined>(opts?: { expand?: T; fields?: F; } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/umbraco/delivery/api/v1/content`, host);
+		const url = new URL(`${host}/umbraco/delivery/api/v2/content`, host);
 		url.search = queryParams.toString();
 
-		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions});
+		return fetchFunction<{ total: number, items: ExpandResult<OmitFields<Doc, F>, T>[] }>({ url, options: fetchOptions});
 	}
 }
 
@@ -143,17 +163,44 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, 
  * 	return response.json() as T;
  * }
  *
- * const getContentById = buildContentItemFetcher<Content>('https://example.com/umbraco/delivery', customFetchFunction);
+ * const getContentById = buildContentItemFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
 export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
+	return async <F extends Fields<Doc> = ['$all'], T extends ExpandParam<OmitFields<Doc, F>> = undefined>(id: string, opts?: { expand?: T; fields?: F; } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/umbraco/delivery/api/v1/content/item/${id}`, host);
+		const url = new URL(`${host}/umbraco/delivery/api/v2/content/item/${id}`, host);
 		url.search = queryParams.toString();
 
-		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
+		return fetchFunction<ExpandResult<OmitFields<Doc, F>, T>>({ url, options: fetchOptions });
+	}
+}
+
+/**
+ * Builds a typed fetch function for getting content by ids.
+ * @example
+ * ```ts
+ * const customFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
+ * 	const response = await fetch(url);
+ * 	if (!response.ok) {
+ * 		throw new Error(response.statusText);
+ * 	}
+ * 	return response.json() as T;
+ * }
+ *
+ * const getContentById = buildContentItemFetcher<Content>('https://example.com', customFetchFunction);
+ * ```
+ */
+export function buildContentItemsFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
+	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
+	return async <F extends Fields<Doc> = ['$all'], T extends ExpandParam<OmitFields<Doc, F>> = undefined>(opts?: { ids: string[]; expand?: T; fields?: F; } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
+		const queryParams = buildQueryParams<Doc>(opts || {});
+
+		const url = new URL(`${host}/umbraco/delivery/api/v2/content/items`, host);
+		url.search = queryParams.toString();
+
+		return fetchFunction<ExpandResult<OmitFields<Doc, F>, T>[]>({ url, options: fetchOptions });
 	}
 }

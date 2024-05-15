@@ -153,13 +153,31 @@ export type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListe
 	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
 	: never;
 
-export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | 'all' | undefined | [];
+export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | '$all' | undefined | [];
 export type ExpandResult<Doc extends BaseDocumentType, Param extends ExpandParam<Doc>> = Param extends [] | undefined
 	? UnexpandDocumentExpandables<Doc, undefined>
-	: Param extends 'all'
+	: Param extends '$all'
 		? UnexpandDocumentExpandables<Doc, ExpandableDocumentKeys<Doc>>
 		: Param extends ExpandableDocumentKeys<Doc>[]
 			? Param[number] extends never
 				? Doc
 				: UnexpandDocumentExpandables<Doc, Param[number]>
 			: Doc;
+
+type DocFields<T extends BaseDocumentType> = keyof T['properties'];
+
+export type Fields<T extends BaseDocumentType> = ['$all'] | (DocFields<T> | {
+	[K in Exclude<ExpandableDocumentKeys<T>, undefined>]?: NonNullable<T['properties'][K]> extends BaseDocumentType[]
+		? Fields<NonNullable<T['properties'][K]>[number]>
+		: NonNullable<T['properties'][K]> extends BaseDocumentType
+			? Fields<NonNullable<T['properties'][K]>>
+			: never;
+})[];
+
+export type OmitFields<T extends BaseDocumentType, K extends Fields<T>> = K extends ['$all']
+	? T
+	: BaseDocumentType<
+			T['contentType'],
+			Pick<T['properties'], K extends [DocFields<T>] ? K[number] : never>,
+			T['cultures']
+		>;
