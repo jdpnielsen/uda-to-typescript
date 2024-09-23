@@ -12,7 +12,8 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 	const {
 		input,
 		output,
-		dataTypes = dataTypeMap
+		dataTypes = dataTypeMap,
+		templates = true,
 	} = options;
 
 	const resolvedOutput = path.resolve(workingDirectory, output);
@@ -41,8 +42,11 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 		omitTrailingSemicolon: true,
 	})
 
-	// TODO: support custom templates
-	await cloneTemplates(path.resolve(__dirname, '../../templates'), dir);
+	console.log('Copy tempaltes?', typeof templates);
+	if (templates) {
+		// TODO: support custom templates
+		await cloneTemplates(path.resolve(__dirname, '../../templates'), dir);
+	}
 
 	const outputFile = printer.printList(
 		ts.ListFormat.MultiLine,

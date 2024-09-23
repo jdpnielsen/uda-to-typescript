@@ -7,6 +7,9 @@ export type UDAConvertConfiguration = {
 	/** Output file */
 	output: string;
 
+	/** Copy templates */
+	templates?: boolean;
+
 	/**
 	 * @example
 	 * ```ts
