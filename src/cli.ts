@@ -15,7 +15,7 @@ program
 	.option('-c, --config <string>', 'Path for config file. Example: --config ./udaconvert.config.ts')
 	.option('-i, --input <string>', 'Glob pattern to match. Example: --input ./files/*.uda')
 	.option('-o, --output <string>', 'Where to write output file. Example: --output ./file.ts')
-	.option('-t, --templates <boolean>', 'Control writing of template files. Example: --templates false', 'true')
+	.option('--skip-templates', 'Prevent writing of template files. Example: --skip-templates')
 	.option('-d, --debug', 'enables verbose logging', false)
 	.parse(process.argv);
 
@@ -29,7 +29,7 @@ const opts = program.opts() as {
 	/** Output file */
 	output: string;
 
-	templates: 'true' | 'false';
+	skipTemplates: boolean;
 
 	config?: string;
 };
@@ -48,7 +48,6 @@ const executeFrom = searchedFor
 const configuration: UDAConvertConfiguration = {
 	...(searchedFor?.config || {}) as UDAConvertConfiguration,
 	...opts,
-	templates: opts.templates === 'true',
 };
 
 // Validate configuration

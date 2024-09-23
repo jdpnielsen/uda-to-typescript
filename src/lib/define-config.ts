@@ -8,7 +8,7 @@ export type UDAConvertConfiguration = {
 	output: string;
 
 	/** Copy templates */
-	templates?: boolean;
+	skipTemplates?: boolean;
 
 	/**
 	 * @example

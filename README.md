@@ -27,6 +27,7 @@ Options:
   -c, --config <string>  Path for config file. Example: --config ./udaconvert.config.ts
   -i, --input <string>   Glob pattern to match. Example: --input ./files/*.uda
   -o, --output <string>  Where to write output file. Example: --output ./file.ts
+  --skip-template        revent writing of template files. Example: --skip-templates
   -d, --debug            enables verbose logging (default: false)
   -h, --help             display help for command
 

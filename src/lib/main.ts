@@ -13,7 +13,7 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 		input,
 		output,
 		dataTypes = dataTypeMap,
-		templates = true,
+		skipTemplates,
 	} = options;
 
 	const resolvedOutput = path.resolve(workingDirectory, output);
@@ -42,8 +42,7 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 		omitTrailingSemicolon: true,
 	})
 
-	console.log('Copy tempaltes?', typeof templates);
-	if (templates) {
+	if (!skipTemplates) {
 		// TODO: support custom templates
 		await cloneTemplates(path.resolve(__dirname, '../../templates'), dir);
 	}

@@ -1,4 +1,4 @@
-import execa from 'execa';
+import execa, { ExecaError } from 'execa';
 import { rm, stat } from 'fs/promises';
 import { resolve } from 'path';
 import { version } from '../../../package.json';
@@ -42,7 +42,7 @@ describe('uda-to-typescript', () => {
 	it('should not include templates if so configured', async () => {
 		expect.assertions(4)
 
-		await execa(bin, ['--input', './src/__tests__/__fixtures__/*.uda', '--output', './dist/output.ts', '--templates', 'false']);
+		await execa(bin, ['--input', './src/__tests__/__fixtures__/*.uda', '--output', './dist/output.ts', '--skip-templates']);
 
 		const outputFile = await stat('./dist/output.ts');
 		expect(outputFile.isFile()).toBeTruthy();
@@ -65,6 +65,23 @@ describe('uda-to-typescript', () => {
 			await stat('./dist/utils.ts');
 		} catch (error) {
 			expect((error as Error & { code: string }).code).toBe('ENOENT');
+		}
+	});
+
+	it('should support configuration file', async () => {
+		await execa(bin, ['--config', './src/__tests__/__fixtures__/udaconvert.config.ts']);
+
+		const outputFile = await stat('./dist/output.ts');
+		expect(outputFile.isFile()).toBeTruthy();
+	});
+
+	it('should error when configuration file is not found', async () => {
+		expect.assertions(1)
+
+		try {
+			await execa(bin, ['--config', './src/__tests__/__fixtures__/not.existing.config.ts']);
+		} catch (error) {
+			expect((error as ExecaError).stderr).toContain('ENOENT: no such file or directory, open');
 		}
 	});
 });
