@@ -21,6 +21,7 @@ export type Image = BaseMediaType<"Image", {
     Height: unknown;
     Size: unknown;
     Type: unknown;
+    altText?: string;
 }>;
 
 export type PickableMediaType = Image;

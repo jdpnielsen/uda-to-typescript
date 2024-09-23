@@ -111,6 +111,13 @@
           "MemberCanEdit": false,
           "ViewOnProfile": false,
           "IsSensitive": false
+        },
+        {
+          "Key": "8eb229ab-ccfe-4019-89de-ee7971842f33",
+          "Alias": "altText",
+          "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+          "Name": "Alt text",
+          "SortOrder": 5
         }
       ]
     }
@@ -118,6 +125,10 @@
   "PropertyTypes": [],
   "Udi": "umb://media-type/cc07b31308434aa8bbda871c8da728c8",
   "Dependencies": [
+    {
+      "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+      "Ordering": true
+    },
     {
       "Udi": "umb://data-type/1df9f033e6d4451fb8d2e0cbc50a836f",
       "Ordering": true,
