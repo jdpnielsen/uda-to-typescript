@@ -114,10 +114,10 @@ export default defineConfig({
 
 [build-img]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml/badge.svg
 [build-url]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml
-[downloads-img]:https://img.shields.io/npm/dt/uda-to-typescript
-[downloads-url]:https://www.npmtrends.com/uda-to-typescript
-[npm-img]:https://img.shields.io/npm/v/uda-to-typescript
-[npm-url]:https://www.npmjs.com/package/uda-to-typescript
+[downloads-img]:https://img.shields.io/npm/dt/@jdpnielsen/uda-to-typescript
+[downloads-url]:https://www.npmtrends.com/@jdpnielsen/uda-to-typescript
+[npm-img]:https://img.shields.io/npm/v/@jdpnielsen/uda-to-typescript
+[npm-url]:https://www.npmjs.com/package/@jdpnielsen/uda-to-typescript
 [issues-img]:https://img.shields.io/github/issues/jdpnielsen/uda-to-typescript
 [issues-url]:https://github.com/jdpnielsen/uda-to-typescript/issues
 [semantic-release-img]:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
