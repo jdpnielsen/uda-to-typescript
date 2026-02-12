@@ -111,6 +111,47 @@ export default defineConfig({
 });
 ```
 
+For Umbraco 14+ migrations, custom property editors may be exported with a core `EditorAlias` (for example `Umbraco.Plain.Json`) and the original editor alias moved to `EditorUiAlias`.
+Custom handlers can therefore also be registered by `EditorUiAlias`, for example `Noa.CustomLinkPicker`.
+
+## Umbraco v17 support
+
+This library supports newer Umbraco UDA exports (v14+ including v17) where datatypes can be migrated to a split editor model:
+
+- `EditorAlias` can point to a core schema alias (for example `Umbraco.Plain.Json`)
+- `EditorUiAlias` carries the UI/editor alias (for example `Noa.CustomLinkPicker`)
+
+The generator now resolves handlers by `EditorUiAlias` first, then `EditorAlias`. This means custom handlers continue to work after Umbraco migration without rewriting your UDA files.
+
+## Migration notes for consumers (v13 -> v17)
+
+When moving your Umbraco project to v17, review these points in your consuming app:
+
+1. Update any custom datatype handlers to register by `EditorUiAlias` when relevant.
+2. Expect some editor configs to contain fewer enumerated values in UDA than before.
+3. For migrated editors using `Umbraco.Plain.*`, generated types may be broader unless you provide a custom handler.
+4. `Umbraco.RichText` is now handled and maps to `{ markup: string }`.
+5. Label datatypes now infer value kind from `umbracoDataValueType` instead of resolving to `never`.
+
+### Custom handler example using EditorUiAlias
+
+```ts
+import { defineConfig, dataTypes } from '@jdpnielsen/uda-to-typescript';
+
+export default defineConfig({
+	input: '../umbraco/Deploy/Revision/*.uda',
+	output: './src/umbraco/types.ts',
+	dataTypes: {
+		...dataTypes,
+		'Noa.CustomLinkPicker': {
+			editorAlias: 'Noa.CustomLinkPicker',
+			build: () => [],
+			reference: () => 'UrlItem',
+		},
+	},
+});
+```
+
 
 [build-img]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml/badge.svg
 [build-url]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml

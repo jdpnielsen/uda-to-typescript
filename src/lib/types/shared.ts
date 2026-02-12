@@ -2,15 +2,15 @@ import { UDI } from './utils';
 
 export interface Dependency {
 	Udi: UDI;
-	Ordering: boolean;
-	Mode: number;
+	Ordering?: boolean;
+	Mode?: number | string;
 }
 
 export interface PropertyGroup {
 	Key: string;
 	Name: string;
-	SortOrder: number;
-	Type: number;
+	SortOrder?: number;
+	Type?: number;
 	Alias: string;
 	PropertyTypes: PropertyType[];
 }
@@ -20,25 +20,25 @@ export interface PropertyType {
 	Alias: string;
 	DataType: UDI;
 	Description?: string;
-	Mandatory: boolean;
+	Mandatory?: boolean;
 	MandatoryMessage?: string;
 	Name: string;
-	SortOrder: number;
+	SortOrder?: number;
 	Validation?: string;
 	ValidationMessage?: string;
-	VariesByCulture: boolean;
-	VariesBySegment: boolean;
-	LabelOnTop: boolean;
-	MemberCanEdit: boolean;
-	ViewOnProfile: boolean;
-	IsSensitive: boolean;
+	VariesByCulture?: boolean;
+	VariesBySegment?: boolean;
+	LabelOnTop?: boolean;
+	MemberCanEdit?: boolean;
+	ViewOnProfile?: boolean;
+	IsSensitive?: boolean;
 }
 
 export interface Permissions {
-	AllowVaryingByCulture: boolean;
-	AllowVaryingBySegment: boolean;
-	AllowedAtRoot: boolean;
-	IsElementType: boolean;
+	AllowVaryingByCulture?: boolean;
+	AllowVaryingBySegment?: boolean;
+	AllowedAtRoot?: boolean;
+	IsElementType?: boolean;
 	AllowedChildContentTypes: UDI[];
 }
 

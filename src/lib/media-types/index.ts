@@ -7,6 +7,7 @@ import type { HandlerContext } from '../build-types';
 import { parseStringStatements } from '../helpers/ast/parse-string';
 import { PropertyType } from '../types/shared';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
+import { resolveDataTypeHandler } from '../datatypes';
 
 export type MediaTypeHandler = {
 	build: (dataType: MediaType, context: HandlerContext) => ts.Node[];
@@ -40,8 +41,10 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 				);
 			}
 
-			if (!dataTypeHandlers[dataType.EditorAlias]) {
-				console.warn(`Could not find handler for data type ${dataType.EditorAlias}`);
+			const resolvedHandler = resolveDataTypeHandler(dataTypeHandlers, dataType);
+
+			if (!resolvedHandler) {
+				console.warn(`Could not find handler for data type ${dataType.EditorAlias}${dataType.EditorUiAlias ? ` (${dataType.EditorUiAlias})` : ''}`);
 
 				return factory.createPropertySignature(
 					undefined,
@@ -60,7 +63,7 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 				);
 			}
 
-			const referenceOutput = dataTypeHandlers[dataType.EditorAlias].reference(dataType, artifacts);
+			const referenceOutput = resolvedHandler.handler.reference(dataType, artifacts);
 			const reference =	typeof referenceOutput === 'string'
 				? parseStringStatements(referenceOutput)[0] as ts.TypeNode
 				: referenceOutput;

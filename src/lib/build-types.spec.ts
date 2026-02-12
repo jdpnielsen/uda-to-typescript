@@ -44,6 +44,7 @@ describe('buildTypes', () => {
 
 	it('Should handle v17 fixtures without throwing', async () => {
 		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+		const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
 
 		const output = buildTypes({
 			artifacts,
@@ -57,6 +58,39 @@ describe('buildTypes', () => {
 				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
 			);
 
+		expect(warnSpy).not.toHaveBeenCalled();
 		expect(actual).toContain('import { type BaseDocumentType');
+		expect(actual).toContain('content?: {' );
+		expect(actual).toContain('markup: string;');
+		expect(actual).toContain('form: string | null;');
+		expect(actual).toContain('umbracoBytes: number;');
+		expect(actual).toContain('umbracoWidth: number;');
+
+		warnSpy.mockRestore();
+	});
+
+	it('Should resolve custom handlers by EditorUiAlias for v17', async () => {
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+
+		const output = buildTypes({
+			artifacts,
+			dataTypeHandlers: {
+				...dataTypeMap,
+				'Noa.CustomLinkPicker': {
+					editorAlias: 'Noa.CustomLinkPicker',
+					build: () => [],
+					reference: () => ts.factory.createTypeReferenceNode('UrlItem'),
+				},
+			}
+		});
+
+		const actual = ts.createPrinter()
+			.printList(
+				ts.ListFormat.MultiLine,
+				output,
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			);
+
+		expect(actual).toContain('link: UrlItem;');
 	});
 });
