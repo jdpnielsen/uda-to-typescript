@@ -1,0 +1,18 @@
+{
+  "Name": "Meta description - Textarea",
+  "EditorAlias": "Umbraco.TextArea",
+  "EditorUiAlias": "Umb.PropertyEditorUi.TextArea",
+  "Configuration": {
+    "maxChars": 180
+  },
+  "Parent": "umb://data-type-container/ad9a412efbb443d0bcdac0de83eb1c53",
+  "Udi": "umb://data-type/9276cd2bb795472d86d24e1e48e9f71a",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/ad9a412efbb443d0bcdac0de83eb1c53",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

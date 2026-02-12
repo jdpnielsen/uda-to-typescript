@@ -1,0 +1,25 @@
+{
+  "Name": "Two Column Layout",
+  "Alias": "umbBlockGridDemoTwoColumnLayoutBlock",
+  "AllowedTemplates": [],
+  "HistoryCleanup": {},
+  "Icon": "icon-book-alt color-black",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "IsElementType": true,
+    "AllowedChildContentTypes": []
+  },
+  "Parent": "umb://document-type-container/a4088dc0ac194a5dbc937ab22e2c0bb8",
+  "CompositionContentTypes": [],
+  "PropertyGroups": [],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/2e35aeb4caab442193171d1890c76f29",
+  "Dependencies": [
+    {
+      "Udi": "umb://document-type-container/a4088dc0ac194a5dbc937ab22e2c0bb8",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "17.0.1"
+}

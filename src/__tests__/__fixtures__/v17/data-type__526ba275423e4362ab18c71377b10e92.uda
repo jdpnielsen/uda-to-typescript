@@ -1,0 +1,19 @@
+{
+  "Name": "Meta title - Textbox",
+  "EditorAlias": "Umbraco.TextBox",
+  "EditorUiAlias": "Umb.PropertyEditorUi.TextBox",
+  "DatabaseType": "Nvarchar",
+  "Configuration": {
+    "maxChars": 80
+  },
+  "Parent": "umb://data-type-container/ad9a412efbb443d0bcdac0de83eb1c53",
+  "Udi": "umb://data-type/526ba275423e4362ab18c71377b10e92",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/ad9a412efbb443d0bcdac0de83eb1c53",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

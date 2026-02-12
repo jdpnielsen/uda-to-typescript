@@ -1,0 +1,74 @@
+{
+  "Name": "Content page",
+  "Alias": "contentPage",
+  "DefaultTemplate": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+  "AllowedTemplates": [
+    "umb://template/2f23da3887f44c9da0e198ef889b4b56"
+  ],
+  "HistoryCleanup": {},
+  "Icon": "icon-document",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "AllowedChildContentTypes": [
+      "umb://document-type/5e00a84958614540a25f99a0f4903db6",
+      "umb://document-type/75766537caa741979252159fdbd048f1"
+    ]
+  },
+  "Parent": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
+  "CompositionContentTypes": [
+    "umb://document-type/7b69656f52b34755a3a2eb6f10964a7e",
+    "umb://document-type/a98e256b8c1e47268fb58124626ee349"
+  ],
+  "PropertyGroups": [
+    {
+      "Key": "0c7b873d-cddf-44cf-9605-278ddee9129e",
+      "Name": "Content",
+      "SortOrder": 98,
+      "Type": 1,
+      "Alias": "content1",
+      "PropertyTypes": [
+        {
+          "Key": "866f455e-a2da-4da7-9de2-633c82cec653",
+          "Alias": "blocks",
+          "DataType": "umb://data-type/7964f5d172534c55b1fb66bbd0091548",
+          "Name": "Blocks"
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/5e00a84958614540a25f99a0f4903db6",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/7964f5d172534c55b1fb66bbd0091548",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/5e00a84958614540a25f99a0f4903db6",
+      "Mode": "Exist"
+    },
+    {
+      "Udi": "umb://document-type/75766537caa741979252159fdbd048f1",
+      "Mode": "Exist"
+    },
+    {
+      "Udi": "umb://document-type/7b69656f52b34755a3a2eb6f10964a7e",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/a98e256b8c1e47268fb58124626ee349",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+      "Ordering": true,
+      "Mode": "Exist"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "17.0.1"
+}

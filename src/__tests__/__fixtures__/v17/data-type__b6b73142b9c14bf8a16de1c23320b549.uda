@@ -1,0 +1,21 @@
+{
+  "Name": "Tags",
+  "EditorAlias": "Umbraco.Tags",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Tags",
+  "Configuration": {
+    "group": "default",
+    "storageType": "Json",
+    "umbMigrationV14": "2026-02-06T08:25:43.4952867\u002B00:00",
+    "delimiter": "\u0000"
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/b6b73142b9c14bf8a16de1c23320b549",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

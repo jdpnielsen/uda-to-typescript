@@ -1,0 +1,34 @@
+{
+  "Name": "Image Cropper",
+  "EditorAlias": "Umbraco.ImageCropper",
+  "EditorUiAlias": "Umb.PropertyEditorUi.ImageCropper",
+  "Configuration": {
+    "crops": [
+      {
+        "alias": "16:9",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "alias": "4:3",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "alias": "4:5",
+        "width": 800,
+        "height": 1000
+      }
+    ]
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/1df9f033e6d4451fb8d2e0cbc50a836f",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

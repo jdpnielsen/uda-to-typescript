@@ -19,20 +19,33 @@ export const radioButtonListHandler = {
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);
-	const config = dataType.Configuration as RadioButtonListConfig;
+	const config = (dataType.Configuration || {}) as Partial<RadioButtonListConfig>;
+	const items = getItems(config);
 
-	const items = config.items.map((item) => {
+	if (items.length === 0) {
+		return [];
+	}
+
+	const enumItems = items.map((item) => {
 		return {
 			key: pascalCase(item.value),
 			value: item.value,
 		};
 	});
 
-	return createModernEnumHandler(variableIdentifier, items);
+	return createModernEnumHandler(variableIdentifier, enumItems);
 }
 
 export function reference(dataType: DataType): ts.TypeNode {
 	const variableIdentifier = pascalCase(dataType.Name);
+	const config = (dataType.Configuration || {}) as Partial<RadioButtonListConfig>;
+	const items = getItems(config);
+
+	if (items.length === 0) {
+		return maybeNull(
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+		);
+	}
 
 	return maybeNull(
 		factory.createTypeReferenceNode(
@@ -40,4 +53,13 @@ export function reference(dataType: DataType): ts.TypeNode {
 			undefined
 		)
 	);
+}
+
+function getItems(config: Partial<RadioButtonListConfig>): Array<{ id: number; value: string }> {
+	if (!Array.isArray(config.items)) {
+		return [];
+	}
+
+	return config.items
+		.filter((item): item is { id: number; value: string } => typeof item?.value === 'string');
 }

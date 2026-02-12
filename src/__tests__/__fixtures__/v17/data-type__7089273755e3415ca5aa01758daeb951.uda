@@ -1,0 +1,41 @@
+{
+  "Name": "Navigation Block List",
+  "EditorAlias": "Umbraco.BlockList",
+  "EditorUiAlias": "Umb.PropertyEditorUi.BlockList",
+  "Configuration": {
+    "blocks": [
+      {
+        "contentElementTypeKey": "5f471833-1668-46a4-a2fb-f04c1a3946a8",
+        "label": "Link: {{ link[0].overrideTitle }}{{ link[0].overrideTitle ? \u0027\u0027 : link[0].udi | ncNodeName }}",
+        "editorSize": "medium",
+        "forceHideContentEditorInOverlay": false
+      },
+      {
+        "contentElementTypeKey": "d380ff6d-28e3-44c2-868c-ca53ae8a2ca3",
+        "label": "Group: {{title}}",
+        "editorSize": "medium",
+        "forceHideContentEditorInOverlay": false
+      }
+    ],
+    "validationLimit": {},
+    "useSingleBlockMode": false,
+    "useLiveEditing": false,
+    "useInlineEditingAsDefault": true
+  },
+  "Parent": "umb://data-type-container/d8577cf8ea0943e397bbfd9c143c9a81",
+  "Udi": "umb://data-type/7089273755e3415ca5aa01758daeb951",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/d8577cf8ea0943e397bbfd9c143c9a81",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/5f471833166846a4a2fbf04c1a3946a8"
+    },
+    {
+      "Udi": "umb://document-type/d380ff6d28e344c2868cca53ae8a2ca3"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}
