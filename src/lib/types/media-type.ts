@@ -7,7 +7,7 @@ export interface MediaType {
 	Icon: string;
 	Thumbnail: string;
 	Description?: string;
-	IsContainer: boolean;
+	IsContainer?: boolean;
 	Permissions: Permissions;
 	Parent?: UDI;
 	CompositionContentTypes: UDI[];

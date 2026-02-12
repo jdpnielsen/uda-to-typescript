@@ -1,7 +1,7 @@
 import ts, { factory } from 'typescript';
 
 import { ArtifactContainer } from './helpers/collect-artifacts';
-import { DataTypeConfig } from './datatypes';
+import { DataTypeConfig, resolveDataTypeHandler } from './datatypes';
 import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
 import { getPickableTypes } from './helpers/pickable-document-type';
@@ -84,15 +84,15 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 	];
 
 	/** Initialize datatypes */
-	const configuredEditors = Array
-		.from(new Set(dataTypes.map((dataType) => dataType.EditorAlias)).values())
-		.sort((a, b) => a.localeCompare(b));
+	const initializedHandlers = new Set<string>();
 
-	for (const editorAlias of configuredEditors) {
-		const handler = dataTypeHandlers[editorAlias];
+	for (const dataType of dataTypes) {
+		const resolvedHandler = resolveDataTypeHandler(dataTypeHandlers, dataType);
 
-		if (handler && handler.init) {
-			const nodes = handler.init(artifacts);
+		if (resolvedHandler && resolvedHandler.handler.init && !initializedHandlers.has(resolvedHandler.key)) {
+			initializedHandlers.add(resolvedHandler.key);
+
+			const nodes = resolvedHandler.handler.init(artifacts);
 			if (typeof nodes === 'string') {
 				statements.push(...parseStringStatements(nodes));
 			} else {
@@ -103,10 +103,10 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 
 	/** Build datatype instances */
 	for (const dataType of dataTypes) {
-		const handler = dataTypeHandlers[dataType.EditorAlias];
+		const resolvedHandler = resolveDataTypeHandler(dataTypeHandlers, dataType);
 
-		if (handler) {
-			const nodes = handler.build(dataType, artifacts);
+		if (resolvedHandler) {
+			const nodes = resolvedHandler.handler.build(dataType, artifacts);
 
 			if (typeof nodes === 'string') {
 				statements.push(...parseStringStatements(nodes));

@@ -17,6 +17,15 @@ export type UDAConvertConfiguration = {
 	 * 		reference: () => {},
 	 * 	}
 	 * }
+	 *
+	 * // Umbraco 14+ custom editors can also be keyed by EditorUiAlias.
+	 * dataTypes: {
+	 * 	'Noa.CustomLinkPicker': {
+	 * 		init: () => {},
+	 * 		build: () => {},
+	 * 		reference: () => {},
+	 * 	}
+	 * }
 	 * ```
 	 */
 	dataTypes?: DataTypeConfig;

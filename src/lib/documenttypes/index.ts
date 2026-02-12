@@ -6,6 +6,7 @@ import { collectProperties } from '../helpers/build-properties';
 import { exportToken } from '../helpers/ast/export-token';
 import { HandlerContext } from '../build-types';
 import { parseStringStatements } from '../helpers/ast/parse-string';
+import { resolveDataTypeHandler } from '../datatypes';
 
 export type HandlerConfig = {
 	build: (dataType: DocumentType, context: HandlerContext) => ts.Node[];
@@ -37,8 +38,10 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 				);
 			}
 
-			if (!dataTypeHandlers[artifact.EditorAlias]) {
-				console.warn(`Could not find handler for data type ${artifact.EditorAlias}`);
+			const resolvedHandler = resolveDataTypeHandler(dataTypeHandlers, artifact);
+
+			if (!resolvedHandler) {
+				console.warn(`Could not find handler for data type ${artifact.EditorAlias}${artifact.EditorUiAlias ? ` (${artifact.EditorUiAlias})` : ''}`);
 
 				return factory.createPropertySignature(
 					undefined,
@@ -48,7 +51,7 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 				);
 			}
 
-			const referenceOutput = dataTypeHandlers[artifact.EditorAlias].reference(artifact, artifacts);
+			const referenceOutput = resolvedHandler.handler.reference(artifact, artifacts);
 			const reference =	typeof referenceOutput === 'string'
 				? parseStringStatements(referenceOutput)[0] as ts.TypeNode
 				: referenceOutput;

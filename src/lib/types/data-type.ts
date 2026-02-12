@@ -3,9 +3,10 @@ import { UDI } from './utils';
 
 export interface DataType {
 	Name: string;
-	Alias: string;
+	Alias?: string;
 	EditorAlias: string;
-	DatabaseType: number;
+	EditorUiAlias?: string;
+	DatabaseType?: number | string;
 	Configuration: Configuration;
 	Parent?: UDI;
 	Udi: UDI;
