@@ -132,6 +132,7 @@ When moving your Umbraco project to v17, review these points in your consuming a
 3. For migrated editors using `Umbraco.Plain.*`, generated types may be broader unless you provide a custom handler.
 4. `Umbraco.RichText` is now handled and maps to `{ markup: string }`.
 5. Label datatypes now infer value kind from `umbracoDataValueType` instead of resolving to `never`.
+6. Some custom editor configs can now omit fields you previously depended on (for example `items`) and booleans can appear as `'0'` / `'1'` strings.
 
 ### Custom handler example using EditorUiAlias
 
@@ -150,6 +151,24 @@ export default defineConfig({
 		},
 	},
 });
+```
+
+### Making custom handlers resilient to v17 config shapes
+
+When migrating custom handlers, avoid assuming config arrays always exist.
+
+```ts
+const config = dataType.Configuration as {
+	multiple?: boolean | '0' | '1';
+	items?: Array<{ key: string; value: string }>;
+};
+
+const isMultiple = config.multiple === true || config.multiple === '1';
+const items = Array.isArray(config.items) ? config.items : [];
+
+if (items.length === 0) {
+	return isMultiple ? 'string[]' : 'string';
+}
 ```
 
 
