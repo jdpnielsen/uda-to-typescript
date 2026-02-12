@@ -1,0 +1,19 @@
+{
+  "Name": "Label (decimal)",
+  "EditorAlias": "Umbraco.Label",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Label",
+  "DatabaseType": "Decimal",
+  "Configuration": {
+    "umbracoDataValueType": "DECIMAL"
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/8f1ef1e19de440d3a0726673f631ca64",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

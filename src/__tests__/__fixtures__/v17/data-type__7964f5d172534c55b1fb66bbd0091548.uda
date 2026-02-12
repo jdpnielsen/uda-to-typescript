@@ -1,0 +1,49 @@
+{
+  "Name": "Content Block List",
+  "EditorAlias": "Umbraco.BlockList",
+  "EditorUiAlias": "Umb.PropertyEditorUi.BlockList",
+  "Configuration": {
+    "blocks": [
+      {
+        "contentElementTypeKey": "7a09a5cf-86c2-4794-a57e-b6a38640f2d9",
+        "label": "Media",
+        "editorSize": "medium",
+        "forceHideContentEditorInOverlay": false
+      },
+      {
+        "contentElementTypeKey": "5f9ec177-39a2-4d33-9bcf-9d1409630509",
+        "editorSize": "medium",
+        "forceHideContentEditorInOverlay": false
+      },
+      {
+        "contentElementTypeKey": "fe0ca33f-c8dd-4bad-9813-cb41761b9c32",
+        "editorSize": "medium",
+        "forceHideContentEditorInOverlay": false
+      }
+    ],
+    "validationLimit": {},
+    "useSingleBlockMode": false,
+    "useLiveEditing": false,
+    "useInlineEditingAsDefault": true,
+    "maxPropertyWidth": "100%"
+  },
+  "Parent": "umb://data-type-container/811fd7ec2cfb4ba79e85010232842f80",
+  "Udi": "umb://data-type/7964f5d172534c55b1fb66bbd0091548",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/811fd7ec2cfb4ba79e85010232842f80",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/5f9ec17739a24d339bcf9d1409630509"
+    },
+    {
+      "Udi": "umb://document-type/7a09a5cf86c24794a57eb6a38640f2d9"
+    },
+    {
+      "Udi": "umb://document-type/fe0ca33fc8dd4bad9813cb41761b9c32"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

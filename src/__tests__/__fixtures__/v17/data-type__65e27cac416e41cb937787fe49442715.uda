@@ -1,0 +1,37 @@
+{
+  "Name": "Meta image picker - MediaPicker",
+  "EditorAlias": "Umbraco.MediaPicker3",
+  "EditorUiAlias": "Umb.PropertyEditorUi.MediaPicker",
+  "Configuration": {
+    "filter": "cc07b313-0843-4aa8-bbda-871c8da728c8",
+    "multiple": false,
+    "validationLimit": {
+      "max": 1
+    },
+    "enableLocalFocalPoint": false,
+    "crops": [
+      {
+        "alias": "minimal",
+        "label": "Minimal",
+        "width": 1200,
+        "height": 630
+      }
+    ],
+    "ignoreUserStartNodes": false,
+    "umbMigrationV14": "2026-02-06T08:25:43.5322016\u002B00:00"
+  },
+  "Parent": "umb://data-type-container/ad9a412efbb443d0bcdac0de83eb1c53",
+  "Udi": "umb://data-type/65e27cac416e41cb937787fe49442715",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/ad9a412efbb443d0bcdac0de83eb1c53",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://media-type/cc07b31308434aa8bbda871c8da728c8",
+      "Mode": "Exist"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

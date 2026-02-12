@@ -1,0 +1,57 @@
+{
+  "Name": "Page settings",
+  "Alias": "pageSettings",
+  "AllowedTemplates": [],
+  "HistoryCleanup": {},
+  "Icon": "icon-defrag",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "IsElementType": true,
+    "AllowedChildContentTypes": []
+  },
+  "Parent": "umb://document-type-container/6973ef9518e143c29d23d701320121fe",
+  "CompositionContentTypes": [],
+  "PropertyGroups": [
+    {
+      "Key": "821bbcf5-4478-4196-b3fb-f2fb658a6a25",
+      "Name": "Page settings",
+      "SortOrder": 98,
+      "Type": 1,
+      "Alias": "pageSettings",
+      "PropertyTypes": [
+        {
+          "Key": "6e8f1692-3be8-4d32-ac96-f7da842e0c21",
+          "Alias": "umbracoUrlName",
+          "DataType": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+          "Description": "Allows overwriting of page url",
+          "Name": "Url segment overwrite"
+        },
+        {
+          "Key": "e3f38ed2-8449-41ba-9260-9cd5cb0fb78d",
+          "Alias": "excludeSearchResult",
+          "DataType": "umb://data-type/92897bc6a5f34ffeae27f2e7e33dda49",
+          "Name": "Exclude search result",
+          "SortOrder": 1
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/a98e256b8c1e47268fb58124626ee349",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/0cc0eba1996042c9bf9b60e150b429ae",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/92897bc6a5f34ffeae27f2e7e33dda49",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type-container/6973ef9518e143c29d23d701320121fe",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "17.0.1"
+}

@@ -1,0 +1,20 @@
+{
+  "Name": "Date Picker with time",
+  "EditorAlias": "Umbraco.DateTime",
+  "EditorUiAlias": "Umb.PropertyEditorUi.DatePicker",
+  "DatabaseType": "Date",
+  "Configuration": {
+    "format": "YYYY-MM-DD HH:mm:ss",
+    "offsetTime": false
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/e4d66c0fb935420081f0025f7256b89a",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

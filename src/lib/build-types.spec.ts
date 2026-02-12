@@ -24,8 +24,8 @@ describe('buildTypes', () => {
 	});
 
 	it('Should handle a glob with files', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/*.uda');
-		const expected = await readFile('./src/__tests__/__fixtures__/output.txt');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v13/*.uda');
+		const expected = await readFile('./src/__tests__/__fixtures__/v13/output.txt');
 
 		const output = buildTypes({
 			artifacts,
@@ -40,5 +40,23 @@ describe('buildTypes', () => {
 			);
 
 		expect(actual).toBe(expected.toString());
+	});
+
+	it('Should handle v17 fixtures without throwing', async () => {
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+
+		const output = buildTypes({
+			artifacts,
+			dataTypeHandlers: dataTypeMap
+		});
+
+		const actual = ts.createPrinter()
+			.printList(
+				ts.ListFormat.MultiLine,
+				output,
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			);
+
+		expect(actual).toContain('import { type BaseDocumentType');
 	});
 });

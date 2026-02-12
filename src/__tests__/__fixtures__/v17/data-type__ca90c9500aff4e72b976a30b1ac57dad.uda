@@ -1,0 +1,40 @@
+{
+  "Name": "Richtext editor",
+  "EditorAlias": "Umbraco.RichText",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Tiptap",
+  "Configuration": {
+    "hideLabel": false,
+    "ignoreUserStartNodes": false,
+    "extensions": [
+      "Umb.Tiptap.RichTextEssentials",
+      "Umb.Tiptap.Anchor",
+      "Umb.Tiptap.Block",
+      "Umb.Tiptap.Blockquote",
+      "Umb.Tiptap.Bold",
+      "Umb.Tiptap.BulletList",
+      "Umb.Tiptap.CodeBlock",
+      "Umb.Tiptap.Heading",
+      "Umb.Tiptap.HorizontalRule",
+      "Umb.Tiptap.HtmlAttributeClass",
+      "Umb.Tiptap.HtmlAttributeDataset",
+      "Umb.Tiptap.HtmlAttributeId",
+      "Umb.Tiptap.HtmlAttributeStyle",
+      "Umb.Tiptap.HtmlTagDiv",
+      "Umb.Tiptap.HtmlTagSpan",
+      "Umb.Tiptap.Italic",
+      "Umb.Tiptap.OrderedList",
+      "Umb.Tiptap.Strike",
+      "Umb.Tiptap.TrailingNode"
+    ]
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dad",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

@@ -1,0 +1,19 @@
+{
+  "Name": "Label (time)",
+  "EditorAlias": "Umbraco.Label",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Label",
+  "DatabaseType": "Date",
+  "Configuration": {
+    "umbracoDataValueType": "TIME"
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/a97cec699b714c308b12ec398860d7e8",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

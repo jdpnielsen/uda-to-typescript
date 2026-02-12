@@ -6,11 +6,6 @@ import { version } from '../../../package.json';
 const bin = resolve(__dirname, './bin.js');
 
 describe('uda-to-typescript', () => {
-	beforeEach(async () => {
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		await rm('./dist', { recursive: true }).catch(() => {});
-	});
-
 	it('should display the help contents', async () => {
 		const { stdout } = await execa(bin, ['--help']);
 
@@ -24,9 +19,20 @@ describe('uda-to-typescript', () => {
 	});
 
 	it('should output types', async () => {
-		await execa(bin, ['--input', './src/__tests__/__fixtures__/*.uda', '--output', './dist/output.ts']);
+		await rm('./dist/v13', { recursive: true, force: true });
 
-		const val = await stat('./dist/output.ts');
+		await execa(bin, ['--input', './src/__tests__/__fixtures__/v13/*.uda', '--output', './dist/v13/output.ts']);
+
+		const val = await stat('./dist/v13/output.ts');
+		expect(val.isFile()).toBeTruthy();
+	});
+
+	it('should output types for v17 fixtures', async () => {
+		await rm('./dist/v17', { recursive: true, force: true });
+
+		await execa(bin, ['--input', './src/__tests__/__fixtures__/v17/*.uda', '--output', './dist/v17/output.ts']);
+
+		const val = await stat('./dist/v17/output.ts');
 		expect(val.isFile()).toBeTruthy();
 	});
 });

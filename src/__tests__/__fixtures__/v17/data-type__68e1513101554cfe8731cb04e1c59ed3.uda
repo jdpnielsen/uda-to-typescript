@@ -1,0 +1,23 @@
+{
+  "Name": "NoA Multi Link Picker",
+  "EditorAlias": "Umbraco.Plain.Json",
+  "EditorUiAlias": "Noa.CustomLinkPicker",
+  "Configuration": {
+    "overlaySize": "small",
+    "hideAnchor": "0",
+    "ignoreUserStartNodes": "0",
+    "excludeMedia": "1",
+    "excludeInternalContent": "0",
+    "excludeExternal": "0"
+  },
+  "Parent": "umb://data-type-container/811fd7ec2cfb4ba79e85010232842f80",
+  "Udi": "umb://data-type/68e1513101554cfe8731cb04e1c59ed3",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/811fd7ec2cfb4ba79e85010232842f80",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

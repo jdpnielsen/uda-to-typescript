@@ -1,0 +1,68 @@
+{
+  "Name": "List View - Members",
+  "EditorAlias": "Umbraco.ListView",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Collection",
+  "DatabaseType": "Nvarchar",
+  "Configuration": {
+    "pageSize": 10,
+    "orderDirection": "asc",
+    "includeProperties": [
+      {
+        "alias": "username",
+        "header": "User name",
+        "nameTemplate": null,
+        "isSystem": true
+      },
+      {
+        "alias": "email",
+        "header": "Email",
+        "nameTemplate": null,
+        "isSystem": true
+      },
+      {
+        "alias": "updateDate",
+        "header": "Last edited",
+        "nameTemplate": null,
+        "isSystem": true
+      }
+    ],
+    "orderBy": "username",
+    "layouts": [
+      {
+        "name": "List",
+        "collectionView": "Umb.CollectionView.Document.Table",
+        "icon": "icon-list",
+        "isSystem": true,
+        "selected": true
+      },
+      {
+        "name": "Grid",
+        "collectionView": "Umb.CollectionView.Document.Grid",
+        "icon": "icon-thumbnails-small",
+        "isSystem": true,
+        "selected": true
+      }
+    ],
+    "bulkActionPermissions": {
+      "allowBulkPublish": true,
+      "allowBulkUnpublish": true,
+      "allowBulkCopy": true,
+      "allowBulkMove": true,
+      "allowBulkDelete": true
+    },
+    "showContentFirst": false,
+    "useInfiniteEditor": false,
+    "icon": "icon-badge color-black",
+    "umbMigrationV14": "2026-02-06T08:25:43.4669143\u002B00:00"
+  },
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/aa2c52a0ce874e65a47c7df09358585d",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

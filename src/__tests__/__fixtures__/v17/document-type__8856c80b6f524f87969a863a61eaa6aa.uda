@@ -1,0 +1,134 @@
+{
+  "Name": "Site root",
+  "Alias": "siteRoot",
+  "DefaultTemplate": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+  "AllowedTemplates": [
+    "umb://template/2f23da3887f44c9da0e198ef889b4b56"
+  ],
+  "HistoryCleanup": {},
+  "Icon": "icon-globe color-black",
+  "Thumbnail": "folder.png",
+  "Permissions": {
+    "AllowedAtRoot": true,
+    "AllowedChildContentTypes": [
+      "umb://document-type/5e00a84958614540a25f99a0f4903db6",
+      "umb://document-type/75766537caa741979252159fdbd048f1"
+    ]
+  },
+  "Parent": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
+  "CompositionContentTypes": [
+    "umb://document-type/7b69656f52b34755a3a2eb6f10964a7e",
+    "umb://document-type/a98e256b8c1e47268fb58124626ee349"
+  ],
+  "PropertyGroups": [
+    {
+      "Key": "9cd02828-b59a-44f1-a35d-865e5da3e68a",
+      "Name": "Header",
+      "Alias": "content/header",
+      "PropertyTypes": [
+        {
+          "Key": "16ecaff4-3f00-4f01-b7ce-f847f5e682fd",
+          "Alias": "header_menu",
+          "DataType": "umb://data-type/7089273755e3415ca5aa01758daeb951",
+          "Name": "Menu"
+        }
+      ]
+    },
+    {
+      "Key": "b728712b-c227-45f0-9a19-7418924b6de4",
+      "Name": "Content",
+      "Type": 1,
+      "Alias": "content",
+      "PropertyTypes": []
+    },
+    {
+      "Key": "bb8908f8-11cc-46f7-88f8-5c738b8507de",
+      "Name": "Content",
+      "SortOrder": 1,
+      "Alias": "content/content",
+      "PropertyTypes": [
+        {
+          "Key": "b3a5e2aa-37c5-49da-aa0f-16c54233a613",
+          "Alias": "blocks",
+          "DataType": "umb://data-type/7964f5d172534c55b1fb66bbd0091548",
+          "Name": "Blocks"
+        }
+      ]
+    },
+    {
+      "Key": "d41acdb1-138c-4996-a588-044334abed7d",
+      "Name": "Footer",
+      "SortOrder": 3,
+      "Alias": "content/footer",
+      "PropertyTypes": [
+        {
+          "Key": "3341d644-d6e3-4696-ac5b-b92768cbbf4b",
+          "Alias": "footer_menu",
+          "DataType": "umb://data-type/7089273755e3415ca5aa01758daeb951",
+          "Name": "Menu"
+        },
+        {
+          "Key": "668f3ed1-bce0-4a82-945d-7ac677460a20",
+          "Alias": "footer_bottom_copyright",
+          "DataType": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dad",
+          "Name": "Bottom copyright",
+          "SortOrder": 2
+        },
+        {
+          "Key": "ca23c525-c274-4ed0-afdf-c8bac2d2a9c2",
+          "Alias": "footer_bottom_menu",
+          "DataType": "umb://data-type/b4e3535a175347e28568602cf8cfee6f",
+          "Name": "Bottom menu",
+          "SortOrder": 1
+        }
+      ]
+    }
+  ],
+  "PropertyTypes": [],
+  "Udi": "umb://document-type/8856c80b6f524f87969a863a61eaa6aa",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type/7089273755e3415ca5aa01758daeb951",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/7964f5d172534c55b1fb66bbd0091548",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/b4e3535a175347e28568602cf8cfee6f",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://data-type/ca90c9500aff4e72b976a30b1ac57dad",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type-container/a7c30af313db48139d1d17ca30f1ed19",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/5e00a84958614540a25f99a0f4903db6",
+      "Mode": "Exist"
+    },
+    {
+      "Udi": "umb://document-type/75766537caa741979252159fdbd048f1",
+      "Mode": "Exist"
+    },
+    {
+      "Udi": "umb://document-type/7b69656f52b34755a3a2eb6f10964a7e",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://document-type/a98e256b8c1e47268fb58124626ee349",
+      "Ordering": true
+    },
+    {
+      "Udi": "umb://template/2f23da3887f44c9da0e198ef889b4b56",
+      "Ordering": true,
+      "Mode": "Exist"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact",
+  "__version": "17.0.1"
+}

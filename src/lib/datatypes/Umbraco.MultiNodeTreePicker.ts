@@ -29,9 +29,9 @@ export function build(): ts.Node[] {
 }
 
 export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.TypeNode {
-	const config = dataType.Configuration as MultiNodeTreePickerConfiguration;
+	const config = (dataType.Configuration || {}) as Partial<MultiNodeTreePickerConfiguration>;
 
-	if (config.startNode.type !== 'content') {
+	if (config.startNode?.type !== 'content') {
 		/**
 		 * Output: unkown[];
 		 */
@@ -59,16 +59,25 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 
 	const documentTypes = config.filter
 		.split(',')
+		.map(alias => alias.trim())
+		.filter((alias) => alias !== '')
 		.map(alias => {
 			const doc = documentTypeMap.get(alias);
 
 			if (!doc) {
-				console.log('documentTypeMap', documentTypeMap);
-				throw new Error(`Document type with alias "${alias}" was not found.`);
+				console.warn(`Could not find document type with alias "${alias}".`);
+				return undefined;
 			}
 
 			return doc
-		});
+		})
+		.filter((docType): docType is NonNullable<typeof docType> => !!docType);
+
+	if (documentTypes.length === 0) {
+		return factory.createArrayTypeNode(
+			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
+		)
+	}
 
 	if (documentTypes.length === 1) {
 		/**

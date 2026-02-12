@@ -1,0 +1,15 @@
+{
+  "Name": "Form Block - Form - Form Picker",
+  "EditorAlias": "UmbracoForms.FormPicker",
+  "EditorUiAlias": "Forms.PropertyEditorUi.FormPicker.Single",
+  "DatabaseType": "Nvarchar",
+  "Configuration": {
+    "allowedForms": [
+      "160caa99-fb1d-4a1a-a2b3-b3e0710ee0c1"
+    ]
+  },
+  "Udi": "umb://data-type/c44ab12b87f34f82bb70d05ea465bda6",
+  "Dependencies": [],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

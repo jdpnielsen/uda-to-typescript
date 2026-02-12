@@ -1,0 +1,41 @@
+import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+
+export type TestPageBlocksBlockList = BaseBlockListType<BaseBlockType<RichtextBlock, null>>;
+export const DropdownMultiple = {
+    First: "first",
+    Second: "Second"
+} as const;
+
+export type DropdownMultiple = (typeof DropdownMultiple)[keyof typeof DropdownMultiple];
+
+export type Image = BaseMediaType<"Image", {
+    Image: unknown;
+    Width: unknown;
+    Height: unknown;
+    Size: unknown;
+    Type: unknown;
+}>;
+
+export type PickableMediaType = Image;
+
+export type Page = BaseDocumentType<"page", {
+    title: DropdownMultiple[];
+}>;
+
+export type Root = BaseDocumentType<"root", {
+    media: unknown;
+}>;
+
+export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+    content?: {
+        markup: string;
+    };
+}>;
+
+export type TestPage = BaseDocumentType<"testPage", {
+    text?: string;
+    textArea?: string;
+    blocks?: TestPageBlocksBlockList;
+}>;
+
+export type PickableDocumentType = Page | Root;

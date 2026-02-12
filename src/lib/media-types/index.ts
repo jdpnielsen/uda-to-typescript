@@ -120,14 +120,19 @@ function getExtentions(properties: PropertyType[], artifacts: ArtifactContainer)
 	}
 
 	const config = dataType.Configuration as {
-		fileExtensions: { id: number; value: string }[];
+		fileExtensions?: Array<{ id: number; value: string } | string>;
 	};
+	const fileExtensions = Array.isArray(config.fileExtensions)
+		? config.fileExtensions
+			.map((extension) => typeof extension === 'string' ? extension : extension?.value)
+			.filter((extension): extension is string => typeof extension === 'string' && extension !== '')
+		: [];
 
-	if (!config.fileExtensions || config.fileExtensions.length === 0) {
+	if (fileExtensions.length === 0) {
 		return fallbackExtiontions;
 	}
 
 	return factory.createUnionTypeNode(
-		config.fileExtensions.map(extension => factory.createLiteralTypeNode(factory.createStringLiteral(extension.value)))
+		fileExtensions.map((extension) => factory.createLiteralTypeNode(factory.createStringLiteral(extension)))
 	)
 }

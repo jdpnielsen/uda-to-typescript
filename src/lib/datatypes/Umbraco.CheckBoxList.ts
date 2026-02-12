@@ -18,20 +18,33 @@ export const checkboxListHandler = {
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);
-	const config = dataType.Configuration as CheckboxListConfig;
+	const config = (dataType.Configuration || {}) as Partial<CheckboxListConfig>;
+	const items = getItems(config);
 
-	const items = config.items.map((item) => {
+	if (items.length === 0) {
+		return [];
+	}
+
+	const enumItems = items.map((item) => {
 		return {
 			key: pascalCase(item.value),
 			value: item.value,
 		};
 	});
 
-	return createModernEnumHandler(variableIdentifier, items);
+	return createModernEnumHandler(variableIdentifier, enumItems);
 }
 
 export function reference(dataType: DataType): ts.TypeNode {
 	const variableIdentifier = pascalCase(dataType.Name);
+	const config = (dataType.Configuration || {}) as Partial<CheckboxListConfig>;
+	const items = getItems(config);
+
+	if (items.length === 0) {
+		return factory.createArrayTypeNode(
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+		)
+	}
 
 	const checkboxListType = factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
@@ -39,4 +52,13 @@ export function reference(dataType: DataType): ts.TypeNode {
 	);
 
 	return factory.createArrayTypeNode(checkboxListType)
+}
+
+function getItems(config: Partial<CheckboxListConfig>): Array<{ id: number; value: string }> {
+	if (!Array.isArray(config.items)) {
+		return [];
+	}
+
+	return config.items
+		.filter((item): item is { id: number; value: string } => typeof item?.value === 'string');
 }

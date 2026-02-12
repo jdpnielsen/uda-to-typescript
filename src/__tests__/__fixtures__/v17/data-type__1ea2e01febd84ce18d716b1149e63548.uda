@@ -1,0 +1,17 @@
+{
+  "Name": "Member Picker",
+  "EditorAlias": "Umbraco.MemberPicker",
+  "EditorUiAlias": "Umb.PropertyEditorUi.MemberPicker",
+  "DatabaseType": "Nvarchar",
+  "Configuration": {},
+  "Parent": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+  "Udi": "umb://data-type/1ea2e01febd84ce18d716b1149e63548",
+  "Dependencies": [
+    {
+      "Udi": "umb://data-type-container/0cd5cda64fad45dc9e1dca89a7a8e137",
+      "Ordering": true
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

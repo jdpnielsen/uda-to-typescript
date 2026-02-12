@@ -5,6 +5,7 @@ import { pascalCase } from 'change-case';
 import { DataType } from '../types/data-type';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { buildCrops } from '../helpers/ast/media-object';
+import { parseUdi } from '../helpers/parse-udi';
 import { MediaType } from '../types/media-type';
 
 import type { HandlerConfig } from '.';
@@ -44,14 +45,21 @@ export function build(): ts.Node[] {
 
 // TODO: combine crop from MediaPicker3 with mediaType's crops from its Image Cropper field.
 export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.TypeNode {
-	const config = dataType.Configuration as mediaPickerConfig;
+	const config = (dataType.Configuration || {}) as Partial<mediaPickerConfig>;
+	const crops = Array.isArray(config.crops)
+		? config.crops
+		: [];
 
 	const allowedMediaTypes = getAllowedMediaTypes(artifacts, config.filter)
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
 
-	const mediaPickerItems = allowedMediaTypes.map((mediaType) => {
-		const crops = config.crops || [];
+	if (allowedMediaTypes.length === 0) {
+		return factory.createArrayTypeNode(
+			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
+		)
+	}
 
+	const mediaPickerItems = allowedMediaTypes.map((mediaType) => {
 		return factory.createTypeReferenceNode(
 			factory.createIdentifier('MediaPickerItem'),
 			[
@@ -75,28 +83,43 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 }
 
 function getAllowedMediaTypes(artifacts: ArtifactContainer, filter: string | undefined): MediaType[] {
+	const mediaTypes = Array.from(artifacts['media-type'].values());
+
 	if (!filter) {
-		return Array
-			.from(artifacts['media-type'].entries())
-			.map(([, mediaType]) => mediaType)
+		return mediaTypes;
 	}
 
-	const mediaTypeMap = new Map(
-		Array
-			.from(artifacts['media-type'].entries())
-			.map(([, mediaType]) => [mediaType.Alias, mediaType])
-	);
+	const mediaTypeMap = new Map(mediaTypes.map((mediaType) => [mediaType.Alias, mediaType]));
+	const mediaTypeByUdiIdMap = new Map(mediaTypes.map((mediaType) => [
+		parseUdi(mediaType.Udi).id.toLowerCase(),
+		mediaType,
+	]));
 
-	return filter
-		.split(',')
-		.map(alias => {
-			const doc = mediaTypeMap.get(alias);
+	const pickedMediaTypes: MediaType[] = [];
+	const seen = new Set<string>();
 
-			if (!doc) {
-				console.log('documentTypeMap', mediaTypeMap);
-				throw new Error(`Document type with alias "${alias}" was not found.`);
-			}
+	for (const rawFilterValue of filter.split(',')) {
+		const filterValue = rawFilterValue.trim();
 
-			return doc
-		});
+		if (filterValue === '') {
+			continue;
+		}
+
+		const id = filterValue.replaceAll('-', '').toLowerCase();
+		const mediaType = mediaTypeMap.get(filterValue) || mediaTypeByUdiIdMap.get(id);
+
+		if (!mediaType) {
+			console.warn(`Could not find media type with alias or id "${filterValue}"`);
+			continue;
+		}
+
+		if (seen.has(mediaType.Udi)) {
+			continue;
+		}
+
+		seen.add(mediaType.Udi);
+		pickedMediaTypes.push(mediaType);
+	}
+
+	return pickedMediaTypes;
 }
