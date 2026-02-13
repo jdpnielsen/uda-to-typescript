@@ -3,7 +3,7 @@ import { newLineAST } from './newline';
 import { exportToken } from './export-token';
 
 /**
- * Creates an immidiate indexed object which acts as an enum, but is actually a plain object.
+ * Creates an immediately indexed object that acts like an enum.
  * @param name The name of the enum.
  * @param items The entries of the enum.
  * @example
