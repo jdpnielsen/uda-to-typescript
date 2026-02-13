@@ -1,4 +1,4 @@
-import { writeFile, copyFile, readdir, stat, mkdir } from 'fs/promises';
+import { writeFile, copyFile, readdir, mkdir } from 'fs/promises';
 import { collectArtifacts } from './helpers/collect-artifacts';
 import { buildTypes } from './build-types';
 import ts from 'typescript';
@@ -30,10 +30,7 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 
 	const { dir, name } = path.parse(resolvedOutput);
 
-	// Check if folder exists & create if possible.
-	// If we are missing multiple levels, the script will still fail
-	await stat(dir)
-		.catch(() => mkdir(dir));
+	await mkdir(dir, { recursive: true });
 
 	const artifacts = await collectArtifacts(resolvedInput);
 
