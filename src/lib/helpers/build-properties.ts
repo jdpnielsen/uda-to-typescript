@@ -5,6 +5,12 @@ type Collectable = {
 	PropertyTypes: PropertyType[];
 }
 
+/**
+ * Collects all property definitions for a document/media type.
+ *
+ * Umbraco can place properties at the root (`PropertyTypes`) and inside groups.
+ * This helper flattens both sources into a single list.
+ */
 export function collectProperties<T extends Collectable>(type: T): PropertyType[] {
 	const properties = [
 		...type.PropertyTypes,
