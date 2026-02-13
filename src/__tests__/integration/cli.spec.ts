@@ -1,5 +1,5 @@
 import execa from 'execa';
-import { rm, stat } from 'fs/promises';
+import { rm, stat, readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { version } from '../../../package.json';
 
@@ -34,5 +34,18 @@ describe('uda-to-typescript', () => {
 
 		const val = await stat('./dist/v17/output.ts');
 		expect(val.isFile()).toBeTruthy();
+	});
+
+	it('should resolve custom handlers by EditorUiAlias from config', async () => {
+		await rm('./dist/v17/custom-handler-output.ts', { force: true });
+
+		await execa(bin, ['--config', './src/__tests__/__fixtures__/v17/udaconvert.custom-handler.config.ts']);
+
+		const val = await stat('./dist/v17/custom-handler-output.ts');
+		expect(val.isFile()).toBeTruthy();
+
+		const output = await readFile('./dist/v17/custom-handler-output.ts', 'utf8');
+		expect(output).toContain('link: UrlItem;');
+		expect(output).not.toContain('link: unknown;');
 	});
 });
