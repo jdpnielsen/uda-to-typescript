@@ -39,6 +39,13 @@ import { trueFalseHandler } from './Umbraco.TrueFalse';
 import { uploadFieldHandler } from './Umbraco.UploadField';
 import { formsFormPickerHandler } from './UmbracoForms.FormPicker';
 
+/**
+ * Contract implemented by each datatype handler.
+ *
+ * - `init` runs once per resolved handler key and can emit shared declarations.
+ * - `build` runs for every matching datatype artifact.
+ * - `reference` returns the type used when a property references the datatype.
+ */
 export type HandlerConfig = {
 	editorAlias: string;
 	init?: (artifacts: ArtifactContainer) => string | ts.Node[];
@@ -46,6 +53,11 @@ export type HandlerConfig = {
 	reference: (dataType: DataType, artifacts: ArtifactContainer) => string | ts.TypeNode;
 }
 
+/**
+ * Registry of datatype handlers keyed by editor alias.
+ *
+ * In Umbraco v14+ migrations, custom handlers can also be keyed by `EditorUiAlias`.
+ */
 export type DataTypeConfig = {
 	[EditorAlias: string]: HandlerConfig
 };
@@ -55,6 +67,13 @@ export type ResolvedHandlerConfig = {
 	handler: HandlerConfig;
 }
 
+/**
+ * Resolves a datatype handler in migration-safe order.
+ *
+ * Resolution order:
+ * 1. `EditorUiAlias` (v14+ split editor model)
+ * 2. `EditorAlias` (legacy and fallback)
+ */
 export function resolveDataTypeHandler(dataTypeHandlers: DataTypeConfig, dataType: DataType): ResolvedHandlerConfig | undefined {
 	if (dataType.EditorUiAlias && dataTypeHandlers[dataType.EditorUiAlias]) {
 		return {
@@ -73,6 +92,9 @@ export function resolveDataTypeHandler(dataTypeHandlers: DataTypeConfig, dataTyp
 	return undefined;
 }
 
+/**
+ * Built-in datatype handlers shipped with the package.
+ */
 export const dataTypeMap = {
 	[blockGridHandler.editorAlias]: blockGridHandler,
 	[blockListHandler.editorAlias]: blockListHandler,
