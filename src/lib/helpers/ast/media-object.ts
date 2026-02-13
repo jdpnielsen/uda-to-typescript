@@ -6,6 +6,9 @@ interface Crop {
 	height: number;
 }
 
+/**
+ * Builds `Crop<Alias, Width, Height>` type references from crop config values.
+ */
 export function buildCrops(crops: Crop[]) {
 	return crops.map(crop => factory.createTypeReferenceNode(
 		factory.createIdentifier('Crop'),

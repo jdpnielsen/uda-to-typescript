@@ -7,12 +7,23 @@ import { DocumentType } from '../types/document-type';
 import { MediaType } from '../types/media-type';
 
 // TODO: Implement culture artifact
+/**
+ * In-memory artifact maps keyed by normalized artifact id (UDI id without prefix).
+ */
 export type ArtifactContainer = {
 	'data-type': Map<string, DataType>;
 	'document-type': Map<string, DocumentType>;
 	'media-type': Map<string, MediaType>;
 };
 
+/**
+ * Collects and parses supported UDA artifacts from a glob expression.
+ *
+ * Files are expected to follow `<artifact-type>__<id>.uda` naming, for example
+ * `data-type__f38f0ac71d27439c9f3f089cd8825a53.uda`.
+ *
+ * Unsupported file prefixes are ignored.
+ */
 export async function collectArtifacts(input: string): Promise<ArtifactContainer> {
 	const filePaths = await glob(input, { ignore: 'node_modules/**' });
 
