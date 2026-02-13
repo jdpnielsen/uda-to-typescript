@@ -1,9 +1,10 @@
 import ts, { factory } from 'typescript';
 import type { HandlerConfig } from '.';
 import { DataType } from '../types/data-type';
+import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 
 type SliderConfig = {
-	enableRange: boolean,
+	enableRange: boolean | '0' | '1',
 
 	/* Unused */
 	initVal1: number,
@@ -20,9 +21,10 @@ export const sliderHandler = {
 } satisfies HandlerConfig
 
 export function reference(dataType: DataType): ts.TypeNode {
-	const config = dataType.Configuration as SliderConfig;
+	const config = (dataType.Configuration || {}) as Partial<SliderConfig>;
+	const enableRange = parseBooleanConfigValue(config.enableRange) ?? false;
 
-	if (!config.enableRange) {
+	if (!enableRange) {
 		return factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
 	}
 

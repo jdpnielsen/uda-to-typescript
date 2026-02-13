@@ -5,9 +5,10 @@ import { DataType } from '../types/data-type';
 
 import type { HandlerConfig } from '.';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
+import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 
 type DropdownConfig = {
-	multiple: boolean,
+	multiple: boolean | '0' | '1',
 	items: { id: number, value: string }[]
 };
 
@@ -40,7 +41,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 	const variableIdentifier = pascalCase(dataType.Name);
 	const config = (dataType.Configuration || {}) as Partial<DropdownConfig>;
 	const items = getItems(config);
-	const isMultiple = config.multiple === true;
+	const isMultiple = parseBooleanConfigValue(config.multiple) ?? false;
 
 	if (items.length === 0) {
 		const fallback = factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);

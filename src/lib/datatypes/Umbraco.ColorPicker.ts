@@ -4,9 +4,10 @@ import { DataType } from '../types/data-type';
 import { pascalCase } from 'change-case';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { maybeNull } from '../helpers/ast/maybe-null';
+import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 
 type ColorPickerConfig = {
-	useLabel: boolean;
+	useLabel: boolean | '0' | '1';
 	items: { id: number, value: string }[];
 }
 
@@ -46,7 +47,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 	const variableIdentifier = pascalCase(dataType.Name);
 	const config = (dataType.Configuration || {}) as Partial<ColorPickerConfig>;
 	const items = getItems(config);
-	const useLabel = config.useLabel === true;
+	const useLabel = parseBooleanConfigValue(config.useLabel) ?? false;
 
 	if (items.length === 0) {
 		if (!useLabel) {
