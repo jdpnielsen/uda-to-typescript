@@ -8,6 +8,16 @@ import { UDAConvertConfiguration } from './define-config';
 import { dataTypeMap } from './datatypes';
 import { cwd } from 'process';
 
+/**
+ * Executes the full conversion pipeline from UDA artifacts to TypeScript output.
+ *
+ * Steps:
+ * 1. Resolve input/output paths from the provided working directory.
+ * 2. Collect artifacts from disk.
+ * 3. Build AST declarations for all supported artifacts.
+ * 4. Copy runtime template helpers.
+ * 5. Print and write the generated output file.
+ */
 export async function main(options: UDAConvertConfiguration, workingDirectory = cwd()): Promise<void> {
 	const {
 		input,
@@ -54,6 +64,11 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 	await writeFile(resolvedOutput, outputFile);
 }
 
+/**
+ * Copies package templates into the output directory.
+ *
+ * Only `.ts` implementation files are copied. Declaration files are skipped.
+ */
 async function cloneTemplates(source: PathLike, destination: PathLike) {
 	const templates = await readdir(source);
 
