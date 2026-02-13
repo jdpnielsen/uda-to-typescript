@@ -1,5 +1,8 @@
 import { DataTypeConfig } from './datatypes';
 
+/**
+ * Runtime configuration consumed by the CLI and conversion pipeline.
+ */
 export type UDAConvertConfiguration = {
 	/** Input glob */
 	input: string;
@@ -31,6 +34,17 @@ export type UDAConvertConfiguration = {
 	dataTypes?: DataTypeConfig;
 };
 
+/**
+ * Identity helper that preserves literal inference for config objects.
+ *
+ * @example
+ * ```ts
+ * export default defineConfig({
+ * 	input: './umbraco/Deploy/Revision/*.uda',
+ * 	output: './src/umbraco/types.ts',
+ * });
+ * ```
+ */
 // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
 export function defineConfig(config: UDAConvertConfiguration): UDAConvertConfiguration {
 	return config;

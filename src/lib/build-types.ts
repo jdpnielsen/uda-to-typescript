@@ -8,11 +8,23 @@ import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 import { parseStringStatements } from './helpers/ast/parse-string';
 
+/**
+ * Shared context passed to artifact handlers while generating AST nodes.
+ */
 export type HandlerContext = {
 	artifacts: ArtifactContainer;
 	dataTypeHandlers: DataTypeConfig;
 }
 
+/**
+ * Builds all generated TypeScript declarations for collected UDA artifacts.
+ *
+ * The function emits:
+ * - shared imports from `base-types`
+ * - datatype setup and declarations from registered handlers
+ * - media/document type declarations
+ * - `PickableMediaType` and `PickableDocumentType` unions
+ */
 export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 	const { artifacts, dataTypeHandlers } = context;
 	const dataTypes = Array
