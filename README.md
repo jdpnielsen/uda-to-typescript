@@ -111,28 +111,24 @@ export default defineConfig({
 });
 ```
 
-For Umbraco 14+ migrations, custom property editors may be exported with a core `EditorAlias` (for example `Umbraco.Plain.Json`) and the original editor alias moved to `EditorUiAlias`.
-Custom handlers can therefore also be registered by `EditorUiAlias`, for example `Noa.CustomLinkPicker`.
+## Umbraco version target
 
-## Umbraco v17 support
+This library targets Umbraco v17+ artifact exports and Delivery API v2.
+Support for pre-v17 exports and Delivery API v1 conventions is intentionally removed.
 
-This library supports newer Umbraco UDA exports (v14+ including v17) where datatypes can be migrated to a split editor model:
+For custom property editors, Umbraco can export a split editor model:
 
 - `EditorAlias` can point to a core schema alias (for example `Umbraco.Plain.Json`)
 - `EditorUiAlias` carries the UI/editor alias (for example `Noa.CustomLinkPicker`)
 
-The generator now resolves handlers by `EditorUiAlias` first, then `EditorAlias`. This means custom handlers continue to work after Umbraco migration without rewriting your UDA files.
+The generator resolves handlers by `EditorUiAlias` first, then `EditorAlias`.
 
-## Migration notes for consumers (v13 -> v17)
+### v17 behavior notes
 
-When moving your Umbraco project to v17, review these points in your consuming app:
-
-1. Update any custom datatype handlers to register by `EditorUiAlias` when relevant.
-2. Expect some editor configs to contain fewer enumerated values in UDA than before.
-3. For migrated editors using `Umbraco.Plain.*`, generated types may be broader unless you provide a custom handler.
-4. `Umbraco.RichText` is now handled and maps to `{ markup: string }`.
-5. Label datatypes now infer value kind from `umbracoDataValueType` instead of resolving to `never`.
-6. Some custom editor configs can now omit fields you previously depended on (for example `items`) and booleans can appear as `'0'` / `'1'` strings.
+1. Register custom datatype handlers by `EditorUiAlias` when relevant.
+2. Some editor configs contain fewer enumerated values than earlier exports.
+3. Migrated editors using `Umbraco.Plain.*` can produce broader types unless you provide a custom handler.
+4. Some custom editor configs can omit fields you depended on (for example `items`) and booleans can appear as `'0'` / `'1'` strings.
 
 ### Custom handler example using EditorUiAlias
 
@@ -169,6 +165,24 @@ const items = Array.isArray(config.items) ? config.items : [];
 if (items.length === 0) {
 	return isMultiple ? 'string[]' : 'string';
 }
+```
+
+## Generated fetchers (Delivery API v2)
+
+Generated `fetcher.ts` helpers call Delivery API v2 endpoints and support recursive media hydration for content responses.
+
+- `buildContentFetcher` calls `/umbraco/delivery/api/v2/content`
+- `buildContentItemFetcher` calls `/umbraco/delivery/api/v2/content/item/{id}`
+- media picker references that only contain `mediaKey` are resolved through `/umbraco/delivery/api/v2/media/items`
+
+```ts
+import { buildContentFetcher } from './fetcher';
+
+const getContent = buildContentFetcher<SiteRoot>('https://example.com', undefined, {
+	resolveMediaPickers: true,
+	mediaBatchSize: 50,
+	onMissingMedia: 'warn-and-keep',
+});
 ```
 
 
