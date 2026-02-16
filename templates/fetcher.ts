@@ -1,8 +1,12 @@
 import { BaseDocumentType } from './base-types';
 import { ExpandParam, ExpandResult } from './utils';
+import { buildDeliveryApiUrl } from './delivery-api';
 
 type SortDirection = 'asc' | 'desc';
 
+/**
+ * Query options supported by Delivery API content endpoints.
+ */
 interface QueryOptions<T extends BaseDocumentType> {
 	expand?: ExpandParam<T>;
 	filter?: {
@@ -25,13 +29,16 @@ interface QueryOptions<T extends BaseDocumentType> {
 	skip?: number;
 }
 
+/**
+ * Serializes high-level query options into Delivery API v2 query parameters.
+ */
 function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) {
 	const queryParams = new URLSearchParams();
 
 	if (options.expand === 'all') {
-		queryParams.set('expand', 'all');
-	} else if (Array.isArray(options.expand)) {
-		queryParams.append('expand', 'property:' + options.expand.join(','));
+		queryParams.set('expand', 'properties[$all]');
+	} else if (Array.isArray(options.expand) && options.expand.length !== 0) {
+		queryParams.append('expand', `properties[${options.expand.join(',')}]`);
 	}
 
 	if (options.fetch?.ancestors) {
@@ -47,18 +54,18 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	}
 
 	if (options.filter?.contentType) {
-		queryParams.set('filter', 'contentType:' + options.filter.contentType);
+		queryParams.append('filter', 'contentType:' + options.filter.contentType);
 	}
 
 	if (options.filter?.name) {
-		queryParams.set('filter', 'name:' + options.filter.name);
+		queryParams.append('filter', 'name:' + options.filter.name);
 	}
 
 	if (options.sort) {
 		Object
 			.entries(options.sort)
 			.forEach(([key, value]) => {
-				queryParams.set('sort', `${key}:${value}`);
+				queryParams.append('sort', `${key}:${value}`);
 			});
 	}
 
@@ -96,6 +103,9 @@ type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
  */
 export type FetchFunction<O = RequestInit & { headers?: UmbracoHeaders }> = <T>({ url, options }: { url: URL, options?: O }) => Promise<T>;
 
+/**
+ * Default network implementation used by generated fetchers.
+ */
 const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: URL, options?: RequestInit }) => {
 	const response = await fetch(url, options);
 	if (!response.ok) {
@@ -106,6 +116,9 @@ const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: U
 
 /**
  * Builds a typed fetch function for getting content by query.
+ *
+ * The returned function targets Delivery API v2 and can optionally hydrate
+ * media picker references into full media items.
  * @example
  * ```ts
  * const customFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
@@ -116,23 +129,29 @@ const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: U
  * 	return response.json() as T;
  * }
  *
- * const getContent = buildContentFetcher<Content>('https://example.com/umbraco/delivery', customFetchFunction);
+ * const getContent = buildContentFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
-export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
+export function buildContentFetcher<Doc extends BaseDocumentType>(
+	host: string,
+	fetchFunction: FetchFunction = defaultFetchFunction
+) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
 	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/umbraco/delivery/api/v1/content`, host);
+		const url = buildDeliveryApiUrl(host, '/api/v2/content');
 		url.search = queryParams.toString();
 
-		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions});
+		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions });
 	}
 }
 
 /**
  * Builds a typed fetch function for getting content by id.
+ *
+ * The returned function targets Delivery API v2 and can optionally hydrate
+ * media picker references into full media items.
  * @example
  * ```ts
  * const customFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
@@ -143,15 +162,18 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(host: string, 
  * 	return response.json() as T;
  * }
  *
- * const getContentById = buildContentItemFetcher<Content>('https://example.com/umbraco/delivery', customFetchFunction);
+ * const getContentById = buildContentItemFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
-export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
+export function buildContentItemFetcher<Doc extends BaseDocumentType>(
+	host: string,
+	fetchFunction: FetchFunction = defaultFetchFunction
+) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
 	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
-		const url = new URL(`${host}/umbraco/delivery/api/v1/content/item/${id}`, host);
+		const url = buildDeliveryApiUrl(host, `/api/v2/content/item/${id}`);
 		url.search = queryParams.toString();
 
 		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
