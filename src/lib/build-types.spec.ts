@@ -1,7 +1,6 @@
 import { collectArtifacts } from './helpers/collect-artifacts';
 import { buildTypes } from './build-types';
 import ts from 'typescript';
-import { readFile } from 'fs/promises';
 import { dataTypeMap } from './datatypes';
 
 describe('buildTypes', () => {
@@ -21,25 +20,6 @@ describe('buildTypes', () => {
 
 		expect(expected.trim())
 			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";');
-	});
-
-	it('Should handle a glob with files', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v13/*.uda');
-		const expected = await readFile('./src/__tests__/__fixtures__/v13/output.txt');
-
-		const output = buildTypes({
-			artifacts,
-			dataTypeHandlers: dataTypeMap
-		});
-
-		const actual = ts.createPrinter()
-			.printList(
-				ts.ListFormat.MultiLine,
-				output,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
-			);
-
-		expect(actual).toBe(expected.toString());
 	});
 
 	it('Should handle v17 fixtures without throwing', async () => {

@@ -1,6 +1,7 @@
 import { BaseDocumentType } from './base-types';
 import { ExpandParam, ExpandResult } from './utils';
 import { buildDeliveryApiUrl } from './delivery-api';
+import { FetchFunctionLike, MissingMediaMode, resolveMediaPickerReferences } from './media-resolver';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -27,6 +28,18 @@ interface QueryOptions<T extends BaseDocumentType> {
 	};
 	take?: number;
 	skip?: number;
+}
+
+/**
+ * Optional behavior switches for generated content fetchers.
+ */
+export interface ContentFetcherOptions {
+	/** Enables recursive media picker hydration in fetched content payloads. */
+	resolveMediaPickers?: boolean;
+	/** Maximum number of media ids per hydration request to `/media/items`. */
+	mediaBatchSize?: number;
+	/** Behavior used when a media reference cannot be resolved. */
+	onMissingMedia?: MissingMediaMode;
 }
 
 /**
@@ -101,7 +114,7 @@ type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
  * }
  * ```
  */
-export type FetchFunction<O = RequestInit & { headers?: UmbracoHeaders }> = <T>({ url, options }: { url: URL, options?: O }) => Promise<T>;
+export type FetchFunction<O = RequestInit & { headers?: UmbracoHeaders }> = FetchFunctionLike<O>;
 
 /**
  * Default network implementation used by generated fetchers.
@@ -134,7 +147,8 @@ const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: U
  */
 export function buildContentFetcher<Doc extends BaseDocumentType>(
 	host: string,
-	fetchFunction: FetchFunction = defaultFetchFunction
+	fetchFunction: FetchFunction = defaultFetchFunction,
+	resolverOptions: ContentFetcherOptions = {}
 ) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
 	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
@@ -143,7 +157,16 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
 		const url = buildDeliveryApiUrl(host, '/api/v2/content');
 		url.search = queryParams.toString();
 
-		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions });
+		const response = await fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions });
+
+		return resolveMediaPickerReferences(response, {
+			host,
+			fetchFunction,
+			fetchOptions,
+			enabled: resolverOptions.resolveMediaPickers ?? true,
+			batchSize: resolverOptions.mediaBatchSize,
+			onMissingMedia: resolverOptions.onMissingMedia,
+		});
 	}
 }
 
@@ -167,7 +190,8 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
  */
 export function buildContentItemFetcher<Doc extends BaseDocumentType>(
 	host: string,
-	fetchFunction: FetchFunction = defaultFetchFunction
+	fetchFunction: FetchFunction = defaultFetchFunction,
+	resolverOptions: ContentFetcherOptions = {}
 ) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
 	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
@@ -176,6 +200,15 @@ export function buildContentItemFetcher<Doc extends BaseDocumentType>(
 		const url = buildDeliveryApiUrl(host, `/api/v2/content/item/${id}`);
 		url.search = queryParams.toString();
 
-		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
+		const response = await fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
+
+		return resolveMediaPickerReferences(response, {
+			host,
+			fetchFunction,
+			fetchOptions,
+			enabled: resolverOptions.resolveMediaPickers ?? true,
+			batchSize: resolverOptions.mediaBatchSize,
+			onMissingMedia: resolverOptions.onMissingMedia,
+		});
 	}
 }

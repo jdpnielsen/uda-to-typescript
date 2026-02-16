@@ -1,6 +1,5 @@
 import { glob } from 'glob';
 import path from 'path';
-import { each as asyncEach } from 'async-parallel';
 import { readFile } from 'fs/promises';
 import { DataType } from '../types/data-type';
 import { DocumentType } from '../types/document-type';
@@ -33,7 +32,7 @@ export async function collectArtifacts(input: string): Promise<ArtifactContainer
 		'media-type': new Map<string, MediaType>(),
 	};
 
-	await asyncEach(filePaths, async (filePath) => {
+	await Promise.all(filePaths.map(async (filePath) => {
 		const { name } = path.parse(filePath);
 
 		const [filePrefix, id] = name.split('__');
@@ -44,6 +43,7 @@ export async function collectArtifacts(input: string): Promise<ArtifactContainer
 
 		const fileContents = await readFile(filePath);
 		const content = JSON.parse(fileContents.toString()) as unknown;
+		assertSupportedArtifactVersion(content, filePath);
 
 		switch (filePrefix) {
 			case 'data-type':
@@ -56,7 +56,34 @@ export async function collectArtifacts(input: string): Promise<ArtifactContainer
 				items[filePrefix].set(id, content as MediaType);
 				break;
 		}
-	});
+	}));
 
 	return items;
+}
+
+/**
+ * Validates supported Umbraco artifact versions.
+ *
+ * The check only runs when an explicit `__version` exists, which keeps parsing
+ * tolerant of partial/custom fixture payloads while still failing fast on
+ * known pre-v17 exports.
+ */
+function assertSupportedArtifactVersion(content: unknown, filePath: string): void {
+	if (typeof content !== 'object' || content === null || !('__version' in content)) {
+		return;
+	}
+
+	const maybeArtifact = content as { __version?: unknown };
+	const version = maybeArtifact.__version;
+
+	if (typeof version !== 'string') {
+		return;
+	}
+
+	const [majorVersionToken] = version.split('.');
+	const majorVersion = Number.parseInt(majorVersionToken, 10);
+
+	if (!Number.isNaN(majorVersion) && majorVersion < 17) {
+		throw new Error(`Unsupported Umbraco artifact version "${version}" in "${filePath}". This package supports v17+ artifacts only.`);
+	}
 }

@@ -18,22 +18,19 @@ describe('uda-to-typescript', () => {
 		expect(stdout).toContain(version);
 	});
 
-	it('should output types', async () => {
-		await rm('./dist/v13', { recursive: true, force: true });
-
-		await execa(bin, ['--input', './src/__tests__/__fixtures__/v13/*.uda', '--output', './dist/v13/output.ts']);
-
-		const val = await stat('./dist/v13/output.ts');
-		expect(val.isFile()).toBeTruthy();
-	});
-
 	it('should output types for v17 fixtures', async () => {
 		await rm('./dist/v17', { recursive: true, force: true });
 
 		await execa(bin, ['--input', './src/__tests__/__fixtures__/v17/*.uda', '--output', './dist/v17/output.ts']);
 
-		const val = await stat('./dist/v17/output.ts');
-		expect(val.isFile()).toBeTruthy();
+		const output = await stat('./dist/v17/output.ts');
+		expect(output.isFile()).toBeTruthy();
+
+		const fetcher = await stat('./dist/v17/fetcher.ts');
+		expect(fetcher.isFile()).toBeTruthy();
+
+		const mediaResolver = await stat('./dist/v17/media-resolver.ts');
+		expect(mediaResolver.isFile()).toBeTruthy();
 	});
 
 	it('should resolve custom handlers by EditorUiAlias from config', async () => {
