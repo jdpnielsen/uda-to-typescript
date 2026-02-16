@@ -11,8 +11,9 @@ Guidance for coding agents working in `@jdpnielsen/uda-to-typescript`.
 
 ## Current Branch Strategy
 
-- `main` remains the stable line for Umbraco v13-compatible behavior.
-- Active v17 migration and compatibility work currently lives on `feat/v17-support`.
+- The active compatibility target is Umbraco v17+ only.
+- Pre-v17 compatibility work is considered obsolete and should not be reintroduced.
+- Current v17 work lives on `feat/v17-support`.
 - Prefer targeting v17-related changes on this feature branch until migration is merged.
 - If branch names change later, update this section to keep agent context current.
 
