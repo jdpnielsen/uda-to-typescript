@@ -18,7 +18,7 @@ describe('collectArtifacts', () => {
 	});
 
 	it('Should reject unsupported pre-v17 fixtures', async () => {
-		await expect(collectArtifacts('./src/__tests__/__fixtures__/v13/data-type__f38f0ac71d27439c9f3f089cd8825a53.uda'))
+		await expect(collectArtifacts('./src/__tests__/__fixtures__/invalid/data-type__pre-v17.uda'))
 			.rejects
 			.toThrow('supports v17+ artifacts only');
 	});
