@@ -19,32 +19,32 @@ describe('uda-to-typescript', () => {
 	});
 
 	it('should output types for current fixtures', async () => {
-		await rm('./dist/v17', { recursive: true, force: true });
+		await rm('./dist/current', { recursive: true, force: true });
 
-		await execa(bin, ['--input', './src/__tests__/__fixtures__/v17/*.uda', '--output', './dist/v17/output.ts']);
+		await execa(bin, ['--input', './src/__tests__/__fixtures__/current/*.uda', '--output', './dist/current/output.ts']);
 
-		const output = await stat('./dist/v17/output.ts');
+		const output = await stat('./dist/current/output.ts');
 		expect(output.isFile()).toBeTruthy();
 
-		const fetcher = await stat('./dist/v17/fetcher.ts');
+		const fetcher = await stat('./dist/current/fetcher.ts');
 		expect(fetcher.isFile()).toBeTruthy();
 
-		const mediaResolver = await stat('./dist/v17/media-resolver.ts');
+		const mediaResolver = await stat('./dist/current/media-resolver.ts');
 		expect(mediaResolver.isFile()).toBeTruthy();
 
-		const outputSource = await readFile('./dist/v17/output.ts', 'utf8');
+		const outputSource = await readFile('./dist/current/output.ts', 'utf8');
 		expect(outputSource).toContain('export type ApprovedColor = string | null;');
 	});
 
 	it('should resolve custom handlers by EditorUiAlias from config', async () => {
-		await rm('./dist/v17/custom-handler-output.ts', { force: true });
+		await rm('./dist/current/custom-handler-output.ts', { force: true });
 
-		await execa(bin, ['--config', './src/__tests__/__fixtures__/v17/udaconvert.custom-handler.config.ts']);
+		await execa(bin, ['--config', './src/__tests__/__fixtures__/current/udaconvert.custom-handler.config.ts']);
 
-		const val = await stat('./dist/v17/custom-handler-output.ts');
+		const val = await stat('./dist/current/custom-handler-output.ts');
 		expect(val.isFile()).toBeTruthy();
 
-		const output = await readFile('./dist/v17/custom-handler-output.ts', 'utf8');
+		const output = await readFile('./dist/current/custom-handler-output.ts', 'utf8');
 		expect(output).toContain('link: UrlItem;');
 		expect(output).not.toContain('link: unknown;');
 	});

@@ -2,7 +2,7 @@ import { collectArtifacts } from './collect-artifacts';
 
 describe('collectArtifacts', () => {
 	it('Should handle a glob', async () => {
-		const output = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
 		expect(output['data-type'].size).toBe(47);
 		expect(output['document-type'].size).toBe(14);
@@ -10,7 +10,7 @@ describe('collectArtifacts', () => {
 	});
 
 	it('Should handle a file path', async () => {
-		const output = await collectArtifacts('./src/__tests__/__fixtures__/v17/data-type__f38f0ac71d27439c9f3f089cd8825a53.uda');
+		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/data-type__f38f0ac71d27439c9f3f089cd8825a53.uda');
 
 		expect(output['data-type'].size).toBe(1);
 		expect(output['document-type'].size).toBe(0);

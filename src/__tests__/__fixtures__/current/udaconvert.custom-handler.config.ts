@@ -3,7 +3,7 @@ import { defineConfig, dataTypes } from '../../../index';
 
 export default defineConfig({
 	input: './*.uda',
-	output: '../../../../dist/v17/custom-handler-output.ts',
+	output: '../../../../dist/current/custom-handler-output.ts',
 	dataTypes: {
 		...dataTypes,
 		'Noa.CustomLinkPicker': {
