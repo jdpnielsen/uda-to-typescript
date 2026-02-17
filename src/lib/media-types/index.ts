@@ -4,7 +4,7 @@ import { pascalCase } from 'change-case';
 import { parseUdi } from '../helpers/parse-udi';
 import { collectProperties } from '../helpers/build-properties';
 import type { HandlerContext } from '../build-types';
-import { parseStringStatements } from '../helpers/ast/parse-string';
+import { parseTypeNode } from '../helpers/ast/parse-type';
 import { PropertyType } from '../types/shared';
 import { ArtifactContainer } from '../helpers/collect-artifacts';
 import { resolveDataTypeHandler } from '../datatypes';
@@ -65,7 +65,7 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 
 			const referenceOutput = resolvedHandler.handler.reference(dataType, artifacts);
 			const reference =	typeof referenceOutput === 'string'
-				? parseStringStatements(referenceOutput)[0] as ts.TypeNode
+				? parseTypeNode(referenceOutput)
 				: referenceOutput;
 
 			return factory.createPropertySignature(

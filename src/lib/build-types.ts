@@ -1,4 +1,5 @@
 import ts, { factory } from 'typescript';
+import { pascalCase } from 'change-case';
 
 import { ArtifactContainer } from './helpers/collect-artifacts';
 import { DataTypeConfig, resolveDataTypeHandler } from './datatypes';
@@ -7,6 +8,8 @@ import { newLineAST } from './helpers/ast/newline';
 import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 import { parseStringStatements } from './helpers/ast/parse-string';
+import { parseTypeNode } from './helpers/ast/parse-type';
+import { DataType } from './types/data-type';
 
 /**
  * Shared context passed to artifact handlers while generating AST nodes.
@@ -14,6 +17,18 @@ import { parseStringStatements } from './helpers/ast/parse-string';
 export type HandlerContext = {
 	artifacts: ArtifactContainer;
 	dataTypeHandlers: DataTypeConfig;
+}
+
+/**
+ * Additional generation options for `buildTypes`.
+ */
+export type BuildTypesOptions = {
+	/**
+	 * Emits `export type <DataTypeName> = ...` aliases for every data type.
+	 *
+	 * Enabled by default to keep generated output discoverable for consumers.
+	 */
+	emitDataTypeAliases?: boolean;
 }
 
 /**
@@ -25,8 +40,12 @@ export type HandlerContext = {
  * - media/document type declarations
  * - `PickableMediaType` and `PickableDocumentType` unions
  */
-export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
-	const { artifacts, dataTypeHandlers } = context;
+export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.NodeArray<ts.Node> {
+	const {
+		artifacts,
+		dataTypeHandlers,
+		emitDataTypeAliases = true,
+	} = context;
 	const dataTypes = Array
 		.from(artifacts['data-type'].values())
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
@@ -128,6 +147,22 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 		}
 	}
 
+	if (emitDataTypeAliases) {
+		const aliasNodes = buildDataTypeAliases({
+			artifacts,
+			dataTypes,
+			dataTypeHandlers,
+			existingStatements: statements,
+		});
+
+		if (aliasNodes.length !== 0) {
+			statements.push(
+				ts.factory.createIdentifier('\n'),
+				...aliasNodes,
+			);
+		}
+	}
+
 	/** Build datatypes */
 	const mediaTypes = Array
 		.from(artifacts['media-type'].values())
@@ -193,4 +228,124 @@ export function buildTypes(context: HandlerContext): ts.NodeArray<ts.Node> {
 	}
 
 	return ts.factory.createNodeArray(statements);
+}
+
+type BuildDataTypeAliasesContext = {
+	artifacts: ArtifactContainer;
+	dataTypes: DataType[];
+	dataTypeHandlers: DataTypeConfig;
+	existingStatements: ts.Node[];
+}
+
+/**
+ * Emits discoverable type aliases for every resolved datatype artifact.
+ */
+function buildDataTypeAliases(context: BuildDataTypeAliasesContext): ts.TypeAliasDeclaration[] {
+	const {
+		artifacts,
+		dataTypes,
+		dataTypeHandlers,
+		existingStatements,
+	} = context;
+
+	const occupiedNames = getOccupiedTypeNames(existingStatements);
+
+	for (const documentType of artifacts['document-type'].values()) {
+		occupiedNames.add(pascalCase(documentType.Alias));
+	}
+
+	for (const mediaType of artifacts['media-type'].values()) {
+		occupiedNames.add(pascalCase(mediaType.Alias));
+	}
+
+	occupiedNames.add('PickableMediaType');
+	occupiedNames.add('PickableDocumentType');
+
+	const aliases: ts.TypeAliasDeclaration[] = [];
+
+	for (const dataType of dataTypes) {
+		const aliasName = pascalCase(dataType.Name);
+
+		if (aliasName === '') {
+			continue;
+		}
+
+		if (occupiedNames.has(aliasName)) {
+			continue;
+		}
+
+		const resolvedHandler = resolveDataTypeHandler(dataTypeHandlers, dataType);
+
+		const reference = resolvedHandler
+			? toTypeNode(resolvedHandler.handler.reference(dataType, artifacts))
+			: ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword);
+
+		if (!resolvedHandler) {
+			console.warn(`Could not resolve handler for data type "${dataType.Name}" (${dataType.EditorAlias}${dataType.EditorUiAlias ? ` / ${dataType.EditorUiAlias}` : ''}), aliasing to unknown`);
+		}
+
+		aliases.push(
+			factory.createTypeAliasDeclaration(
+				[factory.createToken(ts.SyntaxKind.ExportKeyword)],
+				factory.createIdentifier(aliasName),
+				undefined,
+				reference,
+			)
+		);
+
+		occupiedNames.add(aliasName);
+	}
+
+	return aliases;
+}
+
+/**
+ * Converts handler reference output to a concrete `TypeNode`.
+ */
+function toTypeNode(output: string | ts.TypeNode): ts.TypeNode {
+	return typeof output === 'string'
+		? parseTypeNode(output)
+		: output;
+}
+
+/**
+ * Collects currently declared symbol names to prevent duplicate type aliases.
+ */
+function getOccupiedTypeNames(nodes: ts.Node[]): Set<string> {
+	const occupied = new Set<string>();
+
+	for (const node of nodes) {
+		if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isEnumDeclaration(node)) {
+			occupied.add(node.name.text);
+			continue;
+		}
+
+		if (ts.isClassDeclaration(node) && node.name) {
+			occupied.add(node.name.text);
+			continue;
+		}
+
+		if (ts.isVariableStatement(node)) {
+			for (const declaration of node.declarationList.declarations) {
+				if (ts.isIdentifier(declaration.name)) {
+					occupied.add(declaration.name.text);
+				}
+			}
+			continue;
+		}
+
+		if (ts.isImportDeclaration(node) && node.importClause) {
+			if (node.importClause.name) {
+				occupied.add(node.importClause.name.text);
+			}
+
+			if (node.importClause.namedBindings && ts.isNamedImports(node.importClause.namedBindings)) {
+				for (const specifier of node.importClause.namedBindings.elements) {
+					occupied.add(specifier.name.text);
+				}
+			}
+		}
+	}
+
+	return occupied;
 }
