@@ -3,7 +3,7 @@ import { getPickableTypes } from './pickable-document-type';
 
 describe('getPickableTypes', () => {
 	it('Should count root document as pickable', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v13/document-type__3a0918f517e14625922203299b168d11.uda');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/document-type__8856c80b6f524f87969a863a61eaa6aa.uda');
 		const documentTypes = Array.from(artifacts['document-type'].values());
 
 		const pickable = getPickableTypes(documentTypes);
@@ -11,7 +11,7 @@ describe('getPickableTypes', () => {
 	});
 
 	it('Should not count non-root document as pickable', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v13/document-type__1ab5ade5519e42709b4cc554968d97c9.uda');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/document-type__5f471833166846a4a2fbf04c1a3946a8.uda');
 		const documentTypes = Array.from(artifacts['document-type'].values());
 
 		const pickable = getPickableTypes(documentTypes);
@@ -19,7 +19,7 @@ describe('getPickableTypes', () => {
 	});
 
 	it('Should count documents referenced via AllowedChildContent as pickable', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v13/*.uda');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 		const documentTypes = Array.from(artifacts['document-type'].values());
 
 		const pickable = getPickableTypes(documentTypes);
