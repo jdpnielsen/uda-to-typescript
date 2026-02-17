@@ -18,7 +18,7 @@ describe('uda-to-typescript', () => {
 		expect(stdout).toContain(version);
 	});
 
-	it('should output types for v17 fixtures', async () => {
+	it('should output types for current fixtures', async () => {
 		await rm('./dist/v17', { recursive: true, force: true });
 
 		await execa(bin, ['--input', './src/__tests__/__fixtures__/v17/*.uda', '--output', './dist/v17/output.ts']);
