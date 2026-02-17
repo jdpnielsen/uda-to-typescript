@@ -16,4 +16,10 @@ describe('collectArtifacts', () => {
 		expect(output['document-type'].size).toBe(0);
 		expect(output['media-type'].size).toBe(0);
 	});
+
+	it('Should reject unsupported pre-v17 fixtures', async () => {
+		await expect(collectArtifacts('./src/__tests__/__fixtures__/invalid/data-type__pre-v17.uda'))
+			.rejects
+			.toThrow('supports v17+ artifacts only');
+	});
 });
