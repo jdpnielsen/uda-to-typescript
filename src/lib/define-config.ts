@@ -21,7 +21,7 @@ export type UDAConvertConfiguration = {
 	 * 	}
 	 * }
 	 *
-	 * // Umbraco 14+ custom editors can also be keyed by EditorUiAlias.
+	 * // In the split editor model, custom editors can also be keyed by EditorUiAlias.
 	 * dataTypes: {
 	 * 	'Noa.CustomLinkPicker': {
 	 * 		init: () => {},

@@ -17,9 +17,9 @@ describe('collectArtifacts', () => {
 		expect(output['media-type'].size).toBe(0);
 	});
 
-	it('Should reject unsupported pre-v17 fixtures', async () => {
-		await expect(collectArtifacts('./src/__tests__/__fixtures__/invalid/data-type__pre-v17.uda'))
+	it('Should reject unsupported artifact versions', async () => {
+		await expect(collectArtifacts('./src/__tests__/__fixtures__/invalid/data-type__unsupported-version.uda'))
 			.rejects
-			.toThrow('supports v17+ artifacts only');
+			.toThrow('Unsupported Umbraco artifact version');
 	});
 });
