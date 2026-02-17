@@ -1,0 +1,12 @@
+{
+	"Name": "Pre-v17 Color",
+	"EditorAlias": "Umbraco.ColorPicker",
+	"DatabaseType": "Nvarchar",
+	"Configuration": {
+		"useLabel": false
+	},
+	"Udi": "umb://data-type/11111111111111111111111111111111",
+	"Dependencies": [],
+	"__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+	"__version": "13.6.0"
+}
