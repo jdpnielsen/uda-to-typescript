@@ -13,6 +13,7 @@ export function buildDeliveryApiUrl(host: string, endpoint: string): URL {
 	const deliveryRoot = normalizedPath.endsWith('/umbraco/delivery')
 		? normalizedPath
 		: '/umbraco/delivery';
+	const normalizedEndpoint = `/${endpoint}`.replace(/\/{2,}/g, '/');
 
-	return new URL(`${deliveryRoot}${endpoint}`, `${base.origin}/`);
+	return new URL(`${deliveryRoot}${normalizedEndpoint}`, `${base.origin}/`);
 }
