@@ -45,8 +45,31 @@ describe('buildTypes', () => {
 		expect(actual).toContain('form: string | null;');
 		expect(actual).toContain('umbracoBytes: number;');
 		expect(actual).toContain('umbracoWidth: number;');
+		expect(actual).toContain('export type ApprovedColor = string | null;');
+
+		const navigationBlockListDeclarations = actual.match(/export type NavigationBlockList\s*=/g) || [];
+		expect(navigationBlockListDeclarations).toHaveLength(1);
 
 		warnSpy.mockRestore();
+	});
+
+	it('Should support disabling data type alias emission', async () => {
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+
+		const output = buildTypes({
+			artifacts,
+			dataTypeHandlers: dataTypeMap,
+			emitDataTypeAliases: false,
+		});
+
+		const actual = ts.createPrinter()
+			.printList(
+				ts.ListFormat.MultiLine,
+				output,
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			);
+
+		expect(actual).not.toContain('export type ApprovedColor =');
 	});
 
 	it('Should resolve custom handlers by EditorUiAlias for v17', async () => {

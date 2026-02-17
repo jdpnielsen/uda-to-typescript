@@ -32,6 +32,15 @@ export type UDAConvertConfiguration = {
 	 * ```
 	 */
 	dataTypes?: DataTypeConfig;
+
+	/**
+	 * Emits `export type <DataTypeName> = ...` aliases for all UDA data types.
+	 *
+	 * Defaults to `true`.
+	 * Set to `false` to keep the previous behavior where only handler-specific
+	 * generated declarations were emitted.
+	 */
+	emitDataTypeAliases?: boolean;
 };
 
 /**

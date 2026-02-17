@@ -31,6 +31,9 @@ describe('uda-to-typescript', () => {
 
 		const mediaResolver = await stat('./dist/v17/media-resolver.ts');
 		expect(mediaResolver.isFile()).toBeTruthy();
+
+		const outputSource = await readFile('./dist/v17/output.ts', 'utf8');
+		expect(outputSource).toContain('export type ApprovedColor = string | null;');
 	});
 
 	it('should resolve custom handlers by EditorUiAlias from config', async () => {

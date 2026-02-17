@@ -5,7 +5,7 @@ import { parseUdi } from '../helpers/parse-udi';
 import { collectProperties } from '../helpers/build-properties';
 import { exportToken } from '../helpers/ast/export-token';
 import { HandlerContext } from '../build-types';
-import { parseStringStatements } from '../helpers/ast/parse-string';
+import { parseTypeNode } from '../helpers/ast/parse-type';
 import { resolveDataTypeHandler } from '../datatypes';
 
 export type HandlerConfig = {
@@ -53,7 +53,7 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 
 			const referenceOutput = resolvedHandler.handler.reference(artifact, artifacts);
 			const reference =	typeof referenceOutput === 'string'
-				? parseStringStatements(referenceOutput)[0] as ts.TypeNode
+				? parseTypeNode(referenceOutput)
 				: referenceOutput;
 
 			return factory.createPropertySignature(

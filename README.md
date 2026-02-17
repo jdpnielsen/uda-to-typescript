@@ -130,6 +130,26 @@ The generator resolves handlers by `EditorUiAlias` first, then `EditorAlias`.
 3. Migrated editors using `Umbraco.Plain.*` can produce broader types unless you provide a custom handler.
 4. Some custom editor configs can omit fields you depended on (for example `items`) and booleans can appear as `'0'` / `'1'` strings.
 
+### Data type alias emission (default on)
+
+By default, the generator emits a named type alias for every data type artifact:
+
+```ts
+export type ApprovedColor = string | null;
+```
+
+This improves discoverability in consumer projects, even when a data type is not currently referenced by a document or media type.
+
+If you need legacy behavior, disable it in config:
+
+```ts
+export default defineConfig({
+	input: '../umbraco/Deploy/Revision/*.uda',
+	output: './src/umbraco/types.ts',
+	emitDataTypeAliases: false,
+});
+```
+
 ### Custom handler example using EditorUiAlias
 
 ```ts
