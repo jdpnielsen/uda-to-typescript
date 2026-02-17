@@ -182,4 +182,26 @@ describe('generated fetcher template', () => {
 			'/umbraco/delivery/api/v2/media/items',
 		]);
 	});
+
+	it('should normalize empty content item identifiers without double slashes', async () => {
+		const requests: URL[] = [];
+		const fetchFunction: FetchFunction = <T>({ url }: { url: URL }) => {
+			requests.push(url);
+			return Promise.resolve({} as T);
+		};
+
+		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction, {
+			resolveMediaPickers: false,
+		});
+
+		await fetchContentItem('/', { expand: 'all' });
+		await fetchContentItem('', { expand: 'all' });
+		await fetchContentItem(undefined, { expand: 'all' });
+
+		expect(requests.map((request) => request.pathname)).toEqual([
+			'/umbraco/delivery/api/v2/content/item',
+			'/umbraco/delivery/api/v2/content/item',
+			'/umbraco/delivery/api/v2/content/item',
+		]);
+	});
 });

@@ -128,6 +128,23 @@ const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: U
 }
 
 /**
+ * Normalizes content item identifier/path values for endpoint construction.
+ *
+ * Empty input resolves to `/api/v2/content/item`, while non-empty values are
+ * trimmed and attached to `/api/v2/content/item/{idOrPath}`.
+ */
+function buildContentItemEndpoint(idOrPath: string | undefined): string {
+	const normalizedIdOrPath = (idOrPath || '')
+		.trim()
+		.replace(/^\/+|\/+$/g, '')
+		.replace(/\/{2,}/g, '/');
+
+	return normalizedIdOrPath === ''
+		? '/api/v2/content/item'
+		: `/api/v2/content/item/${normalizedIdOrPath}`;
+}
+
+/**
  * Builds a typed fetch function for getting content by query.
  *
  * The returned function targets Delivery API v2 and can optionally hydrate
@@ -175,6 +192,9 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
  *
  * The returned function targets Delivery API v2 and can optionally hydrate
  * media picker references into full media items.
+ *
+ * Passing an empty id/path (for example `''` or `'/'`) targets
+ * `/api/v2/content/item` directly.
  * @example
  * ```ts
  * const customFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
@@ -194,10 +214,10 @@ export function buildContentItemFetcher<Doc extends BaseDocumentType>(
 	resolverOptions: ContentFetcherOptions = {}
 ) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(id: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
+	return async <T extends ExpandParam<Doc> = undefined>(id?: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
-
-		const url = buildDeliveryApiUrl(host, `/api/v2/content/item/${id}`);
+		const endpoint = buildContentItemEndpoint(id);
+		const url = buildDeliveryApiUrl(host, endpoint);
 		url.search = queryParams.toString();
 
 		const response = await fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
