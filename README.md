@@ -200,6 +200,50 @@ import { buildContentFetcher } from './fetcher';
 const getContent = buildContentFetcher<SiteRoot>('https://example.com');
 ```
 
+### `UMBRACO_NO_CACHE` runtime flag
+
+Teams commonly use `UMBRACO_NO_CACHE` in local development and preview environments to bypass response caching while validating content and media changes.
+
+`uda-to-typescript` does **not** read environment variables directly in generated fetchers. Instead, pass a custom fetch function and apply cache behavior there.
+
+Recommended semantics:
+
+- `UMBRACO_NO_CACHE=true` or `UMBRACO_NO_CACHE=1`: disable caching (`cache: 'no-store'`) and add a cache-buster query parameter.
+- Any other value (or unset): keep normal/default caching behavior.
+
+```ts
+import { buildContentFetcher, type FetchFunction } from './fetcher';
+
+const noCache = process.env.UMBRACO_NO_CACHE === 'true' || process.env.UMBRACO_NO_CACHE === '1';
+
+const fetchFunction: FetchFunction = async <T>({ url, options }) => {
+	const nextUrl = new URL(url.toString());
+
+	if (noCache) {
+		nextUrl.searchParams.set('_ts', Date.now().toString());
+	}
+
+	const response = await fetch(nextUrl, {
+		...options,
+		cache: noCache ? 'no-store' : options?.cache,
+	});
+
+	if (!response.ok) {
+		throw new Error(response.statusText);
+	}
+
+	return response.json() as Promise<T>;
+};
+
+export const getContent = buildContentFetcher<SiteRoot>('https://example.com', fetchFunction);
+```
+
+Practical guidance:
+
+- Use this flag in development/preview only.
+- Keep it off in production unless you explicitly need real-time freshness over cache efficiency.
+- If your platform adds caching upstream (CDN/reverse proxy), pair this with appropriate cache-control headers in your hosting layer.
+
 
 [build-img]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml/badge.svg
 [build-url]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml
