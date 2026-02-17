@@ -1,5 +1,5 @@
 {
-	"Name": "Pre-v17 Color",
+	"Name": "Legacy Color",
 	"EditorAlias": "Umbraco.ColorPicker",
 	"DatabaseType": "Nvarchar",
 	"Configuration": {

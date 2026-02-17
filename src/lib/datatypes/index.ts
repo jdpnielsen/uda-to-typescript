@@ -56,7 +56,7 @@ export type HandlerConfig = {
 /**
  * Registry of datatype handlers keyed by editor alias.
  *
- * In Umbraco v14+ migrations, custom handlers can also be keyed by `EditorUiAlias`.
+ * Custom handlers can also be keyed by `EditorUiAlias`.
  */
 export type DataTypeConfig = {
 	[EditorAlias: string]: HandlerConfig
@@ -71,7 +71,7 @@ export type ResolvedHandlerConfig = {
  * Resolves a datatype handler in migration-safe order.
  *
  * Resolution order:
- * 1. `EditorUiAlias` (v14+ split editor model)
+ * 1. `EditorUiAlias` (split editor model)
  * 2. `EditorAlias` (legacy and fallback)
  */
 export function resolveDataTypeHandler(dataTypeHandlers: DataTypeConfig, dataType: DataType): ResolvedHandlerConfig | undefined {

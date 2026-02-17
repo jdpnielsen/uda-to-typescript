@@ -113,8 +113,8 @@ export default defineConfig({
 
 ## Umbraco version target
 
-This library targets Umbraco v17+ artifact exports and Delivery API v2.
-Support for pre-v17 exports and Delivery API v1 conventions is intentionally removed.
+This library targets Umbraco v17 artifact exports and Delivery API v2.
+Earlier Umbraco exports and Delivery API v1 conventions are not supported.
 
 For custom property editors, Umbraco can export a split editor model:
 
@@ -123,7 +123,7 @@ For custom property editors, Umbraco can export a split editor model:
 
 The generator resolves handlers by `EditorUiAlias` first, then `EditorAlias`.
 
-### v17 behavior notes
+### Current behavior notes
 
 1. Register custom datatype handlers by `EditorUiAlias` when relevant.
 2. Some editor configs contain fewer enumerated values than earlier exports.
@@ -169,7 +169,7 @@ export default defineConfig({
 });
 ```
 
-### Making custom handlers resilient to v17 config shapes
+### Making custom handlers resilient to current config shapes
 
 When migrating custom handlers, avoid assuming config arrays always exist.
 

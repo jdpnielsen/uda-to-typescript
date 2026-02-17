@@ -66,7 +66,7 @@ export async function collectArtifacts(input: string): Promise<ArtifactContainer
  *
  * The check only runs when an explicit `__version` exists, which keeps parsing
  * tolerant of partial/custom fixture payloads while still failing fast on
- * known pre-v17 exports.
+ * known unsupported exports.
  */
 function assertSupportedArtifactVersion(content: unknown, filePath: string): void {
 	if (typeof content !== 'object' || content === null || !('__version' in content)) {
@@ -84,6 +84,6 @@ function assertSupportedArtifactVersion(content: unknown, filePath: string): voi
 	const majorVersion = Number.parseInt(majorVersionToken, 10);
 
 	if (!Number.isNaN(majorVersion) && majorVersion < 17) {
-		throw new Error(`Unsupported Umbraco artifact version "${version}" in "${filePath}". This package supports v17+ artifacts only.`);
+		throw new Error(`Unsupported Umbraco artifact version "${version}" in "${filePath}".`);
 	}
 }

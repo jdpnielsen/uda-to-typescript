@@ -11,10 +11,10 @@ Guidance for coding agents working in `@jdpnielsen/uda-to-typescript`.
 
 ## Current Branch Strategy
 
-- The active compatibility target is Umbraco v17+ only.
-- Pre-v17 compatibility work is considered obsolete and should not be reintroduced.
-- Current v17 work lives on `feat/v17-support`.
-- Prefer targeting v17-related changes on this feature branch until migration is merged.
+- The active compatibility target is the current Umbraco major only.
+- Legacy compatibility work is considered obsolete and should not be reintroduced.
+- Current compatibility work lives on `feat/v17-support`.
+- Prefer targeting compatibility-related changes on this feature branch until migration is merged.
 - If branch names change later, update this section to keep agent context current.
 
 ## Environment and Toolchain
@@ -118,7 +118,7 @@ Guidance for coding agents working in `@jdpnielsen/uda-to-typescript`.
 - Prefer readable assertions with focused `describe`/`it` blocks.
 - Maintain existing sentence style in test names when editing nearby tests.
 - Recommended verification order: targeted tests first, then `npm run typecheck`, then broader/full test runs for substantial changes.
-- Some v17 fixture-driven tests intentionally exercise partial artifact sets and may log `console.warn`; treat these as expected unless assertions indicate behavior changed.
+- Some fixture-driven tests intentionally exercise partial artifact sets and may log `console.warn`; treat these as expected unless assertions indicate behavior changed.
 
 ## Lint Rules to Respect
 

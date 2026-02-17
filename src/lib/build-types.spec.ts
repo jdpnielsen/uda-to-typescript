@@ -22,7 +22,7 @@ describe('buildTypes', () => {
 			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";');
 	});
 
-	it('Should handle v17 fixtures without throwing', async () => {
+	it('Should handle current fixtures without throwing', async () => {
 		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
 		const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
 
@@ -72,7 +72,7 @@ describe('buildTypes', () => {
 		expect(actual).not.toContain('export type ApprovedColor =');
 	});
 
-	it('Should resolve custom handlers by EditorUiAlias for v17', async () => {
+	it('Should resolve custom handlers by EditorUiAlias', async () => {
 		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
 
 		const output = buildTypes({
