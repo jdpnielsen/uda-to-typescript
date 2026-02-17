@@ -22,7 +22,8 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 	const {
 		input,
 		output,
-		dataTypes = dataTypeMap
+		dataTypes = dataTypeMap,
+		emitDataTypeAliases = true,
 	} = options;
 
 	const resolvedOutput = path.resolve(workingDirectory, output);
@@ -34,7 +35,11 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 
 	const artifacts = await collectArtifacts(resolvedInput);
 
-	const nodes = buildTypes({ artifacts, dataTypeHandlers: dataTypes });
+	const nodes = buildTypes({
+		artifacts,
+		dataTypeHandlers: dataTypes,
+		emitDataTypeAliases,
+	});
 
 	const sourceFile = ts.createSourceFile(
 		output,
