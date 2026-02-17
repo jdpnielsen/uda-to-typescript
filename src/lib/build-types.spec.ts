@@ -23,7 +23,7 @@ describe('buildTypes', () => {
 	});
 
 	it('Should handle current fixtures without throwing', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 		const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
 
 		const output = buildTypes({
@@ -54,7 +54,7 @@ describe('buildTypes', () => {
 	});
 
 	it('Should support disabling data type alias emission', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
 		const output = buildTypes({
 			artifacts,
@@ -73,7 +73,7 @@ describe('buildTypes', () => {
 	});
 
 	it('Should resolve custom handlers by EditorUiAlias', async () => {
-		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/v17/*.uda');
+		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
 		const output = buildTypes({
 			artifacts,
