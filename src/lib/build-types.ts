@@ -163,7 +163,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		}
 	}
 
-	/** Build datatypes */
+	/** Build media types */
 	const mediaTypes = Array
 		.from(artifacts['media-type'].values())
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
@@ -195,7 +195,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		);
 	}
 
-	/** Build datatypes */
+	/** Build document types */
 	const documentTypes = Array
 		.from(artifacts['document-type'].values())
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
