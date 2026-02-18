@@ -48,9 +48,8 @@
     "url": "https://github.com/jdpnielsen/uda-to-typescript/issues"
   },
   "homepage": "https://github.com/jdpnielsen/uda-to-typescript#readme",
-  "dependencies": {
-    "async-parallel": "^1.2.3",
-    "change-case": "^4.1.2",
+	"dependencies": {
+		"change-case": "^4.1.2",
     "commander": "^7.2.0",
     "cosmiconfig": "^8.3.6",
     "glob": "^10.2.7"
