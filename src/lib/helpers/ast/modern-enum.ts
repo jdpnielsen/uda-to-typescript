@@ -3,7 +3,8 @@ import { newLineAST } from './newline';
 import { exportToken } from './export-token';
 
 /**
- * Creates an immediately indexed object that acts like an enum.
+ * Creates a const object and a type alias that acts like an enum.
+ * The type represents the union of all object values.
  * @param name The name of the enum.
  * @param items The entries of the enum.
  * @example
