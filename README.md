@@ -116,6 +116,8 @@ export default defineConfig({
 This library targets Umbraco v17 artifact exports and Delivery API v2.
 Earlier Umbraco exports and Delivery API v1 conventions are not supported.
 
+Test fixtures and examples in this branch use the `current` fixture set under `src/__tests__/__fixtures__/current`.
+
 For custom property editors, Umbraco can export a split editor model:
 
 - `EditorAlias` can point to a core schema alias (for example `Umbraco.Plain.Json`)
