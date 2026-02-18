@@ -17,7 +17,7 @@ export type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unk
 
 /**
  * Unexpands a media type.
- * In practice this means that all properties are removed from the document type.
+ * In practice this means that all properties are removed from the media type.
  */
 export type UnexpandMediatType<Media extends BaseMediaType> = Media extends unknown
 	? Overwrite<Media, { properties: EmptyObjectType }>
