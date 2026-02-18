@@ -84,6 +84,6 @@ function assertSupportedArtifactVersion(content: unknown, filePath: string): voi
 	const majorVersion = Number.parseInt(majorVersionToken, 10);
 
 	if (!Number.isNaN(majorVersion) && majorVersion < 17) {
-		throw new Error(`Unsupported Umbraco artifact version "${version}" in "${filePath}".`);
+		throw new Error(`Unsupported Umbraco artifact version "${version}" in "${filePath}". Ensure artifacts match the supported major.`);
 	}
 }
