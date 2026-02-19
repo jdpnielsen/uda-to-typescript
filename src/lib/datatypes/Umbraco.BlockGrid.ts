@@ -69,7 +69,7 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 				throw new Error(`Could not find document type with id: ${block.contentElementTypeKey}`);
 			}
 
-			const areas = block.areas.map((area) => {
+			const areas = (block.areas || []).map((area) => {
 				const specifiedAllowances = area.specifiedAllowance
 					.map((allowance) => {
 						const blockEl = (config.blocks || [])
