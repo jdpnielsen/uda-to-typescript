@@ -34,6 +34,7 @@ import { plainStringHandler } from './Umbraco.Plain.String';
 import { plainTimeHandler } from './Umbraco.Plain.Time';
 import { radioButtonListHandler } from './Umbraco.RadioButtonList';
 import { richTextHandler } from './Umbraco.RichText';
+import { singleBlockHandler } from './Umbraco.SingleBlock';
 import { sliderHandler } from './Umbraco.Slider';
 import { tagsHandler } from './Umbraco.Tags';
 import { textareaHandler } from './Umbraco.TextArea';
@@ -132,6 +133,7 @@ export const dataTypeMap = {
 	[plainTimeHandler.editorAlias]: plainTimeHandler,
 	[radioButtonListHandler.editorAlias]: radioButtonListHandler,
 	[richTextHandler.editorAlias]: richTextHandler,
+	[singleBlockHandler.editorAlias]: singleBlockHandler,
 	[sliderHandler.editorAlias]: sliderHandler,
 	[tagsHandler.editorAlias]: tagsHandler,
 	[textareaHandler.editorAlias]: textareaHandler,
