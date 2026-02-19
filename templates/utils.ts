@@ -1,4 +1,5 @@
 import type { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseDocumentType, BaseGridBlockType, BaseMediaType, EmptyObjectType, ObjectType } from './base-types';
+import { UmbracoForm } from './form';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
@@ -102,6 +103,10 @@ export type ExpandablePropertyKeys<Properties extends ObjectType> = Properties e
 	? KeysOfBaseType<Properties, BaseDocumentType>
 		| KeysOfBaseType<Properties, BaseDocumentType[]>
 		| KeysOfBaseType<Properties, BaseBlockListType>
+		| KeysOfBaseType<Properties, BaseBlockType>
+		| KeysOfBaseType<Properties, { form: UmbracoForm }>
+		| KeysOfBaseType<Properties, { form: UmbracoForm }[]>
+		| KeysOfBaseType<Properties, UmbracoForm>
 		| KeysOfBaseType<Properties, BaseBlockGridType>
 		| KeysOfBaseType<Properties, BaseMediaType>
 		| KeysOfBaseType<Properties, BaseMediaType[]>
@@ -127,11 +132,19 @@ export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
 			? UnexpandBlockGrid<Prop, undefined, undefined>
 			: Prop extends BaseBlockListType
 				? UnexpandBlockList<Prop, undefined>
-				: Prop extends BaseMediaType
-					? UnexpandMediatType<Prop>
-					: Prop extends BaseMediaType[]
-						? UnexpandMediatType<Prop[number]>[]
-						: Prop
+				: Prop extends BaseBlockType
+					? UnexpandBlock<Prop, undefined>
+					: Prop extends BaseMediaType
+						? UnexpandMediatType<Prop>
+						: Prop extends BaseMediaType[]
+							? UnexpandMediatType<Prop[number]>[]
+							: Prop extends { form: UmbracoForm }
+								? Overwrite<Prop, { form: null }>
+								: Prop extends { form: UmbracoForm }[]
+									? Overwrite<Prop[number], { form: null }>[]
+									: Prop extends UmbracoForm
+										? Overwrite<Prop, { form: null }>
+										: Prop;
 
 /**
  * Unexpands all expandable properties.

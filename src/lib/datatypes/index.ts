@@ -15,6 +15,8 @@ import { decimalHandler } from './Umbraco.Decimal';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { emailAddressHandler } from './Umbraco.EmailAddress';
 import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
+import { folderPickerHandler } from './UmbracoForms.FolderPicker';
+import { formDetailsPickerHandler } from './UmbracoForms.FormDetailsPicker';
 import { formsFormPickerHandler } from './UmbracoForms.FormPicker';
 import { imageCropperHandler } from './Umbraco.ImageCropper';
 import { integerHandler } from './Umbraco.Integer';
@@ -39,6 +41,7 @@ import { sliderHandler } from './Umbraco.Slider';
 import { tagsHandler } from './Umbraco.Tags';
 import { textareaHandler } from './Umbraco.TextArea';
 import { textboxHandler } from './Umbraco.TextBox';
+import { themePickerHandler } from './UmbracoForms.ThemePicker';
 import { timeOnlyHandler } from './Umbraco.TimeOnly';
 import { tinyMCEHandler } from './Umbraco.TinyMCE';
 import { trueFalseHandler } from './Umbraco.TrueFalse';
@@ -114,6 +117,8 @@ export const dataTypeMap = {
 	[dropdownHandler.editorAlias]: dropdownHandler,
 	[emailAddressHandler.editorAlias]: emailAddressHandler,
 	[eyedropperHandler.editorAlias]: eyedropperHandler,
+	[folderPickerHandler.editorAlias]: folderPickerHandler,
+	[formDetailsPickerHandler.editorAlias]: formDetailsPickerHandler,
 	[formsFormPickerHandler.editorAlias]: formsFormPickerHandler,
 	[imageCropperHandler.editorAlias]: imageCropperHandler,
 	[integerHandler.editorAlias]: integerHandler,
@@ -138,6 +143,7 @@ export const dataTypeMap = {
 	[tagsHandler.editorAlias]: tagsHandler,
 	[textareaHandler.editorAlias]: textareaHandler,
 	[textboxHandler.editorAlias]: textboxHandler,
+	[themePickerHandler.editorAlias]: themePickerHandler,
 	[timeOnlyHandler.editorAlias]: timeOnlyHandler,
 	[tinyMCEHandler.editorAlias]: tinyMCEHandler,
 	[trueFalseHandler.editorAlias]: trueFalseHandler,

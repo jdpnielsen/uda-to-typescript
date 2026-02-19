@@ -111,6 +111,21 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 			),
 			ts.factory.createStringLiteral('./base-types')
 		),
+		ts.factory.createImportDeclaration(
+			undefined,
+			ts.factory.createImportClause(
+				false,
+				undefined,
+				ts.factory.createNamedImports([
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
+						ts.factory.createIdentifier('UmbracoForm')
+					),
+				])
+			),
+			ts.factory.createStringLiteral('./form')
+		),
 		newLineAST,
 	];
 
