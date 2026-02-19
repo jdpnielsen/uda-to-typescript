@@ -118,6 +118,29 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			expect(printType(value)).toBe('Test');
 		});
 
+		it('should handle invalid javascript identifier', () => {
+			const datatype = createDataType<DropdownConfig>('Umbraco.DropDown.Flexible', {
+				multiple: true,
+				items: [
+					'0 Value',
+					'Value 1',
+					'Value 2',
+					'Value 3',
+				],
+			});
+
+			const buildValue = dropdownHandler.build(datatype);
+			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
+"export const Test = {
+    ["0Value"]: "0 Value",
+    Value_1: "Value 1",
+    Value_2: "Value 2",
+    Value_3: "Value 3"
+} as const;
+export type Test = (typeof Test)[keyof typeof Test];"
+`);
+		});
+
 		it('should handle missing items', () => {
 			const datatype = createDataType<DropdownConfig>('Umbraco.DropDown.Flexible', {
 				multiple: true,

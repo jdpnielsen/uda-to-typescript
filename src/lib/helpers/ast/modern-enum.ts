@@ -39,7 +39,7 @@ export function createModernEnumHandler(name: string, items: { key: string, valu
 					factory.createAsExpression(
 						factory.createObjectLiteralExpression(
 							items.map((item) => factory.createPropertyAssignment(
-								item.key,
+								shouldBeComputed(item.key) ? factory.createComputedPropertyName(factory.createStringLiteral(item.key)) : item.key,
 								typeof item.value === 'string' ? factory.createStringLiteral(item.value) : item.value,
 							)),
 							true
@@ -75,4 +75,8 @@ export function createModernEnumHandler(name: string, items: { key: string, valu
 			)
 		)
 	];
+}
+
+function shouldBeComputed(value: string) {
+	return '0123456789-"`\''.includes(value[0])
 }
