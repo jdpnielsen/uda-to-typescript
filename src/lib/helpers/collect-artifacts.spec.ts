@@ -4,9 +4,9 @@ describe('collectArtifacts', () => {
 	it('Should handle a glob', async () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
-		expect(output['data-type'].size).toBe(5);
-		expect(output['document-type'].size).toBe(4);
-		expect(output['media-type'].size).toBe(1);
+		expect(output['data-type'].size).toBe(48);
+		expect(output['document-type'].size).toBe(14);
+		expect(output['media-type'].size).toBe(7);
 	});
 
 	it('Should handle a file path', async () => {

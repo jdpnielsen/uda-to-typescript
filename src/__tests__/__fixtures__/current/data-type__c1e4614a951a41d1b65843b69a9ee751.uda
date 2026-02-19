@@ -1,0 +1,19 @@
+{
+  "Name": "Value Dropdown",
+  "EditorAlias": "Umbraco.DropDown.Flexible",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Dropdown",
+  "DatabaseType": "Nvarchar",
+  "Configuration": {
+    "items": [
+      "Value 1",
+      "Value 2",
+      "Value 3",
+      "Value 4",
+      "Value 5"
+    ]
+  },
+  "Udi": "umb://data-type/c1e4614a951a41d1b65843b69a9ee751",
+  "Dependencies": [],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

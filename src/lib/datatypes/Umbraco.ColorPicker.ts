@@ -6,14 +6,11 @@ import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { maybeNull } from '../helpers/ast/maybe-null';
 import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 
-type ColorPickerConfig = {
-	useLabel: boolean | '0' | '1';
-	items: { id: number, value: string }[];
-}
+type Item = { label: string; value: string };
 
-type DecodedColorPickerValue = {
-	value: string;
-	label: string;
+export type ColorPickerConfig = {
+	useLabel?: boolean | '0' | '1';
+	items?: Item[];
 }
 
 export const colorPickerHandler = {
@@ -32,7 +29,7 @@ export function build(dataType: DataType): ts.Node[] {
 	}
 
 	const enumItems = items.map((item, index) => {
-		const { label, value } = decodeColorPickerValue(item.value, index);
+		const { label, value } = decodeColorPickerValue(item, index);
 
 		return {
 			key: label === value ? `Color${index + 1}` : label,
@@ -118,28 +115,18 @@ export function reference(dataType: DataType): ts.TypeNode {
 	);
 }
 
-function getItems(config: Partial<ColorPickerConfig>): Array<{ id: number; value: string }> {
+function getItems(config: Partial<ColorPickerConfig>): Item[] {
 	if (!Array.isArray(config.items)) {
 		return [];
 	}
 
 	return config.items
-		.filter((item): item is { id: number; value: string } => typeof item?.value === 'string');
+		.filter(item => typeof item.value === 'string');
 }
 
-function decodeColorPickerValue(value: string, index: number): DecodedColorPickerValue {
-	try {
-		const parsed = JSON.parse(value) as DecodedColorPickerValue;
-
-		if (typeof parsed.value === 'string' && typeof parsed.label === 'string') {
-			return parsed;
-		}
-	} catch {
-		// Ignore invalid json and fall back to raw value.
-	}
-
+function decodeColorPickerValue({ label, value }: Item, index: number): Item {
 	return {
-		label: `Color${index + 1}`,
-		value,
+		label: label ? pascalCase(label) : `Color${index + 1}`,
+		value: value,
 	};
 }
