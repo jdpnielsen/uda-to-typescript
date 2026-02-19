@@ -7,11 +7,15 @@ import { blockListHandler } from './Umbraco.BlockList';
 import { checkboxListHandler } from './Umbraco.CheckBoxList';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import { contentPickerHandler } from './Umbraco.ContentPicker';
+import { dateOnlyHandler } from './Umbraco.DateOnly';
 import { dateTimeHandler } from './Umbraco.DateTime';
+import { dateTimeUnspecifiedHandler } from './Umbraco.DateTimeUnspecified';
+import { dateTimeWithTimeZoneHandler } from './Umbraco.DateTimeWithTimeZone';
 import { decimalHandler } from './Umbraco.Decimal';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { emailAddressHandler } from './Umbraco.EmailAddress';
 import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
+import { formsFormPickerHandler } from './UmbracoForms.FormPicker';
 import { imageCropperHandler } from './Umbraco.ImageCropper';
 import { integerHandler } from './Umbraco.Integer';
 import { labelHandler } from './Umbraco.Label';
@@ -34,10 +38,10 @@ import { sliderHandler } from './Umbraco.Slider';
 import { tagsHandler } from './Umbraco.Tags';
 import { textareaHandler } from './Umbraco.TextArea';
 import { textboxHandler } from './Umbraco.TextBox';
+import { timeOnlyHandler } from './Umbraco.TimeOnly';
 import { tinyMCEHandler } from './Umbraco.TinyMCE';
 import { trueFalseHandler } from './Umbraco.TrueFalse';
 import { uploadFieldHandler } from './Umbraco.UploadField';
-import { formsFormPickerHandler } from './UmbracoForms.FormPicker';
 
 /**
  * Contract implemented by each datatype handler.
@@ -101,11 +105,15 @@ export const dataTypeMap = {
 	[checkboxListHandler.editorAlias]: checkboxListHandler,
 	[colorPickerHandler.editorAlias]: colorPickerHandler,
 	[contentPickerHandler.editorAlias]: contentPickerHandler,
+	[dateOnlyHandler.editorAlias]: dateOnlyHandler,
 	[dateTimeHandler.editorAlias]: dateTimeHandler,
+	[dateTimeUnspecifiedHandler.editorAlias]: dateTimeUnspecifiedHandler,
+	[dateTimeWithTimeZoneHandler.editorAlias]: dateTimeWithTimeZoneHandler,
 	[decimalHandler.editorAlias]: decimalHandler,
 	[dropdownHandler.editorAlias]: dropdownHandler,
 	[emailAddressHandler.editorAlias]: emailAddressHandler,
 	[eyedropperHandler.editorAlias]: eyedropperHandler,
+	[formsFormPickerHandler.editorAlias]: formsFormPickerHandler,
 	[imageCropperHandler.editorAlias]: imageCropperHandler,
 	[integerHandler.editorAlias]: integerHandler,
 	[labelHandler.editorAlias]: labelHandler,
@@ -128,8 +136,8 @@ export const dataTypeMap = {
 	[tagsHandler.editorAlias]: tagsHandler,
 	[textareaHandler.editorAlias]: textareaHandler,
 	[textboxHandler.editorAlias]: textboxHandler,
+	[timeOnlyHandler.editorAlias]: timeOnlyHandler,
 	[tinyMCEHandler.editorAlias]: tinyMCEHandler,
 	[trueFalseHandler.editorAlias]: trueFalseHandler,
 	[uploadFieldHandler.editorAlias]: uploadFieldHandler,
-	[formsFormPickerHandler.editorAlias]: formsFormPickerHandler,
 } satisfies DataTypeConfig;
