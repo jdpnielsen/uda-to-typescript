@@ -6,8 +6,11 @@ import { DataType } from '../types/data-type';
 import type { HandlerConfig } from '.';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 
-type CheckboxListConfig = {
-	items: { id: number, value: string }[]
+/** @deprecated Leftover configuration from Umbraco v13 */
+type Item = { id: number; value: string };
+
+export type CheckboxListConfig = {
+	items?: string[] | Item[]
 };
 
 export const checkboxListHandler = {
@@ -27,8 +30,8 @@ export function build(dataType: DataType): ts.Node[] {
 
 	const enumItems = items.map((item) => {
 		return {
-			key: pascalCase(item.value),
-			value: item.value,
+			key: pascalCase(item),
+			value: item,
 		};
 	});
 
@@ -38,7 +41,7 @@ export function build(dataType: DataType): ts.Node[] {
 export function reference(dataType: DataType): ts.TypeNode {
 	const variableIdentifier = pascalCase(dataType.Name);
 	const config = (dataType.Configuration || {}) as Partial<CheckboxListConfig>;
-	const items = getItems(config);
+	const items = (config.items || []);
 
 	if (items.length === 0) {
 		return factory.createArrayTypeNode(
@@ -54,11 +57,12 @@ export function reference(dataType: DataType): ts.TypeNode {
 	return factory.createArrayTypeNode(checkboxListType)
 }
 
-function getItems(config: Partial<CheckboxListConfig>): Array<{ id: number; value: string }> {
+function getItems(config: Partial<CheckboxListConfig>): string[] {
 	if (!Array.isArray(config.items)) {
 		return [];
 	}
 
 	return config.items
-		.filter((item): item is { id: number; value: string } => typeof item?.value === 'string');
+		.map((item) => typeof item === 'string' ? item : item?.value)
+		.filter(item => typeof item === 'string');
 }

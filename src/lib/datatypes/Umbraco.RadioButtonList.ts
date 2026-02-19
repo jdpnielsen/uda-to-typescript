@@ -7,8 +7,11 @@ import type { HandlerConfig } from '.';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { maybeNull } from '../helpers/ast/maybe-null';
 
-type RadioButtonListConfig = {
-	items: { id: number, value: string }[]
+/** @deprecated Leftover configuration from Umbraco v13 */
+type Item = { id: number; value: string };
+
+export type RadioButtonListConfig = {
+	items?: string[] | Item[];
 };
 
 export const radioButtonListHandler = {
@@ -28,8 +31,8 @@ export function build(dataType: DataType): ts.Node[] {
 
 	const enumItems = items.map((item) => {
 		return {
-			key: pascalCase(item.value),
-			value: item.value,
+			key: pascalCase(item),
+			value: item,
 		};
 	});
 
@@ -55,11 +58,12 @@ export function reference(dataType: DataType): ts.TypeNode {
 	);
 }
 
-function getItems(config: Partial<RadioButtonListConfig>): Array<{ id: number; value: string }> {
+function getItems(config: Partial<RadioButtonListConfig>): string[] {
 	if (!Array.isArray(config.items)) {
 		return [];
 	}
 
 	return config.items
-		.filter((item): item is { id: number; value: string } => typeof item?.value === 'string');
+		.map((item) => typeof item === 'string' ? item : item?.value)
+		.filter(item => typeof item === 'string');
 }
