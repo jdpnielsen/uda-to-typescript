@@ -19,7 +19,7 @@ describe('buildTypes', () => {
 			);
 
 		expect(expected.trim())
-			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";');
+			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";import { type UmbracoForm } from "./form";');
 	});
 
 	it('Should handle current fixtures without throwing', async () => {
@@ -42,7 +42,7 @@ describe('buildTypes', () => {
 		expect(actual).toContain('import { type BaseDocumentType');
 		expect(actual).toContain('content?: {' );
 		expect(actual).toContain('markup: string;');
-		expect(actual).toContain('form: string | null;');
+		expect(actual).toContain('form: UmbracoForm;');
 		expect(actual).toContain('umbracoBytes: number;');
 		expect(actual).toContain('umbracoWidth: number;');
 		expect(actual).toContain('export type ApprovedColor = string | null;');
