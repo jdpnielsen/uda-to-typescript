@@ -6,7 +6,7 @@ import { buildCrops } from '../helpers/ast/media-object';
 import type { HandlerConfig } from '.';
 
 export type ImageCropperConfig = {
-	crops: {
+	crops?: {
 		alias: string;
 		width: number;
 		height: number;
@@ -59,7 +59,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 			undefined,
 			factory.createIdentifier('crops'),
 			undefined,
-			factory.createTupleTypeNode(buildCrops(config.crops)),
+			factory.createTupleTypeNode(buildCrops(config.crops || [])),
 		)
 	]);
 }
