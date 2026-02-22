@@ -17,6 +17,7 @@ program
 	.option('-c, --config <string>', 'Path for config file. Example: --config ./udaconvert.config.ts')
 	.option('-i, --input <string>', 'Glob pattern to match. Example: --input ./files/*.uda')
 	.option('-o, --output <string>', 'Where to write output file. Example: --output ./file.ts')
+	.option('--skip-templates', 'Prevent writing of template files. Example: --skip-templates')
 	.option('-d, --debug', 'enables verbose logging', false)
 	.parse(argv);
 
@@ -29,6 +30,8 @@ const opts = program.opts() as {
 
 	/** Output file */
 	output: string;
+
+	skipTemplates: boolean;
 
 	config?: string;
 };

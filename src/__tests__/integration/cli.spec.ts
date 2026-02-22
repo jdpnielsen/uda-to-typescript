@@ -37,6 +37,35 @@ describe('uda-to-typescript', () => {
 		expect(outputSource).toContain('export type ApprovedColor = string | null;');
 	});
 
+	it('should not include templates if so configured', async () => {
+		await rm('./dist/current', { recursive: true, force: true });
+
+		expect.assertions(4);
+
+		await execa(bin, ['--input', './src/__tests__/__fixtures__/*.uda', '--output', './dist/output.ts', '--skip-templates']);
+
+		const outputFile = await stat('./dist/output.ts');
+		expect(outputFile.isFile()).toBeTruthy();
+
+		try {
+			await stat('./dist/base-types.ts');
+		} catch (error) {
+			expect((error as Error & { code: string }).code).toBe('ENOENT');
+		}
+
+		try {
+			await stat('./dist/fetcher.ts');
+		} catch (error) {
+			expect((error as Error & { code: string }).code).toBe('ENOENT');
+		}
+
+		try {
+			await stat('./dist/utils.ts');
+		} catch (error) {
+			expect((error as Error & { code: string }).code).toBe('ENOENT');
+		}
+	});
+
 	it('should resolve custom handlers by EditorUiAlias from config', async () => {
 		await rm('./dist/current/custom-handler-output.ts', { force: true });
 

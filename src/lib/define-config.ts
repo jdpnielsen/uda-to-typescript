@@ -10,6 +10,9 @@ export interface UDAConvertConfiguration {
 	/** Output file */
 	output: string;
 
+	/** Copy templates */
+	skipTemplates?: boolean;
+
 	/**
 	 * @example
 	 * ```ts

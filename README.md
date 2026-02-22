@@ -27,6 +27,7 @@ Options:
   -c, --config <string>  Path for config file. Example: --config ./udaconvert.config.ts
   -i, --input <string>   Glob pattern to match. Example: --input ./files/*.uda
   -o, --output <string>  Where to write output file. Example: --output ./file.ts
+  --skip-template        Prevent writing of template files. Example: --skip-templates
   -d, --debug            enables verbose logging (default: false)
   -h, --help             display help for command
 
@@ -66,8 +67,8 @@ export default defineConfig({
 ## Provide custom datatypes
 
 ```js
-import { dataTypes, defineConfig, HandlerConfig } from '@jdpnielsen/uda-to-typescript';
 import { factory } from 'typescript';
+import { HandlerConfig, dataTypes, defineConfig } from '@jdpnielsen/uda-to-typescript';
 
 export default defineConfig({
 	input: '../umbraco-boilerplate/src/UmbracoProject/umbraco/Deploy/Revision/*.uda',
