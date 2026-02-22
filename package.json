@@ -43,7 +43,7 @@
 	"files": [
 		"!lib/__tests__/**/*",
 		"bin/**/*",
-		"lib/**/*",
+		"dist/**/*",
 		"templates/**/*"
 	],
 	"engines": {
@@ -70,6 +70,7 @@
 	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^2.25.1",
+		"@arethetypeswrong/core": "^0.18.2",
 		"@semantic-release/changelog": "^6.0.3",
 		"@types/node": "^22.19.11",
 		"commitizen": "^4.2.4",
@@ -79,6 +80,7 @@
 		"execa": "^9.6.1",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
+		"publint": "^0.3.17",
 		"semantic-release": "^25.0.3",
 		"tsdown": "^0.20.3",
 		"tsx": "^4.21.0",

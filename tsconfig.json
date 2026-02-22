@@ -10,6 +10,7 @@
 		"strict": true,
 		"noUnusedLocals": true,
 		"declaration": true,
+		"declarationMap": true,
 		"emitDeclarationOnly": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
