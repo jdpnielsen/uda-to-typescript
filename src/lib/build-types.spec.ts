@@ -16,8 +16,10 @@ describe('buildTypes', () => {
 		});
 
 		const actual = printType(output.map((e) => e));
-		expect(actual.trim())
-			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";\nimport { type UmbracoForm } from "./form";');
+		expect(actual.trim()).toMatchInlineSnapshot(`
+			"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+			import { type UmbracoForm } from "./form";"
+		`);
 	});
 
 	it('should handle current fixtures without throwing', async () => {
@@ -32,16 +34,7 @@ describe('buildTypes', () => {
 		const actual = printType(output.map((e) => e));
 
 		expect(warnSpy).not.toHaveBeenCalled();
-		expect(actual).toContain('import { type BaseDocumentType');
-		expect(actual).toContain('content?: RichtextEditor');
-		expect(actual).toContain('markup: string;');
-		expect(actual).toContain('form: UmbracoForm;');
-		expect(actual).toContain('umbracoBytes: number;');
-		expect(actual).toContain('umbracoWidth: number;');
-		expect(actual).toContain('export type ApprovedColor = string | null;');
-
-		const navigationBlockListDeclarations = actual.match(/export type NavigationBlockList\s*=/g) || [];
-		expect(navigationBlockListDeclarations).toHaveLength(1);
+		expect(actual).toMatchSnapshot();
 
 		warnSpy.mockRestore();
 	});
@@ -56,7 +49,7 @@ describe('buildTypes', () => {
 		});
 
 		const actual = printType(output.map((e) => e));
-		expect(actual).not.toContain('export type ApprovedColor =');
+		expect(actual).toMatchSnapshot();
 	});
 
 	it('should resolve custom handlers by EditorUiAlias', async () => {
@@ -75,6 +68,6 @@ describe('buildTypes', () => {
 		});
 
 		const actual = printType(output.map((e) => e));
-		expect(actual).toContain('link: UrlItem;');
+		expect(actual).toMatchSnapshot();
 	});
 });

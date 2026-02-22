@@ -1,0 +1,649 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`buildTypes > should handle current fixtures without throwing 1`] = `
+"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+import { type UmbracoForm } from "./form";
+
+export interface UrlItem {
+    url: string | null;
+    title: string;
+    target: string | null;
+    destinationId: string | null;
+    destinationType: string | null;
+    route: {
+        path: string;
+        startItem: {
+            id: string;
+            path: string;
+        };
+    } | null;
+    linkType: string;
+}
+
+export type AdvancedRichTextEditor = {
+    markup: string;
+    blocks: (BaseBlockType<RteBlock, null>)[];
+};
+
+export type NavigationBlockList = BaseBlockListType<BaseBlockType<LinkItem, null> | BaseBlockType<LinkGroup, null>>;
+
+export type ContentBlockList = BaseBlockListType<BaseBlockType<MediaBlock, null> | BaseBlockType<RichtextBlock, null> | BaseBlockType<FormBlock, null>>;
+
+export type GridContentPageBlocksBlockGridWithoutAreas = BaseGridBlockType<UmbBlockGridDemoHeadlineBlock, null> | BaseGridBlockType<UmbBlockGridDemoImageBlock, null> | BaseGridBlockType<UmbBlockGridDemoRichTextBlock, null>;
+export type GridContentPageBlocksBlockGrid = BaseBlockGridType<GridContentPageBlocksBlockGridWithoutAreas | BaseGridBlockType<UmbBlockGridDemoTwoColumnLayoutBlock, null, (BaseGridBlockAreaType<"left", GridContentPageBlocksBlockGridWithoutAreas> | BaseGridBlockAreaType<"right", GridContentPageBlocksBlockGridWithoutAreas>)[]>>;
+
+export const ValueDropdown = {
+    Value_1: "Value 1",
+    Value_2: "Value 2",
+    Value_3: "Value 3",
+    Value_4: "Value 4",
+    Value_5: "Value 5",
+    ["0Value"]: "0 Value"
+} as const;
+export type ValueDropdown = (typeof ValueDropdown)[keyof typeof ValueDropdown];
+
+export type RichtextEditor = {
+    markup: string;
+    blocks: [
+    ];
+};
+
+export type ApprovedColor = string | null;
+export type NoASingleLinkPicker = unknown;
+export type Dropdown = string;
+export type Textstring = string;
+export type MultipleImageMediaPicker = MediaPickerItem<Image>[];
+export type LabelDatetime = string;
+export type MultipleMediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type ImageCropper = {
+    url: string;
+    focalPoint: {
+        left: number;
+        top: number;
+    } | null;
+    crops: [
+        Crop<"16:9", 1600, 900>,
+        Crop<"4:3", 800, 600>,
+        Crop<"4:5", 800, 1000>
+    ];
+};
+export type MemberPicker = string | null;
+export type UploadVectorGraphics = string;
+export type Numeric = number;
+export type ListViewMedia = unknown;
+export type MediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type DatePicker = string;
+export type MetaTitleTextbox = string;
+export type LabelPixels = number;
+export type MetaImagePickerMediaPicker = MediaPickerItem<Image, [
+    Crop<"minimal", 1200, 630>
+]>[];
+export type NoAMultiLinkPicker = unknown;
+export type UploadVideo = string;
+export type UploadFile = string;
+export type LabelInteger = number;
+export type LabelDecimal = number;
+export type UploadAudio = string;
+export type MetaDescriptionTextarea = string;
+export type TrueFalse = boolean;
+export type LabelBigint = number;
+export type LabelTime = string;
+export type ListViewMembers = unknown;
+export type ImageMediaPicker = MediaPickerItem<Image>[];
+export type MultiUrlPicker = UrlItem[];
+export type Tags = string[];
+export type LabelBytes = number;
+export type Radiobox = string | null;
+export type UploadArticle = string;
+export type ListViewContent = unknown;
+export type FormBlockFormFormPicker = {
+    id: string;
+    form: UmbracoForm;
+};
+export type NoADropdown = unknown;
+export type Textarea = string;
+export type DatePickerWithTime = string;
+export type LabelString = string;
+export type DropdownMultiple = string[];
+export type CheckboxList = string[];
+export type ContentPicker = PickableDocumentType | null;
+
+export type File = BaseMediaType<"File", {
+    umbracoFile: string;
+    umbracoExtension: string;
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaArticle = BaseMediaType<"umbracoMediaArticle", {
+    umbracoFile: string;
+    umbracoExtension: "pdf" | "docx" | "doc";
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaAudio = BaseMediaType<"umbracoMediaAudio", {
+    umbracoFile: string;
+    umbracoExtension: "mp3" | "weba" | "oga" | "opus";
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaVectorGraphics = BaseMediaType<"umbracoMediaVectorGraphics", {
+    umbracoFile: string;
+    umbracoExtension: "svg";
+    umbracoBytes: number;
+}>;
+
+export type Image = BaseMediaType<"Image", {
+    umbracoFile: {
+        url: string;
+        focalPoint: {
+            left: number;
+            top: number;
+        } | null;
+        crops: [
+            Crop<"16:9", 1600, 900>,
+            Crop<"4:3", 800, 600>,
+            Crop<"4:5", 800, 1000>
+        ];
+    };
+    umbracoWidth: number;
+    umbracoHeight: number;
+    umbracoBytes: number;
+    umbracoExtension: string;
+}>;
+
+export type Folder = BaseMediaType<"Folder", EmptyObjectType>;
+
+export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
+    umbracoFile: string;
+    umbracoExtension: "mp4" | "webm" | "ogv";
+    umbracoBytes: number;
+}>;
+
+export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
+
+export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
+
+export type ContentPage = BaseDocumentType<"contentPage", {
+    blocks?: ContentBlockList;
+}>;
+
+export type LinkItem = BaseDocumentType<"linkItem", {
+    link: unknown;
+}>;
+
+export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+    content?: RichtextEditor;
+}>;
+
+export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRichTextBlock", {
+    richText: RichtextEditor;
+}>;
+
+export type GridContentPage = BaseDocumentType<"gridContentPage", {
+    blocks?: GridContentPageBlocksBlockGrid;
+}>;
+
+export type MediaBlock = BaseDocumentType<"mediaBlock", {
+    media: (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+}>;
+
+export type Metadata = BaseDocumentType<"metadata", {
+    meta_description?: string;
+    meta_image?: MediaPickerItem<Image, [
+        Crop<"minimal", 1200, 630>
+    ]>[];
+    meta_title?: string;
+}>;
+
+export type SiteRoot = BaseDocumentType<"siteRoot", {
+    header_menu?: NavigationBlockList;
+    blocks?: ContentBlockList;
+    footer_menu?: NavigationBlockList;
+    footer_bottom_copyright?: RichtextEditor;
+    footer_bottom_menu?: UrlItem[];
+}>;
+
+export type UmbBlockGridDemoImageBlock = BaseDocumentType<"umbBlockGridDemoImageBlock", {
+    image: MediaPickerItem<Image>[];
+}>;
+
+export type PageSettings = BaseDocumentType<"pageSettings", {
+    umbracoUrlName?: string;
+    excludeSearchResult?: boolean;
+}>;
+
+export type UmbBlockGridDemoHeadlineBlock = BaseDocumentType<"umbBlockGridDemoHeadlineBlock", {
+    headline: string;
+}>;
+
+export type LinkGroup = BaseDocumentType<"linkGroup", {
+    title: string;
+    items?: NavigationBlockList;
+}>;
+
+export type RteBlock = BaseDocumentType<"rteBlock", {
+    nestedProperty: string;
+}>;
+
+export type FormBlock = BaseDocumentType<"formBlock", {
+    form: {
+        id: string;
+        form: UmbracoForm;
+    };
+}>;
+
+export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
+"
+`;
+
+exports[`buildTypes > should resolve custom handlers by EditorUiAlias 1`] = `
+"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+import { type UmbracoForm } from "./form";
+
+export interface UrlItem {
+    url: string | null;
+    title: string;
+    target: string | null;
+    destinationId: string | null;
+    destinationType: string | null;
+    route: {
+        path: string;
+        startItem: {
+            id: string;
+            path: string;
+        };
+    } | null;
+    linkType: string;
+}
+
+export type AdvancedRichTextEditor = {
+    markup: string;
+    blocks: (BaseBlockType<RteBlock, null>)[];
+};
+
+export type NavigationBlockList = BaseBlockListType<BaseBlockType<LinkItem, null> | BaseBlockType<LinkGroup, null>>;
+
+export type ContentBlockList = BaseBlockListType<BaseBlockType<MediaBlock, null> | BaseBlockType<RichtextBlock, null> | BaseBlockType<FormBlock, null>>;
+
+export type GridContentPageBlocksBlockGridWithoutAreas = BaseGridBlockType<UmbBlockGridDemoHeadlineBlock, null> | BaseGridBlockType<UmbBlockGridDemoImageBlock, null> | BaseGridBlockType<UmbBlockGridDemoRichTextBlock, null>;
+export type GridContentPageBlocksBlockGrid = BaseBlockGridType<GridContentPageBlocksBlockGridWithoutAreas | BaseGridBlockType<UmbBlockGridDemoTwoColumnLayoutBlock, null, (BaseGridBlockAreaType<"left", GridContentPageBlocksBlockGridWithoutAreas> | BaseGridBlockAreaType<"right", GridContentPageBlocksBlockGridWithoutAreas>)[]>>;
+
+export const ValueDropdown = {
+    Value_1: "Value 1",
+    Value_2: "Value 2",
+    Value_3: "Value 3",
+    Value_4: "Value 4",
+    Value_5: "Value 5",
+    ["0Value"]: "0 Value"
+} as const;
+export type ValueDropdown = (typeof ValueDropdown)[keyof typeof ValueDropdown];
+
+export type RichtextEditor = {
+    markup: string;
+    blocks: [
+    ];
+};
+
+export type ApprovedColor = string | null;
+export type NoASingleLinkPicker = UrlItem;
+export type Dropdown = string;
+export type Textstring = string;
+export type MultipleImageMediaPicker = MediaPickerItem<Image>[];
+export type LabelDatetime = string;
+export type MultipleMediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type ImageCropper = {
+    url: string;
+    focalPoint: {
+        left: number;
+        top: number;
+    } | null;
+    crops: [
+        Crop<"16:9", 1600, 900>,
+        Crop<"4:3", 800, 600>,
+        Crop<"4:5", 800, 1000>
+    ];
+};
+export type MemberPicker = string | null;
+export type UploadVectorGraphics = string;
+export type Numeric = number;
+export type ListViewMedia = unknown;
+export type MediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type DatePicker = string;
+export type MetaTitleTextbox = string;
+export type LabelPixels = number;
+export type MetaImagePickerMediaPicker = MediaPickerItem<Image, [
+    Crop<"minimal", 1200, 630>
+]>[];
+export type NoAMultiLinkPicker = UrlItem;
+export type UploadVideo = string;
+export type UploadFile = string;
+export type LabelInteger = number;
+export type LabelDecimal = number;
+export type UploadAudio = string;
+export type MetaDescriptionTextarea = string;
+export type TrueFalse = boolean;
+export type LabelBigint = number;
+export type LabelTime = string;
+export type ListViewMembers = unknown;
+export type ImageMediaPicker = MediaPickerItem<Image>[];
+export type MultiUrlPicker = UrlItem[];
+export type Tags = string[];
+export type LabelBytes = number;
+export type Radiobox = string | null;
+export type UploadArticle = string;
+export type ListViewContent = unknown;
+export type FormBlockFormFormPicker = {
+    id: string;
+    form: UmbracoForm;
+};
+export type NoADropdown = unknown;
+export type Textarea = string;
+export type DatePickerWithTime = string;
+export type LabelString = string;
+export type DropdownMultiple = string[];
+export type CheckboxList = string[];
+export type ContentPicker = PickableDocumentType | null;
+
+export type File = BaseMediaType<"File", {
+    umbracoFile: string;
+    umbracoExtension: string;
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaArticle = BaseMediaType<"umbracoMediaArticle", {
+    umbracoFile: string;
+    umbracoExtension: "pdf" | "docx" | "doc";
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaAudio = BaseMediaType<"umbracoMediaAudio", {
+    umbracoFile: string;
+    umbracoExtension: "mp3" | "weba" | "oga" | "opus";
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaVectorGraphics = BaseMediaType<"umbracoMediaVectorGraphics", {
+    umbracoFile: string;
+    umbracoExtension: "svg";
+    umbracoBytes: number;
+}>;
+
+export type Image = BaseMediaType<"Image", {
+    umbracoFile: {
+        url: string;
+        focalPoint: {
+            left: number;
+            top: number;
+        } | null;
+        crops: [
+            Crop<"16:9", 1600, 900>,
+            Crop<"4:3", 800, 600>,
+            Crop<"4:5", 800, 1000>
+        ];
+    };
+    umbracoWidth: number;
+    umbracoHeight: number;
+    umbracoBytes: number;
+    umbracoExtension: string;
+}>;
+
+export type Folder = BaseMediaType<"Folder", EmptyObjectType>;
+
+export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
+    umbracoFile: string;
+    umbracoExtension: "mp4" | "webm" | "ogv";
+    umbracoBytes: number;
+}>;
+
+export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
+
+export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
+
+export type ContentPage = BaseDocumentType<"contentPage", {
+    blocks?: ContentBlockList;
+}>;
+
+export type LinkItem = BaseDocumentType<"linkItem", {
+    link: UrlItem;
+}>;
+
+export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+    content?: RichtextEditor;
+}>;
+
+export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRichTextBlock", {
+    richText: RichtextEditor;
+}>;
+
+export type GridContentPage = BaseDocumentType<"gridContentPage", {
+    blocks?: GridContentPageBlocksBlockGrid;
+}>;
+
+export type MediaBlock = BaseDocumentType<"mediaBlock", {
+    media: (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+}>;
+
+export type Metadata = BaseDocumentType<"metadata", {
+    meta_description?: string;
+    meta_image?: MediaPickerItem<Image, [
+        Crop<"minimal", 1200, 630>
+    ]>[];
+    meta_title?: string;
+}>;
+
+export type SiteRoot = BaseDocumentType<"siteRoot", {
+    header_menu?: NavigationBlockList;
+    blocks?: ContentBlockList;
+    footer_menu?: NavigationBlockList;
+    footer_bottom_copyright?: RichtextEditor;
+    footer_bottom_menu?: UrlItem[];
+}>;
+
+export type UmbBlockGridDemoImageBlock = BaseDocumentType<"umbBlockGridDemoImageBlock", {
+    image: MediaPickerItem<Image>[];
+}>;
+
+export type PageSettings = BaseDocumentType<"pageSettings", {
+    umbracoUrlName?: string;
+    excludeSearchResult?: boolean;
+}>;
+
+export type UmbBlockGridDemoHeadlineBlock = BaseDocumentType<"umbBlockGridDemoHeadlineBlock", {
+    headline: string;
+}>;
+
+export type LinkGroup = BaseDocumentType<"linkGroup", {
+    title: string;
+    items?: NavigationBlockList;
+}>;
+
+export type RteBlock = BaseDocumentType<"rteBlock", {
+    nestedProperty: string;
+}>;
+
+export type FormBlock = BaseDocumentType<"formBlock", {
+    form: {
+        id: string;
+        form: UmbracoForm;
+    };
+}>;
+
+export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
+"
+`;
+
+exports[`buildTypes > should support disabling data type alias emission 1`] = `
+"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+import { type UmbracoForm } from "./form";
+
+export interface UrlItem {
+    url: string | null;
+    title: string;
+    target: string | null;
+    destinationId: string | null;
+    destinationType: string | null;
+    route: {
+        path: string;
+        startItem: {
+            id: string;
+            path: string;
+        };
+    } | null;
+    linkType: string;
+}
+
+export type AdvancedRichTextEditor = {
+    markup: string;
+    blocks: (BaseBlockType<RteBlock, null>)[];
+};
+
+export type NavigationBlockList = BaseBlockListType<BaseBlockType<LinkItem, null> | BaseBlockType<LinkGroup, null>>;
+
+export type ContentBlockList = BaseBlockListType<BaseBlockType<MediaBlock, null> | BaseBlockType<RichtextBlock, null> | BaseBlockType<FormBlock, null>>;
+
+export type GridContentPageBlocksBlockGridWithoutAreas = BaseGridBlockType<UmbBlockGridDemoHeadlineBlock, null> | BaseGridBlockType<UmbBlockGridDemoImageBlock, null> | BaseGridBlockType<UmbBlockGridDemoRichTextBlock, null>;
+export type GridContentPageBlocksBlockGrid = BaseBlockGridType<GridContentPageBlocksBlockGridWithoutAreas | BaseGridBlockType<UmbBlockGridDemoTwoColumnLayoutBlock, null, (BaseGridBlockAreaType<"left", GridContentPageBlocksBlockGridWithoutAreas> | BaseGridBlockAreaType<"right", GridContentPageBlocksBlockGridWithoutAreas>)[]>>;
+
+export const ValueDropdown = {
+    Value_1: "Value 1",
+    Value_2: "Value 2",
+    Value_3: "Value 3",
+    Value_4: "Value 4",
+    Value_5: "Value 5",
+    ["0Value"]: "0 Value"
+} as const;
+export type ValueDropdown = (typeof ValueDropdown)[keyof typeof ValueDropdown];
+
+export type RichtextEditor = {
+    markup: string;
+    blocks: [
+    ];
+};
+
+export type File = BaseMediaType<"File", {
+    umbracoFile: string;
+    umbracoExtension: string;
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaArticle = BaseMediaType<"umbracoMediaArticle", {
+    umbracoFile: string;
+    umbracoExtension: "pdf" | "docx" | "doc";
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaAudio = BaseMediaType<"umbracoMediaAudio", {
+    umbracoFile: string;
+    umbracoExtension: "mp3" | "weba" | "oga" | "opus";
+    umbracoBytes: number;
+}>;
+
+export type UmbracoMediaVectorGraphics = BaseMediaType<"umbracoMediaVectorGraphics", {
+    umbracoFile: string;
+    umbracoExtension: "svg";
+    umbracoBytes: number;
+}>;
+
+export type Image = BaseMediaType<"Image", {
+    umbracoFile: {
+        url: string;
+        focalPoint: {
+            left: number;
+            top: number;
+        } | null;
+        crops: [
+            Crop<"16:9", 1600, 900>,
+            Crop<"4:3", 800, 600>,
+            Crop<"4:5", 800, 1000>
+        ];
+    };
+    umbracoWidth: number;
+    umbracoHeight: number;
+    umbracoBytes: number;
+    umbracoExtension: string;
+}>;
+
+export type Folder = BaseMediaType<"Folder", EmptyObjectType>;
+
+export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
+    umbracoFile: string;
+    umbracoExtension: "mp4" | "webm" | "ogv";
+    umbracoBytes: number;
+}>;
+
+export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
+
+export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
+
+export type ContentPage = BaseDocumentType<"contentPage", {
+    blocks?: ContentBlockList;
+}>;
+
+export type LinkItem = BaseDocumentType<"linkItem", {
+    link: unknown;
+}>;
+
+export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+    content?: RichtextEditor;
+}>;
+
+export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRichTextBlock", {
+    richText: RichtextEditor;
+}>;
+
+export type GridContentPage = BaseDocumentType<"gridContentPage", {
+    blocks?: GridContentPageBlocksBlockGrid;
+}>;
+
+export type MediaBlock = BaseDocumentType<"mediaBlock", {
+    media: (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+}>;
+
+export type Metadata = BaseDocumentType<"metadata", {
+    meta_description?: string;
+    meta_image?: MediaPickerItem<Image, [
+        Crop<"minimal", 1200, 630>
+    ]>[];
+    meta_title?: string;
+}>;
+
+export type SiteRoot = BaseDocumentType<"siteRoot", {
+    header_menu?: NavigationBlockList;
+    blocks?: ContentBlockList;
+    footer_menu?: NavigationBlockList;
+    footer_bottom_copyright?: RichtextEditor;
+    footer_bottom_menu?: UrlItem[];
+}>;
+
+export type UmbBlockGridDemoImageBlock = BaseDocumentType<"umbBlockGridDemoImageBlock", {
+    image: MediaPickerItem<Image>[];
+}>;
+
+export type PageSettings = BaseDocumentType<"pageSettings", {
+    umbracoUrlName?: string;
+    excludeSearchResult?: boolean;
+}>;
+
+export type UmbBlockGridDemoHeadlineBlock = BaseDocumentType<"umbBlockGridDemoHeadlineBlock", {
+    headline: string;
+}>;
+
+export type LinkGroup = BaseDocumentType<"linkGroup", {
+    title: string;
+    items?: NavigationBlockList;
+}>;
+
+export type RteBlock = BaseDocumentType<"rteBlock", {
+    nestedProperty: string;
+}>;
+
+export type FormBlock = BaseDocumentType<"formBlock", {
+    form: {
+        id: string;
+        form: UmbracoForm;
+    };
+}>;
+
+export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
+"
+`;
