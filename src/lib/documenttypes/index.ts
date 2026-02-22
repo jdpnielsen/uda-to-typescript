@@ -99,7 +99,9 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 			factory.createIdentifier(variableIdentifier),
 			undefined,
 			factory.createTypeReferenceNode(
-				factory.createIdentifier('BaseDocumentType'),
+				documentType.Permissions.IsElementType
+					? factory.createIdentifier('BaseElementType')
+					: factory.createIdentifier('BaseDocumentType'),
 				[
 					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
 					documentProperties,

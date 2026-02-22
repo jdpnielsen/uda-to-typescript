@@ -17,7 +17,7 @@ describe('buildTypes', () => {
 
 		const actual = printType(output.map((e) => e));
 		expect(actual.trim()).toMatchInlineSnapshot(`
-			"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+			"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
 			import { type UmbracoForm } from "./form";"
 		`);
 	});

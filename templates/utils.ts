@@ -1,4 +1,4 @@
-import type { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseDocumentType, BaseGridBlockType, BaseMediaType, EmptyObjectType, ObjectType } from './base-types';
+import type { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseDocumentType, BaseElementType, BaseGridBlockType, BaseMediaType, EmptyObjectType, ObjectType } from './base-types';
 import type { UmbracoForm } from './form';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
@@ -79,7 +79,7 @@ export type UnexpandBlockGrid<
  * // type ExpandableKeys = 'foo' | 'bar';
  * ```
  */
-export type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends unknown
+export type ExpandableDocumentKeys<Doc extends BaseElementType> = Doc extends unknown
 	? ExpandablePropertyKeys<Doc['properties']>
 	: never;
 
@@ -162,8 +162,8 @@ export type UnexpandPropertyExpandables<Doc extends ObjectType, BlackListedKeys 
  * @param Doc The document type to unexpand.
  * @param BlackListedKeys The keys that should not be unexpanded.
  */
-export type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys extends ExpandableDocumentKeys<Doc> | undefined> = Doc extends unknown
-	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
+export type UnexpandDocumentExpandables<Doc extends BaseElementType, BlackListedKeys extends ExpandableDocumentKeys<Doc> | undefined> = Doc extends unknown
+	? BaseElementType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
 	: never;
 
 export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | '$all' | undefined | [];
@@ -177,12 +177,12 @@ export type ExpandResult<Doc extends BaseDocumentType, Param extends ExpandParam
 				: UnexpandDocumentExpandables<Doc, Param[number]>
 			: Doc;
 
-type DocFields<T extends BaseDocumentType> = keyof T['properties'];
+type DocFields<T extends BaseElementType> = keyof T['properties'];
 
-export type Fields<T extends BaseDocumentType> = ['$all'] | (DocFields<T> | {
-	[K in Exclude<ExpandableDocumentKeys<T>, undefined>]?: NonNullable<T['properties'][K]> extends BaseDocumentType[]
+export type Fields<T extends BaseElementType> = ['$all'] | (DocFields<T> | {
+	[K in Exclude<ExpandableDocumentKeys<T>, undefined>]?: NonNullable<T['properties'][K]> extends BaseElementType[]
 		? Fields<NonNullable<T['properties'][K]>[number]>
-		: NonNullable<T['properties'][K]> extends BaseDocumentType
+		: NonNullable<T['properties'][K]> extends BaseElementType
 			? Fields<NonNullable<T['properties'][K]>>
 			: never;
 })[];
