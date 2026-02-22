@@ -163,7 +163,7 @@ export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio |
 
 export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
-export type ContentPage = BaseDocumentType<"contentPage", {
+export type ContentPage = BaseDocumentType<"contentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: ContentBlockList;
 }>;
 
@@ -179,7 +179,7 @@ export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRi
     richText: RichtextEditor;
 }>;
 
-export type GridContentPage = BaseDocumentType<"gridContentPage", {
+export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: GridContentPageBlocksBlockGrid;
 }>;
 
@@ -195,7 +195,7 @@ export type Metadata = BaseDocumentType<"metadata", {
     meta_title?: string;
 }>;
 
-export type SiteRoot = BaseDocumentType<"siteRoot", {
+export type SiteRoot = BaseDocumentType<"siteRoot", Metadata["properties"] & PageSettings["properties"] & {
     header_menu?: NavigationBlockList;
     blocks?: ContentBlockList;
     footer_menu?: NavigationBlockList;
@@ -399,7 +399,7 @@ export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio |
 
 export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
-export type ContentPage = BaseDocumentType<"contentPage", {
+export type ContentPage = BaseDocumentType<"contentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: ContentBlockList;
 }>;
 
@@ -415,7 +415,7 @@ export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRi
     richText: RichtextEditor;
 }>;
 
-export type GridContentPage = BaseDocumentType<"gridContentPage", {
+export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: GridContentPageBlocksBlockGrid;
 }>;
 
@@ -431,7 +431,7 @@ export type Metadata = BaseDocumentType<"metadata", {
     meta_title?: string;
 }>;
 
-export type SiteRoot = BaseDocumentType<"siteRoot", {
+export type SiteRoot = BaseDocumentType<"siteRoot", Metadata["properties"] & PageSettings["properties"] & {
     header_menu?: NavigationBlockList;
     blocks?: ContentBlockList;
     footer_menu?: NavigationBlockList;
@@ -575,7 +575,7 @@ export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio |
 
 export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
-export type ContentPage = BaseDocumentType<"contentPage", {
+export type ContentPage = BaseDocumentType<"contentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: ContentBlockList;
 }>;
 
@@ -591,7 +591,7 @@ export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRi
     richText: RichtextEditor;
 }>;
 
-export type GridContentPage = BaseDocumentType<"gridContentPage", {
+export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: GridContentPageBlocksBlockGrid;
 }>;
 
@@ -607,7 +607,7 @@ export type Metadata = BaseDocumentType<"metadata", {
     meta_title?: string;
 }>;
 
-export type SiteRoot = BaseDocumentType<"siteRoot", {
+export type SiteRoot = BaseDocumentType<"siteRoot", Metadata["properties"] & PageSettings["properties"] & {
     header_menu?: NavigationBlockList;
     blocks?: ContentBlockList;
     footer_menu?: NavigationBlockList;
