@@ -39,19 +39,19 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	if (options.expand === '$all') {
 		queryParams.set('expand', 'properties[$all]');
 	} else if (Array.isArray(options.expand) && options.expand.length !== 0) {
-		queryParams.append('expand', `properties[${options.expand.join(',')}]`);
+		queryParams.set('expand', `properties[${options.expand.join(',')}]`);
 	}
 
 	if (options.fetch?.ancestors) {
-		queryParams.set('fetch', `ancestors:${options.fetch.ancestors}`);
+		queryParams.append('fetch', `ancestors:${options.fetch.ancestors}`);
 	}
 
 	if (options.fetch?.descendants) {
-		queryParams.set('fetch', `descendants:${options.fetch.descendants}`);
+		queryParams.append('fetch', `descendants:${options.fetch.descendants}`);
 	}
 
 	if (options.fetch?.children) {
-		queryParams.set('fetch', `children:${options.fetch?.children}`);
+		queryParams.append('fetch', `children:${options.fetch?.children}`);
 	}
 
 	if (options.filter?.contentType) {
