@@ -1,7 +1,7 @@
 {
 	"name": "@jdpnielsen/uda-to-typescript",
 	"type": "module",
-	"version": "1.0.0",
+	"version": "17.0.0",
 	"description": "CLI to convert Umbraco UDA files to typescript definitions",
 	"author": {
 		"name": "Joshua Nielsen",

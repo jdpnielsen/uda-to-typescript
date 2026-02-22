@@ -11,7 +11,7 @@ import { main } from './lib/main';
 const program = new Command();
 
 program
-	.version('1.0.0')
+	.version('17.0.0')
 	.name('uda-to-typescript')
 	.description('CLI to convert Umbraco UDA files to typescript definitions')
 	.option('-c, --config <string>', 'Path for config file. Example: --config ./udaconvert.config.ts')
