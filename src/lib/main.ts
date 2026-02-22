@@ -1,12 +1,15 @@
-import { writeFile, copyFile, readdir, mkdir } from 'fs/promises';
-import { collectArtifacts } from './helpers/collect-artifacts';
-import { buildTypes } from './build-types';
+/* eslint-disable no-console */
+import type { PathLike } from 'node:fs';
+import { copyFile, mkdir, readdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { cwd } from 'node:process';
+
 import ts from 'typescript';
-import path from 'path';
-import type { PathLike } from 'fs';
-import type { UDAConvertConfiguration } from './define-config';
+
+import { buildTypes } from './build-types';
 import { dataTypeMap } from './datatypes';
-import { cwd } from 'process';
+import type { UDAConvertConfiguration } from './define-config';
+import { collectArtifacts } from './helpers/collect-artifacts';
 
 /**
  * Executes the full conversion pipeline from UDA artifacts to TypeScript output.
@@ -46,12 +49,12 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 		name,
 		ts.ScriptTarget.ESNext,
 		true,
-		ts.ScriptKind.TS
-	)
+		ts.ScriptKind.TS,
+	);
 
 	const printer = ts.createPrinter({
 		omitTrailingSemicolon: true,
-	})
+	});
 
 	// TODO: support custom templates
 	await cloneTemplates(path.resolve(__dirname, '../templates'), dir);

@@ -1,4 +1,4 @@
-import type { HistoryCleanup, PropertyGroup, PropertyType, Permissions, Dependency } from './shared';
+import type { Dependency, HistoryCleanup, Permissions, PropertyGroup, PropertyType } from './shared';
 import type { UDI } from './utils';
 
 export interface DocumentType {

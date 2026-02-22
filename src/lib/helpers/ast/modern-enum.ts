@@ -1,6 +1,7 @@
 import ts, { factory } from 'typescript';
-import { newLineAST } from './newline';
+
 import { exportToken } from './export-token';
+import { newLineAST } from './newline';
 
 /**
  * Creates a const object and a type alias that act like an enum.
@@ -25,7 +26,7 @@ import { exportToken } from './export-token';
  * ```
  *
  */
-export function createModernEnumHandler(name: string, items: { key: string, value: ts.Expression | string }[], shouldExport = true): ts.Node[] {
+export function createModernEnumHandler(name: string, items: { key: string; value: ts.Expression | string }[], shouldExport = true): ts.Node[] {
 	return [
 		factory.createVariableStatement(
 			shouldExport
@@ -42,16 +43,16 @@ export function createModernEnumHandler(name: string, items: { key: string, valu
 								shouldBeComputed(item.key) ? factory.createComputedPropertyName(factory.createStringLiteral(item.key)) : item.key,
 								typeof item.value === 'string' ? factory.createStringLiteral(item.value) : item.value,
 							)),
-							true
+							true,
 						),
 						factory.createTypeReferenceNode(
 							factory.createIdentifier('const'),
-							undefined
-						)
-					)
+							undefined,
+						),
+					),
 				)],
-				ts.NodeFlags.Const
-			)
+				ts.NodeFlags.Const,
+			),
 		),
 		newLineAST,
 		factory.createTypeAliasDeclaration(
@@ -63,20 +64,20 @@ export function createModernEnumHandler(name: string, items: { key: string, valu
 			factory.createIndexedAccessTypeNode(
 				factory.createTypeQueryNode(
 					factory.createIdentifier(name),
-					undefined
+					undefined,
 				),
 				factory.createTypeOperatorNode(
 					ts.SyntaxKind.KeyOfKeyword,
 					factory.createTypeQueryNode(
 						factory.createIdentifier(name),
-						undefined
-					)
-				)
-			)
-		)
+						undefined,
+					),
+				),
+			),
+		),
 	];
 }
 
 function shouldBeComputed(value: string) {
-	return '0123456789-"`\''.includes(value[0])
+	return '0123456789-"`\''.includes(value[0]);
 }

@@ -1,8 +1,9 @@
 import ts, { factory } from 'typescript';
+
 import type { HandlerConfig } from '.';
 import type { DataType } from '../types/data-type';
 
-type LabelConfiguration = {
+interface LabelConfiguration {
 	umbracoDataValueType?: string;
 }
 
@@ -10,7 +11,7 @@ export const labelHandler = {
 	editorAlias: 'Umbraco.Label' as const,
 	build: () => [],
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 function reference(dataType: DataType): ts.TypeNode {
 	const config = (dataType.Configuration || {}) as LabelConfiguration;

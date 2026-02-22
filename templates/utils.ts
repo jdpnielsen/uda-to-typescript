@@ -1,5 +1,5 @@
 import type { BaseBlockGridType, BaseBlockListType, BaseBlockType, BaseDocumentType, BaseGridBlockType, BaseMediaType, EmptyObjectType, ObjectType } from './base-types';
-import { UmbracoForm } from './form';
+import type { UmbracoForm } from './form';
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 type KeysOfBaseType<Obj extends ObjectType, BaseType> = {
@@ -20,7 +20,7 @@ export type UnexpandDocumentType<Doc extends BaseDocumentType> = Doc extends unk
  * Unexpands a media type.
  * In practice this means that all properties are removed from the media type.
  */
-export type UnexpandMediatType<Media extends BaseMediaType> = Media extends unknown
+export type UnexpandMediaType<Media extends BaseMediaType> = Media extends unknown
 	? Overwrite<Media, { properties: EmptyObjectType }>
 	: never;
 
@@ -53,7 +53,7 @@ export type UnexpandBlockList<
 export type UnexpandBlockGrid<
 	BlockGrid extends BaseBlockGridType,
 	BlackListedContentKeys extends ExpandableDocumentKeys<BlockGrid['items'][number]['content']> | undefined,
-	BlackListedSettingsKeys extends ExpandableDocumentKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined
+	BlackListedSettingsKeys extends ExpandableDocumentKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined,
 > = BaseBlockGridType<
 	BaseGridBlockType<
 		UnexpandDocumentExpandables<BlockGrid['items'][number]['content'], BlackListedContentKeys>,
@@ -65,7 +65,7 @@ export type UnexpandBlockGrid<
 
 /**
  * Gets all expandable properties of a document type.
- * @param Doc The Docutment to get the expandable keys from.
+ * @param Doc The Document to get the expandable keys from.
  * @returns The expandable keys.
  * @example
  * ```ts
@@ -101,15 +101,15 @@ export type ExpandableDocumentKeys<Doc extends BaseDocumentType> = Doc extends u
  */
 export type ExpandablePropertyKeys<Properties extends ObjectType> = Properties extends unknown
 	? KeysOfBaseType<Properties, BaseDocumentType>
-		| KeysOfBaseType<Properties, BaseDocumentType[]>
-		| KeysOfBaseType<Properties, BaseBlockListType>
-		| KeysOfBaseType<Properties, BaseBlockType>
-		| KeysOfBaseType<Properties, { form: UmbracoForm }>
-		| KeysOfBaseType<Properties, { form: UmbracoForm }[]>
-		| KeysOfBaseType<Properties, UmbracoForm>
-		| KeysOfBaseType<Properties, BaseBlockGridType>
-		| KeysOfBaseType<Properties, BaseMediaType>
-		| KeysOfBaseType<Properties, BaseMediaType[]>
+	| KeysOfBaseType<Properties, BaseDocumentType[]>
+	| KeysOfBaseType<Properties, BaseBlockListType>
+	| KeysOfBaseType<Properties, BaseBlockType>
+	| KeysOfBaseType<Properties, { form: UmbracoForm }>
+	| KeysOfBaseType<Properties, { form: UmbracoForm }[]>
+	| KeysOfBaseType<Properties, UmbracoForm>
+	| KeysOfBaseType<Properties, BaseBlockGridType>
+	| KeysOfBaseType<Properties, BaseMediaType>
+	| KeysOfBaseType<Properties, BaseMediaType[]>
 	: never;
 
 type UnexpandNestedProperty<Prop> = Prop extends BaseDocumentType | null
@@ -122,7 +122,7 @@ type UnexpandNestedProperty<Prop> = Prop extends BaseDocumentType | null
 			? UnexpandBlockGrid<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>, ExpandableDocumentKeys<NonNullable<Prop['items'][number]['settings']>>>
 			: Prop extends BaseBlockListType
 				? UnexpandBlockList<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>>
-				: Prop
+				: Prop;
 
 export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
 	? MaybeUnexpand<Prop>
@@ -135,9 +135,9 @@ export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
 				: Prop extends BaseBlockType
 					? UnexpandBlock<Prop, undefined>
 					: Prop extends BaseMediaType
-						? UnexpandMediatType<Prop>
+						? UnexpandMediaType<Prop>
 						: Prop extends BaseMediaType[]
-							? UnexpandMediatType<Prop[number]>[]
+							? UnexpandMediaType<Prop[number]>[]
 							: Prop extends { form: UmbracoForm }
 								? Overwrite<Prop, { form: null }>
 								: Prop extends { form: UmbracoForm }[]

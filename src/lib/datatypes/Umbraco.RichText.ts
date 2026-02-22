@@ -1,4 +1,5 @@
 import ts, { factory } from 'typescript';
+
 import type { HandlerConfig } from '.';
 
 export const richTextHandler = {
@@ -9,7 +10,7 @@ export const richTextHandler = {
 			undefined,
 			factory.createIdentifier('markup'),
 			undefined,
-			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
-		)
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+		),
 	]),
-} satisfies HandlerConfig
+} satisfies HandlerConfig;

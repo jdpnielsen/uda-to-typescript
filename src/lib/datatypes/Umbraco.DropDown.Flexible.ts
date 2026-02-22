@@ -1,25 +1,24 @@
 import { pascalCase } from 'change-case';
-import ts, { factory } from 'typescript'
-
-import type { DataType } from '../types/data-type';
+import ts, { factory } from 'typescript';
 
 import type { HandlerConfig } from '.';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { parseBooleanConfigValue } from '../helpers/parse-boolean';
+import type { DataType } from '../types/data-type';
 
 /** @deprecated Leftover configuration from Umbraco v13 */
-type Item = { id: number; value: string };
+interface Item { id: number; value: string }
 
-export type DropdownConfig = {
+export interface DropdownConfig {
 	multiple?: boolean | '0' | '1';
 	items?: string[] | Item[];
-};
+}
 
 export const dropdownHandler = {
 	editorAlias: 'Umbraco.DropDown.Flexible' as const,
 	build,
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);
@@ -50,7 +49,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 		const fallback = factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
 
 		if (isMultiple) {
-			return factory.createArrayTypeNode(fallback)
+			return factory.createArrayTypeNode(fallback);
 		}
 
 		return fallback;
@@ -58,11 +57,11 @@ export function reference(dataType: DataType): ts.TypeNode {
 
 	const dropDownType = factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
-		undefined
+		undefined,
 	);
 
 	if (isMultiple) {
-		return factory.createArrayTypeNode(dropDownType)
+		return factory.createArrayTypeNode(dropDownType);
 	}
 
 	return dropDownType;
@@ -75,5 +74,5 @@ function getItems(config: Partial<DropdownConfig>): string[] {
 
 	return config.items
 		.map((item) => typeof item === 'string' ? item : item?.value)
-		.filter(item => typeof item === 'string');
+		.filter((item) => typeof item === 'string');
 }

@@ -1,5 +1,6 @@
 import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
+
 import { createModernEnumHandler } from './modern-enum';
 
 describe('createModernEnumHandler', () => {
@@ -11,10 +12,12 @@ describe('createModernEnumHandler', () => {
 		const nodes = createModernEnumHandler('MyEnum', items);
 		const printer = ts.createPrinter();
 		const result = nodes
-			.map(node => printer.printNode(
+			.map((node) => printer.printNode(
 				ts.EmitHint.Unspecified,
 				node,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest))).join('');
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
+			))
+			.join('');
 
 		expect(result).toEqual(`export const MyEnum = {
     foo: "bar",

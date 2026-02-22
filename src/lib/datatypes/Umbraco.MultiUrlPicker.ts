@@ -1,4 +1,4 @@
-import ts, { factory } from 'typescript'
+import ts, { factory } from 'typescript';
 
 import type { HandlerConfig } from '.';
 
@@ -7,7 +7,7 @@ export const multiurlPickerHandler = {
 	init,
 	build: () => [],
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 const UrlItem = `
 export interface UrlItem {
@@ -35,7 +35,7 @@ function init(): ts.Node[] {
 		'file.ts',
 		UrlItem,
 		ts.ScriptTarget.Latest,
-		true
+		true,
 	);
 
 	return Array.from(source.statements);
@@ -44,8 +44,8 @@ function init(): ts.Node[] {
 function reference(): ts.TypeNode {
 	const checkboxListType = factory.createTypeReferenceNode(
 		factory.createIdentifier('UrlItem'),
-		undefined
+		undefined,
 	);
 
-	return factory.createArrayTypeNode(checkboxListType)
+	return factory.createArrayTypeNode(checkboxListType);
 }

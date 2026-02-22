@@ -1,4 +1,5 @@
-import ts, { factory } from 'typescript';
+import type ts from 'typescript';
+import { factory } from 'typescript';
 
 /**
  * Creates a union type with the given type and null.
@@ -6,6 +7,6 @@ import ts, { factory } from 'typescript';
 export function maybeNull(value: ts.TypeNode): ts.UnionTypeNode {
 	return factory.createUnionTypeNode([
 		value,
-		factory.createLiteralTypeNode(factory.createNull())
-	])
+		factory.createLiteralTypeNode(factory.createNull()),
+	]);
 }

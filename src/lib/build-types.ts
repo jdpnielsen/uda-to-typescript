@@ -1,20 +1,21 @@
-import ts, { factory } from 'typescript';
 import { pascalCase } from 'change-case';
+import ts, { factory } from 'typescript';
 
-import type { ArtifactContainer } from './helpers/collect-artifacts';
-import { type DataTypeConfig, resolveDataTypeHandler } from './datatypes';
+import type { DataTypeConfig } from './datatypes';
+import { resolveDataTypeHandler } from './datatypes';
 import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
-import { getPickableTypes } from './helpers/pickable-document-type';
-import { mediaTypeHandler } from './media-types';
 import { parseStringStatements } from './helpers/ast/parse-string';
 import { parseTypeNode } from './helpers/ast/parse-type';
+import type { ArtifactContainer } from './helpers/collect-artifacts';
+import { getPickableTypes } from './helpers/pickable-document-type';
+import { mediaTypeHandler } from './media-types';
 import type { DataType } from './types/data-type';
 
 /**
  * Shared context passed to artifact handlers while generating AST nodes.
  */
-export type HandlerContext = {
+export interface HandlerContext {
 	artifacts: ArtifactContainer;
 	dataTypeHandlers: DataTypeConfig;
 }
@@ -22,7 +23,7 @@ export type HandlerContext = {
 /**
  * Additional generation options for `buildTypes`.
  */
-export type BuildTypesOptions = {
+export interface BuildTypesOptions {
 	/**
 	 * Emits `export type <DataTypeName> = ...` aliases for every data type.
 	 *
@@ -60,56 +61,56 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseDocumentType')
+						ts.factory.createIdentifier('BaseDocumentType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('EmptyObjectType')
+						ts.factory.createIdentifier('EmptyObjectType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseGridBlockType')
+						ts.factory.createIdentifier('BaseGridBlockType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseBlockType')
+						ts.factory.createIdentifier('BaseBlockType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseGridBlockAreaType')
+						ts.factory.createIdentifier('BaseGridBlockAreaType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseBlockListType')
+						ts.factory.createIdentifier('BaseBlockListType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseBlockGridType')
+						ts.factory.createIdentifier('BaseBlockGridType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('BaseMediaType')
+						ts.factory.createIdentifier('BaseMediaType'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('Crop')
+						ts.factory.createIdentifier('Crop'),
 					),
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('MediaPickerItem')
+						ts.factory.createIdentifier('MediaPickerItem'),
 					),
-				])
+				]),
 			),
-			ts.factory.createStringLiteral('./base-types')
+			ts.factory.createStringLiteral('./base-types'),
 		),
 		ts.factory.createImportDeclaration(
 			undefined,
@@ -120,11 +121,11 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
-						ts.factory.createIdentifier('UmbracoForm')
+						ts.factory.createIdentifier('UmbracoForm'),
 					),
-				])
+				]),
 			),
-			ts.factory.createStringLiteral('./form')
+			ts.factory.createStringLiteral('./form'),
 		),
 		newLineAST,
 	];
@@ -204,7 +205,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 				undefined,
 				ts.factory.createUnionTypeNode(
 					getPickableTypes(mediaTypes)
-						.map((mediaType) => mediaTypeHandler.reference(mediaType, context))
+						.map((mediaType) => mediaTypeHandler.reference(mediaType, context)),
 				),
 			),
 		);
@@ -236,7 +237,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 				undefined,
 				ts.factory.createUnionTypeNode(
 					getPickableTypes(documentTypes)
-						.map((documentType) => documentHandler.reference(documentType, context))
+						.map((documentType) => documentHandler.reference(documentType, context)),
 				),
 			),
 		);
@@ -245,7 +246,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 	return ts.factory.createNodeArray(statements);
 }
 
-type BuildDataTypeAliasesContext = {
+interface BuildDataTypeAliasesContext {
 	artifacts: ArtifactContainer;
 	dataTypes: DataType[];
 	dataTypeHandlers: DataTypeConfig;
@@ -305,7 +306,7 @@ function buildDataTypeAliases(context: BuildDataTypeAliasesContext): ts.TypeAlia
 				factory.createIdentifier(aliasName),
 				undefined,
 				reference,
-			)
+			),
 		);
 
 		occupiedNames.add(aliasName);

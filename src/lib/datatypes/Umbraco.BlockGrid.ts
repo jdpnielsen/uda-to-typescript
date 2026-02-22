@@ -1,20 +1,22 @@
-import ts, { factory } from 'typescript';
-import type { HandlerConfig } from '.';
-import { convertGuidToId } from '../helpers/parse-udi';
 import { pascalCase } from 'change-case';
-import type { GUID } from '../types/utils';
-import type { DataType } from '../types/data-type';
-import type { ArtifactContainer } from '../helpers/collect-artifacts';
-import type { DocumentType } from '../types/document-type';
-import { exportToken } from '../helpers/ast/export-token';
+import type ts from 'typescript';
+import { factory } from 'typescript';
 
-type BlockConfiguration = {
+import type { HandlerConfig } from '.';
+import { exportToken } from '../helpers/ast/export-token';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
+import { convertGuidToId } from '../helpers/parse-udi';
+import type { DataType } from '../types/data-type';
+import type { DocumentType } from '../types/document-type';
+import type { GUID } from '../types/utils';
+
+interface BlockConfiguration {
 	blocks?: Block[];
 	validationLimit?: {
 		min?: number | null;
 		max?: number | null;
-	},
-	useLiveEditing: false
+	};
+	useLiveEditing?: false;
 }
 
 interface Block {
@@ -53,13 +55,13 @@ export const blockGridHandler = {
 function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 	const config = dataType.Configuration as BlockConfiguration;
 	const variableIdentifier = pascalCase(dataType.Name);
-	const variableWithoutAreasIdentifier = pascalCase(dataType.Name + 'WithoutAreas');
+	const variableWithoutAreasIdentifier = pascalCase(`${dataType.Name}WithoutAreas`);
 
 	const blocksWithArea: ts.TypeReferenceNode[] = [];
 	const blocksWithoutArea: ts.TypeReferenceNode[] = [];
 
 	(config.blocks || [])
-		.forEach(block => {
+		.forEach((block) => {
 			const contentElement = artifacts['document-type'].get(convertGuidToId(block.contentElementTypeKey));
 			const settingsElement = block.settingsElementTypeKey
 				? artifacts['document-type'].get(convertGuidToId(block.settingsElementTypeKey))
@@ -91,7 +93,7 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 						return buildBlock(
 							contentEl,
 							settingsEl,
-							[]
+							[],
 						);
 					});
 
@@ -99,16 +101,16 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 					factory.createIdentifier('BaseGridBlockAreaType'),
 					[
 						factory.createLiteralTypeNode(
-							factory.createStringLiteral(area.alias)
+							factory.createStringLiteral(area.alias),
 						),
 						area.specifiedAllowance.length === 0
 							? factory.createTypeReferenceNode(
-								factory.createIdentifier(variableWithoutAreasIdentifier),
-							)
+									factory.createIdentifier(variableWithoutAreasIdentifier),
+								)
 							: factory.createUnionTypeNode(specifiedAllowances),
-					]
+					],
 				);
-			})
+			});
 
 			const blockNode = buildBlock(contentElement, settingsElement, areas);
 
@@ -124,7 +126,7 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 			[exportToken],
 			factory.createIdentifier(variableWithoutAreasIdentifier),
 			undefined,
-			factory.createUnionTypeNode(blocksWithoutArea)
+			factory.createUnionTypeNode(blocksWithoutArea),
 		),
 		factory.createTypeAliasDeclaration(
 			[exportToken],
@@ -138,8 +140,8 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 					),
 					...blocksWithArea,
 				])],
-			)
-		)
+			),
+		),
 	];
 }
 
@@ -148,7 +150,7 @@ function reference(dataType: DataType): ts.TypeNode {
 
 	return factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
-		undefined
+		undefined,
 	);
 }
 
@@ -157,17 +159,17 @@ function buildBlock(contentElement: DocumentType, settingsElement?: DocumentType
 		factory.createIdentifier('BaseGridBlockType'),
 		[
 			factory.createTypeReferenceNode(
-				factory.createIdentifier(pascalCase(contentElement.Alias))
+				factory.createIdentifier(pascalCase(contentElement.Alias)),
 			),
 			settingsElement
 				? factory.createTypeReferenceNode(
-					factory.createIdentifier(pascalCase(settingsElement.Alias))
-				)
+						factory.createIdentifier(pascalCase(settingsElement.Alias)),
+					)
 				: factory.createLiteralTypeNode(factory.createNull()),
 			...(areas.length !== 0
 				? [factory.createArrayTypeNode(factory.createUnionTypeNode(areas))]
 				: []
-			)
-		]
-	)
+			),
+		],
+	);
 }

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
+import type { PropertyGroup, PropertyType } from '../types/shared';
 import { collectProperties } from './build-properties';
-import { PropertyGroup, PropertyType } from '../types/shared';
 
 describe('collectProperties', () => {
 	it('returns an empty array for an empty MediaType', () => {

@@ -4,6 +4,6 @@ export const emptyObjectAST = factory.createTypeReferenceNode(
 	factory.createIdentifier('Record'),
 	[
 		factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-		factory.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword)
-	]
+		factory.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword),
+	],
 );

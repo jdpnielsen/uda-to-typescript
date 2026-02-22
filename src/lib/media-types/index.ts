@@ -1,15 +1,16 @@
-import ts, { factory } from 'typescript';
-import type { MediaType } from '../types/media-type';
 import { pascalCase } from 'change-case';
-import { parseUdi } from '../helpers/parse-udi';
-import { collectProperties } from '../helpers/build-properties';
-import type { HandlerContext } from '../build-types';
-import { parseTypeNode } from '../helpers/ast/parse-type';
-import type { PropertyType } from '../types/shared';
-import type { ArtifactContainer } from '../helpers/collect-artifacts';
-import { resolveDataTypeHandler } from '../datatypes';
+import ts, { factory } from 'typescript';
 
-export type MediaTypeHandler = {
+import type { HandlerContext } from '../build-types';
+import { resolveDataTypeHandler } from '../datatypes';
+import { parseTypeNode } from '../helpers/ast/parse-type';
+import { collectProperties } from '../helpers/build-properties';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
+import { parseUdi } from '../helpers/parse-udi';
+import type { MediaType } from '../types/media-type';
+import type { PropertyType } from '../types/shared';
+
+export interface MediaTypeHandler {
 	build: (dataType: MediaType, context: HandlerContext) => ts.Node[];
 	reference: (dataType: MediaType, context: HandlerContext) => ts.TypeReferenceNode;
 }
@@ -17,7 +18,7 @@ export type MediaTypeHandler = {
 export const mediaTypeHandler: MediaTypeHandler = {
 	build,
 	reference,
-}
+};
 
 function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerContext): ts.Node[] {
 	const variableIdentifier = pascalCase(mediaType.Alias);
@@ -26,7 +27,7 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 	const extentions = getExtentions(props, artifacts);
 
 	const properties = props
-		.map(propertyType => {
+		.map((propertyType) => {
 			const { id: dataTypeId } = parseUdi(propertyType.DataType);
 			const dataType = artifacts['data-type'].get(dataTypeId);
 
@@ -74,7 +75,7 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 				undefined,
 				reference,
 			);
-		})
+		});
 
 	return [
 		factory.createTypeAliasDeclaration(
@@ -87,10 +88,10 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 					factory.createLiteralTypeNode(factory.createStringLiteral(mediaType.Alias)),
 					properties.length === 0
 						? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
-						: factory.createTypeLiteralNode(properties)
-				]
-			)
-		)
+						: factory.createTypeLiteralNode(properties),
+				],
+			),
+		),
 	];
 }
 
@@ -98,12 +99,12 @@ function reference(MediaType: MediaType): ts.TypeReferenceNode {
 	const variableIdentifier = pascalCase(MediaType.Alias);
 
 	return factory.createTypeReferenceNode(
-		factory.createIdentifier(variableIdentifier)
+		factory.createIdentifier(variableIdentifier),
 	);
 }
 
 function getExtentions(properties: PropertyType[], artifacts: ArtifactContainer) {
-	const uploadField = properties.find(prop => {
+	const uploadField = properties.find((prop) => {
 		const { id: dataTypeId } = parseUdi(prop.DataType);
 		const dataType = artifacts['data-type'].get(dataTypeId);
 		return dataType?.EditorAlias === 'Umbraco.UploadField';
@@ -127,8 +128,8 @@ function getExtentions(properties: PropertyType[], artifacts: ArtifactContainer)
 	};
 	const fileExtensions = Array.isArray(config.fileExtensions)
 		? config.fileExtensions
-			.map((extension) => typeof extension === 'string' ? extension : extension?.value)
-			.filter((extension): extension is string => typeof extension === 'string' && extension !== '')
+				.map((extension) => typeof extension === 'string' ? extension : extension?.value)
+				.filter((extension): extension is string => typeof extension === 'string' && extension !== '')
 		: [];
 
 	if (fileExtensions.length === 0) {
@@ -136,6 +137,6 @@ function getExtentions(properties: PropertyType[], artifacts: ArtifactContainer)
 	}
 
 	return factory.createUnionTypeNode(
-		fileExtensions.map((extension) => factory.createLiteralTypeNode(factory.createStringLiteral(extension)))
-	)
+		fileExtensions.map((extension) => factory.createLiteralTypeNode(factory.createStringLiteral(extension))),
+	);
 }

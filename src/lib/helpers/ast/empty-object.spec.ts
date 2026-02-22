@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import { emptyObjectAST } from './empty-object';
 import ts from 'typescript';
+import { describe, expect, it } from 'vitest';
+
+import { emptyObjectAST } from './empty-object';
 
 describe('emptyObjectAST', () => {
 	it('should create a type reference node with Record and string/never types', () => {
@@ -10,8 +11,8 @@ describe('emptyObjectAST', () => {
 			'',
 			ts.ScriptTarget.ESNext,
 			true,
-			ts.ScriptKind.TS
-		)
+			ts.ScriptKind.TS,
+		);
 
 		const printer = ts.createPrinter({});
 

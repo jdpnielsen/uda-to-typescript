@@ -1,4 +1,4 @@
-import type { PropertyGroup, PropertyType, Dependency, Permissions } from './shared';
+import type { Dependency, Permissions, PropertyGroup, PropertyType } from './shared';
 import type { UDI } from './utils';
 
 export interface MediaType {

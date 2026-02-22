@@ -1,17 +1,16 @@
 import { pascalCase } from 'change-case';
-import ts, { factory } from 'typescript'
-
-import type { DataType } from '../types/data-type';
+import ts, { factory } from 'typescript';
 
 import type { HandlerConfig } from '.';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
+import type { DataType } from '../types/data-type';
 
 /** @deprecated Leftover configuration from Umbraco v13 */
-type Item = { id: number; value: string };
+interface Item { id: number; value: string }
 
-export type CheckboxListConfig = {
-	items?: string[] | Item[]
-};
+export interface CheckboxListConfig {
+	items?: string[] | Item[];
+}
 
 export const checkboxListHandler = {
 	editorAlias: 'Umbraco.CheckBoxList' as const,
@@ -45,16 +44,16 @@ export function reference(dataType: DataType): ts.TypeNode {
 
 	if (items.length === 0) {
 		return factory.createArrayTypeNode(
-			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
-		)
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+		);
 	}
 
 	const checkboxListType = factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
-		undefined
+		undefined,
 	);
 
-	return factory.createArrayTypeNode(checkboxListType)
+	return factory.createArrayTypeNode(checkboxListType);
 }
 
 function getItems(config: Partial<CheckboxListConfig>): string[] {
@@ -64,5 +63,5 @@ function getItems(config: Partial<CheckboxListConfig>): string[] {
 
 	return config.items
 		.map((item) => typeof item === 'string' ? item : item?.value)
-		.filter(item => typeof item === 'string');
+		.filter((item) => typeof item === 'string');
 }

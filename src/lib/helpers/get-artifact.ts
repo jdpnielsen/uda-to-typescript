@@ -1,14 +1,14 @@
-import { ArtifactContainer } from './collect-artifacts';
-import { parseUdi } from './parse-udi';
 import type { DataType } from '../types/data-type';
 import type { DocumentType } from '../types/document-type';
 import type { MediaType } from '../types/media-type';
-import { Artifact, typedUDI } from '../types/utils';
+import type { Artifact, typedUDI } from '../types/utils';
+import type { ArtifactContainer } from './collect-artifacts';
+import { parseUdi } from './parse-udi';
 
-type ArtifactMap = {
-	'data-type': DataType,
-	'document-type': DocumentType,
-	'media-type': MediaType,
+interface ArtifactMap {
+	'data-type': DataType;
+	'document-type': DocumentType;
+	'media-type': MediaType;
 }
 
 /**

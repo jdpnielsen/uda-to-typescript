@@ -1,9 +1,11 @@
 import ts from 'typescript';
-import { describe, it, expect } from 'vitest';
-import { dropdownHandler, type DropdownConfig } from './Umbraco.DropDown.Flexible';
-import type { DataType } from '../types/data-type';
+import { describe, expect, it } from 'vitest';
 
-describe('Umbraco.DropDown.Flexible', () => {
+import type { DataType } from '../types/data-type';
+import { dropdownHandler } from './Umbraco.DropDown.Flexible';
+import type { DropdownConfig } from './Umbraco.DropDown.Flexible';
+
+describe('umbraco.DropDown.Flexible', () => {
 	describe('legacy data format', () => {
 		it('should handle multi mode', () => {
 			const dataType = createDataType<DropdownConfig>('Umbraco.DropDown.Flexible', {
@@ -173,7 +175,7 @@ function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
 			.printList(
 				ts.ListFormat.None,
 				typeNode as ts.NodeArray<ts.Node>,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 			);
 	}
 
@@ -181,6 +183,6 @@ function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
 		.printNode(
 			ts.EmitHint.Unspecified,
 			typeNode as ts.Node,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 		);
 }

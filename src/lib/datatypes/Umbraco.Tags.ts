@@ -1,4 +1,5 @@
 import ts, { factory } from 'typescript';
+
 import type { HandlerConfig } from '.';
 
 // We might want to expose group information here.
@@ -8,6 +9,6 @@ export const tagsHandler = {
 	editorAlias: 'Umbraco.Tags' as const,
 	build: () => [],
 	reference: () => factory.createArrayTypeNode(
-		factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+		factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 	),
-} satisfies HandlerConfig
+} satisfies HandlerConfig;

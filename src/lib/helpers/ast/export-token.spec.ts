@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import ts from 'typescript';
+import { describe, expect, it } from 'vitest';
 
 import { exportToken } from './export-token';
 
@@ -11,8 +11,8 @@ describe('exportToken', () => {
 			'',
 			ts.ScriptTarget.ESNext,
 			true,
-			ts.ScriptKind.TS
-		)
+			ts.ScriptKind.TS,
+		);
 
 		const printer = ts.createPrinter({});
 

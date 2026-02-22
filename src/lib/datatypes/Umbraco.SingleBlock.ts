@@ -1,24 +1,26 @@
-import ts, { factory } from 'typescript';
-import type { HandlerConfig } from '.';
-import { convertGuidToId } from '../helpers/parse-udi';
 import { pascalCase } from 'change-case';
-import type { GUID } from '../types/utils';
-import type { DataType } from '../types/data-type';
-import type { ArtifactContainer } from '../helpers/collect-artifacts';
-import { exportToken } from '../helpers/ast/export-token';
+import type ts from 'typescript';
+import { factory } from 'typescript';
 
-type BlockConfiguration = {
+import type { HandlerConfig } from '.';
+import { exportToken } from '../helpers/ast/export-token';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
+import { convertGuidToId } from '../helpers/parse-udi';
+import type { DataType } from '../types/data-type';
+import type { GUID } from '../types/utils';
+
+interface BlockConfiguration {
 	blocks?: Block[];
-	useLiveEditing?: false,
-	useInlineEditingAsDefault?: false
+	useLiveEditing?: false;
+	useInlineEditingAsDefault?: false;
 }
 
 interface Block {
 	contentElementTypeKey: GUID;
 	settingsElementTypeKey?: GUID | null;
-	label?: string,
-	editorSize?: string,
-	forceHideContentEditorInOverlay?: boolean
+	label?: string;
+	editorSize?: string;
+	forceHideContentEditorInOverlay?: boolean;
 }
 
 export const singleBlockHandler = {
@@ -32,7 +34,7 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);
 
 	const blocks = (config.blocks || [])
-		.map(block => {
+		.map((block) => {
 			const contentElement = artifacts['document-type'].get(convertGuidToId(block.contentElementTypeKey));
 			const settingsElement = block.settingsElementTypeKey
 				? artifacts['document-type'].get(convertGuidToId(block.settingsElementTypeKey))
@@ -40,21 +42,21 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 
 			if (!contentElement) {
 				console.warn(`Could not find document type with id ${block.contentElementTypeKey}`);
-				return;
+				return undefined;
 			}
 
 			return factory.createTypeReferenceNode(
 				factory.createIdentifier('BaseBlockType'),
 				[
 					factory.createTypeReferenceNode(
-						factory.createIdentifier(pascalCase(contentElement.Alias))
+						factory.createIdentifier(pascalCase(contentElement.Alias)),
 					),
 					settingsElement
 						? factory.createTypeReferenceNode(
-							factory.createIdentifier(pascalCase(settingsElement.Alias))
-						)
-						: factory.createLiteralTypeNode(factory.createNull())
-				]
+								factory.createIdentifier(pascalCase(settingsElement.Alias)),
+							)
+						: factory.createLiteralTypeNode(factory.createNull()),
+				],
 			);
 		})
 		.filter((e): e is ts.TypeReferenceNode => !!e);
@@ -64,8 +66,8 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 			[exportToken],
 			factory.createIdentifier(variableIdentifier),
 			undefined,
-			factory.createUnionTypeNode(blocks)
-		)
+			factory.createUnionTypeNode(blocks),
+		),
 	];
 }
 
@@ -74,7 +76,7 @@ function reference(dataType: DataType): ts.TypeNode {
 
 	const baseType = factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
-		undefined
+		undefined,
 	);
 
 	return baseType;

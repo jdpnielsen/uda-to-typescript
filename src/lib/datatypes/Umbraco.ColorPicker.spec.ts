@@ -1,20 +1,22 @@
 import ts from 'typescript';
-import { describe, it, expect } from 'vitest';
-import { colorPickerHandler, type ColorPickerConfig } from './Umbraco.ColorPicker';
-import type { DataType } from '../types/data-type';
+import { describe, expect, it } from 'vitest';
 
-describe('Umbraco.ColorPicker', () => {
+import type { DataType } from '../types/data-type';
+import { colorPickerHandler } from './Umbraco.ColorPicker';
+import type { ColorPickerConfig } from './Umbraco.ColorPicker';
+
+describe('umbraco.ColorPicker', () => {
 	it('should handle build and reference enum', () => {
 		const dataType = createDataType<ColorPickerConfig>('Umbraco.CheckBoxList', {
 			items: [
 				{
-					'value': 'e90707',
-					'label': 'Red'
+					value: 'e90707',
+					label: 'Red',
 				},
 				{
-					'value': '2157d4',
-					'label': 'Blue'
-				}
+					value: '2157d4',
+					label: 'Blue',
+				},
 			],
 		});
 
@@ -36,13 +38,13 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			useLabel: true,
 			items: [
 				{
-					'value': 'e90707',
-					'label': 'Red'
+					value: 'e90707',
+					label: 'Red',
 				},
 				{
-					'value': '2157d4',
-					'label': 'Blue'
-				}
+					value: '2157d4',
+					label: 'Blue',
+				},
 			],
 		});
 
@@ -94,7 +96,7 @@ function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
 			.printList(
 				ts.ListFormat.None,
 				typeNode as ts.NodeArray<ts.Node>,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 			);
 	}
 
@@ -102,6 +104,6 @@ function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
 		.printNode(
 			ts.EmitHint.Unspecified,
 			typeNode as ts.Node,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 		);
 }

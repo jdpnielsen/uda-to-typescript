@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import ts from 'typescript';
+import { describe, expect, it } from 'vitest';
 
 import { maybeNull } from './maybe-null';
 
@@ -12,7 +12,7 @@ describe('maybeNull', () => {
 			.printNode(
 				ts.EmitHint.Unspecified,
 				value,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 			);
 
 		expect(expected).toEqual('string | null');

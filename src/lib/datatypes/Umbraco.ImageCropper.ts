@@ -1,23 +1,22 @@
-import ts, { factory } from 'typescript'
-
-import type { DataType } from '../types/data-type';
-import { buildCrops } from '../helpers/ast/media-object';
+import ts, { factory } from 'typescript';
 
 import type { HandlerConfig } from '.';
+import { buildCrops } from '../helpers/ast/media-object';
+import type { DataType } from '../types/data-type';
 
-export type ImageCropperConfig = {
+export interface ImageCropperConfig {
 	crops?: {
 		alias: string;
 		width: number;
 		height: number;
 	}[];
-};
+}
 
 export const imageCropperHandler = {
 	editorAlias: 'Umbraco.ImageCropper' as const,
 	build,
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 export function build(): ts.Node[] {
 	return [];
@@ -31,7 +30,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 			undefined,
 			factory.createIdentifier('url'),
 			undefined,
-			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+			factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 		),
 		factory.createPropertySignature(
 			undefined,
@@ -43,23 +42,23 @@ export function reference(dataType: DataType): ts.TypeNode {
 						undefined,
 						factory.createIdentifier('left'),
 						undefined,
-						factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+						factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
 					),
 					factory.createPropertySignature(
 						undefined,
 						factory.createIdentifier('top'),
 						undefined,
-						factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
-					)
+						factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+					),
 				]),
-				factory.createLiteralTypeNode(factory.createNull())
-			])
+				factory.createLiteralTypeNode(factory.createNull()),
+			]),
 		),
 		factory.createPropertySignature(
 			undefined,
 			factory.createIdentifier('crops'),
 			undefined,
 			factory.createTupleTypeNode(buildCrops(config.crops || [])),
-		)
+		),
 	]);
 }

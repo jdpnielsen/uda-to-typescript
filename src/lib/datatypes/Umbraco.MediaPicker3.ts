@@ -1,16 +1,14 @@
-import ts, { factory } from 'typescript'
 import { pascalCase } from 'change-case';
-
-
-import type { DataType } from '../types/data-type';
-import type { ArtifactContainer } from '../helpers/collect-artifacts';
-import { buildCrops } from '../helpers/ast/media-object';
-import { parseUdi } from '../helpers/parse-udi';
-import type { MediaType } from '../types/media-type';
+import ts, { factory } from 'typescript';
 
 import type { HandlerConfig } from '.';
+import { buildCrops } from '../helpers/ast/media-object';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
+import { parseUdi } from '../helpers/parse-udi';
+import type { DataType } from '../types/data-type';
+import type { MediaType } from '../types/media-type';
 
-type mediaPickerConfig = {
+interface mediaPickerConfig {
 	/**
 	 * Comma separated list of media types which are allowed.
 	 * Example: "Image,File"
@@ -37,7 +35,7 @@ export const mediaPickerHandler = {
 	editorAlias: 'Umbraco.MediaPicker3' as const,
 	build,
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 export function build(): ts.Node[] {
 	return [];
@@ -55,8 +53,8 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 
 	if (allowedMediaTypes.length === 0) {
 		return factory.createArrayTypeNode(
-			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
-		)
+			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+		);
 	}
 
 	const mediaPickerItems = allowedMediaTypes.map((mediaType) => {
@@ -65,13 +63,13 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 			[
 				factory.createTypeReferenceNode(
 					factory.createIdentifier(pascalCase(mediaType.Alias)),
-					undefined
+					undefined,
 				),
 				...(crops.length !== 0
 					? [factory.createTupleTypeNode(buildCrops(crops))]
 					: []
 				),
-			]
+			],
 		);
 	});
 
