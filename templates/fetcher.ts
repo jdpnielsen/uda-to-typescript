@@ -1,6 +1,6 @@
 import type { BaseDocumentType } from './base-types';
 import { buildDeliveryApiUrl } from './delivery-api';
-import type { ExpandParam, ExpandResult } from './utils';
+import type { ExpandParam, ExpandResult, Fields, OmitFields } from './utils';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -25,6 +25,7 @@ interface QueryOptions<T extends BaseDocumentType> {
 		name?: SortDirection;
 		sortOrder?: SortDirection;
 	};
+	fields?: Fields<T>;
 	take?: number;
 	skip?: number;
 }
@@ -61,6 +62,10 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 		queryParams.append('filter', `name:${options.filter.name}`);
 	}
 
+	if (options.fields) {
+		queryParams.set('fields', `properties[${buildFieldQuery(options.fields)}]`);
+	}
+
 	if (options.sort) {
 		Object
 			.entries(options.sort)
@@ -78,6 +83,21 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	}
 
 	return queryParams;
+}
+
+export function buildFieldQuery<T extends BaseDocumentType = BaseDocumentType>(fields: string | Fields<T>): string {
+	if (typeof fields === 'string') {
+		return fields;
+	} else if (Array.isArray(fields)) {
+		return fields.map((e) => buildFieldQuery<T>(e as string | Fields<T>)).join(',');
+	} else {
+		return Object
+			.entries(fields)
+			.map(([key, value]) => {
+				return `${key}[properties[${buildFieldQuery(value as Fields<BaseDocumentType>)}]]`;
+			})
+			.join(',');
+	}
 }
 
 type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
@@ -154,13 +174,13 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
 	fetchFunction: FetchFunction = defaultFetchFunction,
 ) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
+	return async <F extends Fields<Doc> = ['$all'], T extends ExpandParam<OmitFields<Doc, F>> = undefined>(opts?: { expand?: T; fields?: F } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 
 		const url = buildDeliveryApiUrl(host, '/api/v2/content');
 		url.search = queryParams.toString();
 
-		return fetchFunction<{ total: number; items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions });
+		return fetchFunction<{ total: number; items: ExpandResult<OmitFields<Doc, F>, T>[] }>({ url, options: fetchOptions });
 	};
 }
 
@@ -185,17 +205,14 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
  * const getContentById = buildContentItemFetcher<Content>('https://example.com', customFetchFunction);
  * ```
  */
-export function buildContentItemFetcher<Doc extends BaseDocumentType>(
-	host: string,
-	fetchFunction: FetchFunction = defaultFetchFunction,
-) {
+export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
-	return async <T extends ExpandParam<Doc> = undefined>(id?: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
+	return async <F extends Fields<Doc> = ['$all'], T extends ExpandParam<OmitFields<Doc, F>> = undefined>(id: string, opts?: { expand?: T; fields?: F } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
 		const queryParams = buildQueryParams<Doc>(opts || {});
 		const endpoint = buildContentItemEndpoint(id);
 		const url = buildDeliveryApiUrl(host, endpoint);
 		url.search = queryParams.toString();
 
-		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
+		return fetchFunction<ExpandResult<OmitFields<Doc, F>, T>>({ url, options: fetchOptions });
 	};
 }
