@@ -1,14 +1,19 @@
 {
 	"compilerOptions": {
-		"target": "es2022",
-		"module": "commonjs",
+		"target": "esnext",
+		"module": "preserve",
+		"lib": ["es2023"],
+		"moduleDetection": "force",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
 		"strict": true,
-		"outDir": "lib/",
+		"noUnusedLocals": true,
+		"emitDeclarationOnly": true,
 		"esModuleInterop": true,
+		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true,
 		"declaration": true,
-		"declarationMap": true,
 		"forceConsistentCasingInFileNames": true,
 		"types": ["node"]
 	},

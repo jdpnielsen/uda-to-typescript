@@ -1,9 +1,10 @@
 import execa from 'execa';
-import { rm, stat, readFile } from 'fs/promises';
-import { resolve } from 'path';
+import { rm, stat, readFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { version } from '../../../package.json';
 
-const bin = resolve(__dirname, './bin.js');
+const bin = resolve(dirname(fileURLToPath(import.meta.url)), './bin.cjs');
 
 describe('uda-to-typescript', () => {
 	it('should display the help contents', async () => {

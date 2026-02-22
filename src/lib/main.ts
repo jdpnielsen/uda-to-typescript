@@ -54,7 +54,7 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 	})
 
 	// TODO: support custom templates
-	await cloneTemplates(path.resolve(__dirname, '../../templates'), dir);
+	await cloneTemplates(path.resolve(__dirname, '../templates'), dir);
 
 	const outputFile = printer.printList(
 		ts.ListFormat.MultiLine,
