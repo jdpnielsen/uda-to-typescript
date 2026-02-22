@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import type { PathLike } from 'node:fs';
 import { copyFile, mkdir, readdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
+import path, { dirname } from 'node:path';
 import { cwd } from 'node:process';
+import { fileURLToPath } from 'node:url';
 
 import ts from 'typescript';
 
@@ -57,7 +58,7 @@ export async function main(options: UDAConvertConfiguration, workingDirectory = 
 	});
 
 	// TODO: support custom templates
-	await cloneTemplates(path.resolve(__dirname, '../templates'), dir);
+	await cloneTemplates(path.resolve(dirname(fileURLToPath(import.meta.url)), '../templates'), dir);
 
 	const outputFile = printer.printList(
 		ts.ListFormat.MultiLine,
