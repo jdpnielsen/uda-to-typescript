@@ -216,3 +216,34 @@ export function buildContentItemFetcher<Doc extends BaseDocumentType>(host: stri
 		return fetchFunction<ExpandResult<OmitFields<Doc, F>, T>>({ url, options: fetchOptions });
 	};
 }
+
+/**
+ * Builds a typed fetch function for getting content by ids.
+ * @example
+ * ```ts
+ * const customFetchFunction: FetchFunction = async <T>({ url }: { url: URL }) => {
+ * 	const response = await fetch(url);
+ * 	if (!response.ok) {
+ * 		throw new Error(response.statusText);
+ * 	}
+ * 	return response.json() as T;
+ * }
+ *
+ * const getContentByIds = buildContentItemsFetcher<Content>('https://example.com', customFetchFunction);
+ *
+ * const items = await getContentByIds({
+ *   ids: ['c528cda7-4481-4625-a5bb-437431f06d85']
+ * })
+ * ```
+ */
+export function buildContentItemsFetcher<Doc extends BaseDocumentType>(host: string, fetchFunction: FetchFunction = defaultFetchFunction) {
+	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
+	return async <F extends Fields<Doc> = ['$all'], T extends ExpandParam<OmitFields<Doc, F>> = undefined>(opts?: { ids: string[]; expand?: T; fields?: F } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
+		const queryParams = buildQueryParams<Doc>(opts || {});
+
+		const url = buildDeliveryApiUrl(host, '/api/v2/content/items');
+		url.search = queryParams.toString();
+
+		return fetchFunction<ExpandResult<OmitFields<Doc, F>, T>[]>({ url, options: fetchOptions });
+	};
+}
