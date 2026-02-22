@@ -1,5 +1,5 @@
-import { dataTypes, defineConfig } from '@jdpnielsen/uda-to-typescript';
 import { factory } from 'typescript';
+import { dataTypes, defineConfig } from '@jdpnielsen/uda-to-typescript';
 
 export default defineConfig({
 	input: './*.uda',

@@ -1,8 +1,8 @@
 import ts, { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { buildCrops } from '../helpers/ast/media-object';
 import type { DataType } from '../types/data-type';
+import type { HandlerConfig } from '.';
 
 export interface ImageCropperConfig {
 	crops?: {

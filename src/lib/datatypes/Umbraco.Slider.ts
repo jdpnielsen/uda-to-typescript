@@ -1,8 +1,8 @@
 import ts, { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 import type { DataType } from '../types/data-type';
+import type { HandlerConfig } from '.';
 
 interface SliderConfig {
 	enableRange: boolean | '0' | '1';

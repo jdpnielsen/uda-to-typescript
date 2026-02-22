@@ -1,13 +1,16 @@
 import { pascalCase } from 'change-case';
 import ts, { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { maybeNull } from '../helpers/ast/maybe-null';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import type { DataType } from '../types/data-type';
+import type { HandlerConfig } from '.';
 
 /** @deprecated Leftover configuration from Umbraco v13 */
-interface Item { id: number; value: string }
+interface Item {
+	id: number;
+	value: string;
+}
 
 export interface RadioButtonListConfig {
 	items?: string[] | Item[];

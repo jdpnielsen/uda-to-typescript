@@ -1,8 +1,8 @@
 import type ts from 'typescript';
 import { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { maybeNull } from '../helpers/ast/maybe-null';
+import type { HandlerConfig } from '.';
 
 export const contentPickerHandler = {
 	editorAlias: 'Umbraco.ContentPicker' as const,
