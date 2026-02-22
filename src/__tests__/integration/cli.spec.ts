@@ -2,7 +2,7 @@ import { readFile, rm, stat } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import execa from 'execa';
+import { execa } from 'execa';
 import { describe, expect, it } from 'vitest';
 
 import { version } from '../../../package.json';
