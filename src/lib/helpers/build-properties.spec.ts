@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import { collectProperties } from './build-properties';
 import { PropertyGroup, PropertyType } from '../types/shared';
 

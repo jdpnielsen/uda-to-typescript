@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { buildContentFetcher, buildContentItemFetcher, FetchFunction } from '../../../templates/fetcher';
 import { BaseBlockListType, BaseDocumentType, BaseMediaType } from '../../../templates/base-types';
 

@@ -1,4 +1,5 @@
 import execa from 'execa';
+import { describe, it, expect } from 'vitest';
 import { rm, stat, readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

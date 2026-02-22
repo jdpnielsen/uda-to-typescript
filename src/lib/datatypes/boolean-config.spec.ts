@@ -1,4 +1,5 @@
 import ts from 'typescript';
+import { describe, it, expect } from 'vitest';
 
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';

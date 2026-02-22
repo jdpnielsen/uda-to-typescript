@@ -1,5 +1,7 @@
-import { exportToken } from './export-token';
+import { describe, expect, it } from 'vitest';
 import ts from 'typescript';
+
+import { exportToken } from './export-token';
 
 describe('exportToken', () => {
 	it('should create a type reference node with Record and string/never types', () => {
