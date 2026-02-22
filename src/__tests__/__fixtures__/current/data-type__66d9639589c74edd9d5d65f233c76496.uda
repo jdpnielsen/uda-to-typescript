@@ -1,0 +1,91 @@
+{
+  "Name": "Advanced Rich Text Editor",
+  "EditorAlias": "Umbraco.RichText",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Tiptap",
+  "Configuration": {
+    "toolbar": [
+      [
+        [
+          "Umb.Tiptap.Toolbar.SourceEditor"
+        ],
+        [
+          "Umb.Tiptap.Toolbar.Bold",
+          "Umb.Tiptap.Toolbar.Italic",
+          "Umb.Tiptap.Toolbar.Underline"
+        ],
+        [
+          "Umb.Tiptap.Toolbar.TextAlignLeft",
+          "Umb.Tiptap.Toolbar.TextAlignCenter",
+          "Umb.Tiptap.Toolbar.TextAlignRight"
+        ],
+        [
+          "Umb.Tiptap.Toolbar.BulletList",
+          "Umb.Tiptap.Toolbar.OrderedList"
+        ],
+        [
+          "Umb.Tiptap.Toolbar.Blockquote",
+          "Umb.Tiptap.Toolbar.HorizontalRule"
+        ],
+        [
+          "Umb.Tiptap.Toolbar.Link",
+          "Umb.Tiptap.Toolbar.Unlink"
+        ],
+        [
+          "Umb.Tiptap.Toolbar.MediaPicker",
+          "Umb.Tiptap.Toolbar.EmbeddedMedia",
+          "Umb.Tiptap.Toolbar.BlockPicker",
+          "Umb.Tiptap.Toolbar.CodeBlock"
+        ]
+      ]
+    ],
+    "maxImageSize": 500,
+    "overlaySize": "medium",
+    "extensions": [
+      "Umb.Tiptap.RichTextEssentials",
+      "Umb.Tiptap.Anchor",
+      "Umb.Tiptap.Blockquote",
+      "Umb.Tiptap.Bold",
+      "Umb.Tiptap.BulletList",
+      "Umb.Tiptap.CodeBlock",
+      "Umb.Tiptap.Embed",
+      "Umb.Tiptap.Figure",
+      "Umb.Tiptap.Heading",
+      "Umb.Tiptap.HorizontalRule",
+      "Umb.Tiptap.HtmlAttributeClass",
+      "Umb.Tiptap.HtmlAttributeDataset",
+      "Umb.Tiptap.HtmlAttributeId",
+      "Umb.Tiptap.HtmlAttributeStyle",
+      "Umb.Tiptap.HtmlTagDiv",
+      "Umb.Tiptap.HtmlTagSpan",
+      "Umb.Tiptap.Image",
+      "Umb.Tiptap.Italic",
+      "Umb.Tiptap.Link",
+      "Umb.Tiptap.MediaUpload",
+      "Umb.Tiptap.OrderedList",
+      "Umb.Tiptap.Strike",
+      "Umb.Tiptap.Subscript",
+      "Umb.Tiptap.Superscript",
+      "Umb.Tiptap.Table",
+      "Umb.Tiptap.TextAlign",
+      "Umb.Tiptap.TextDirection",
+      "Umb.Tiptap.TextIndent",
+      "Umb.Tiptap.TrailingNode",
+      "Umb.Tiptap.Underline",
+      "Umb.Tiptap.WordCount",
+      "Umb.Tiptap.Block"
+    ],
+    "blocks": [
+      {
+        "contentElementTypeKey": "ee0023a2-707b-4411-976b-7d80e8c38dd5"
+      }
+    ]
+  },
+  "Udi": "umb://data-type/66d9639589c74edd9d5d65f233c76496",
+  "Dependencies": [
+    {
+      "Udi": "umb://document-type/ee0023a2707b4411976b7d80e8c38dd5"
+    }
+  ],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "17.0.1"
+}

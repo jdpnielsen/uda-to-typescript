@@ -6,8 +6,8 @@ describe('collectArtifacts', () => {
 	it('should handle a glob', async () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
-		expect(output['data-type'].size).toBe(48);
-		expect(output['document-type'].size).toBe(14);
+		expect(output['data-type'].size).toBe(49);
+		expect(output['document-type'].size).toBe(15);
 		expect(output['media-type'].size).toBe(7);
 	});
 
