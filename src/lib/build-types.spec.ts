@@ -33,7 +33,7 @@ describe('buildTypes', () => {
 
 		expect(warnSpy).not.toHaveBeenCalled();
 		expect(actual).toContain('import { type BaseDocumentType');
-		expect(actual).toContain('content?: {');
+		expect(actual).toContain('content?: RichtextEditor');
 		expect(actual).toContain('markup: string;');
 		expect(actual).toContain('form: UmbracoForm;');
 		expect(actual).toContain('umbracoBytes: number;');
