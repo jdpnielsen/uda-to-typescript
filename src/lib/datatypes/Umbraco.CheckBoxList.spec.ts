@@ -1,7 +1,7 @@
 import ts from 'typescript';
 
 import { checkboxListHandler, type CheckboxListConfig } from './Umbraco.CheckBoxList';
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 
 describe('Umbraco.CheckBoxList', () => {
 	describe('legacy data format', () => {

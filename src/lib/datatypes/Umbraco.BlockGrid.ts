@@ -2,10 +2,10 @@ import ts, { factory } from 'typescript';
 import type { HandlerConfig } from '.';
 import { convertGuidToId } from '../helpers/parse-udi';
 import { pascalCase } from 'change-case';
-import { GUID } from '../types/utils';
-import { DataType } from '../types/data-type';
-import { ArtifactContainer } from '../helpers/collect-artifacts';
-import { DocumentType } from '../types/document-type';
+import type { GUID } from '../types/utils';
+import type { DataType } from '../types/data-type';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
+import type { DocumentType } from '../types/document-type';
 import { exportToken } from '../helpers/ast/export-token';
 
 type BlockConfiguration = {

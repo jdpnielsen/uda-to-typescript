@@ -1,7 +1,7 @@
 import ts from 'typescript';
 
 import { radioButtonListHandler, type RadioButtonListConfig } from './Umbraco.RadioButtonList';
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 
 describe('Umbraco.RadioButtonList', () => {
 	describe('legacy data format', () => {

@@ -1,10 +1,10 @@
 import ts, { factory } from 'typescript';
 import { pascalCase } from 'change-case';
 import type { HandlerConfig } from '.';
-import { DataType } from '../types/data-type';
-import { ArtifactContainer } from '../helpers/collect-artifacts';
+import type { DataType } from '../types/data-type';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { convertGuidToId, parseUdi } from '../helpers/parse-udi';
-import { GUID } from '../types/utils';
+import type { GUID } from '../types/utils';
 
 type MultiNodeTreePickerConfiguration = {
 	startNode?: {

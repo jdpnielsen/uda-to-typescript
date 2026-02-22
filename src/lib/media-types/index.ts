@@ -1,12 +1,12 @@
 import ts, { factory } from 'typescript';
-import { MediaType } from '../types/media-type';
+import type { MediaType } from '../types/media-type';
 import { pascalCase } from 'change-case';
 import { parseUdi } from '../helpers/parse-udi';
 import { collectProperties } from '../helpers/build-properties';
 import type { HandlerContext } from '../build-types';
 import { parseTypeNode } from '../helpers/ast/parse-type';
-import { PropertyType } from '../types/shared';
-import { ArtifactContainer } from '../helpers/collect-artifacts';
+import type { PropertyType } from '../types/shared';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { resolveDataTypeHandler } from '../datatypes';
 
 export type MediaTypeHandler = {

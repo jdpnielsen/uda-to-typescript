@@ -1,7 +1,7 @@
 import ts from 'typescript';
 
 import { colorPickerHandler, type ColorPickerConfig } from './Umbraco.ColorPicker';
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 
 describe('Umbraco.ColorPicker', () => {
 	it('should handle build and reference enum', () => {

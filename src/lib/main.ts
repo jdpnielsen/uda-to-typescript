@@ -3,8 +3,8 @@ import { collectArtifacts } from './helpers/collect-artifacts';
 import { buildTypes } from './build-types';
 import ts from 'typescript';
 import path from 'path';
-import { PathLike } from 'fs';
-import { UDAConvertConfiguration } from './define-config';
+import type { PathLike } from 'fs';
+import type { UDAConvertConfiguration } from './define-config';
 import { dataTypeMap } from './datatypes';
 import { cwd } from 'process';
 

@@ -1,6 +1,6 @@
 import ts, { factory } from 'typescript';
 import type { HandlerConfig } from '.';
-import { DataType } from '../types/data-type';
+import type{ DataType } from '../types/data-type';
 import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 
 type SliderConfig = {

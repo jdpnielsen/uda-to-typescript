@@ -1,5 +1,5 @@
-import { Dependency } from './shared';
-import { UDI } from './utils';
+import type { Dependency } from './shared';
+import type { UDI } from './utils';
 
 export interface DataType {
 	Name: string;

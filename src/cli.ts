@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { cosmiconfigSync } from 'cosmiconfig';
 
 import { main } from './lib/main';
-import { UDAConvertConfiguration } from './lib/define-config';
+import type { UDAConvertConfiguration } from './lib/define-config';
 import { cwd } from 'process';
 import path from 'path';
 

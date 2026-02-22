@@ -3,7 +3,7 @@ import ts from 'typescript';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { sliderHandler } from './Umbraco.Slider';
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 
 describe('boolean-like datatype config values', () => {
 	describe('dropdownHandler.reference', () => {
