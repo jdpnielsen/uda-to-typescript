@@ -69,10 +69,21 @@ function build(mediaType: MediaType, { artifacts, dataTypeHandlers }: HandlerCon
 				? parseTypeNode(referenceOutput)
 				: referenceOutput;
 
+			if (dataType.EditorAlias === 'Umbraco.Label' && propertyType.Alias.startsWith('umbraco')) {
+				return factory.createPropertySignature(
+					undefined,
+					factory.createIdentifier(propertyType.Alias),
+					undefined,
+					reference,
+				);
+			}
+
 			return factory.createPropertySignature(
 				undefined,
 				factory.createIdentifier(propertyType.Alias),
-				undefined,
+				propertyType.Mandatory
+					? undefined
+					: factory.createToken(ts.SyntaxKind.QuestionToken),
 				reference,
 			);
 		});

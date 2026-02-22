@@ -54,7 +54,7 @@ export type Dropdown = string;
 export type Textstring = string;
 export type MultipleImageMediaPicker = MediaPickerItem<Image>[];
 export type LabelDatetime = string;
-export type MultipleMediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type MultipleMediaPicker = (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 export type ImageCropper = {
     url: string;
     focalPoint: {
@@ -71,7 +71,7 @@ export type MemberPicker = string | null;
 export type UploadVectorGraphics = string;
 export type Numeric = number;
 export type ListViewMedia = unknown;
-export type MediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type MediaPicker = (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 export type DatePicker = string;
 export type MetaTitleTextbox = string;
 export type LabelPixels = number;
@@ -107,6 +107,27 @@ export type LabelString = string;
 export type DropdownMultiple = string[];
 export type CheckboxList = string[];
 export type ContentPicker = PickableDocumentType | null;
+
+export type ImageWithProps = BaseMediaType<"ImageWithProps", {
+    altText?: string;
+    umbracoHeight: number;
+    copyright: boolean;
+    umbracoWidth: number;
+    umbracoFile: {
+        url: string;
+        focalPoint: {
+            left: number;
+            top: number;
+        } | null;
+        crops: [
+            Crop<"16:9", 1600, 900>,
+            Crop<"4:3", 800, 600>,
+            Crop<"4:5", 800, 1000>
+        ];
+    };
+    umbracoBytes: number;
+    umbracoExtension: string;
+}>;
 
 export type File = BaseMediaType<"File", {
     umbracoFile: string;
@@ -159,7 +180,7 @@ export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
     umbracoBytes: number;
 }>;
 
-export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
+export type PickableMediaType = ImageWithProps | File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
 
 export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
@@ -184,7 +205,7 @@ export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["prop
 }>;
 
 export type MediaBlock = BaseDocumentType<"mediaBlock", {
-    media: (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+    media: (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 }>;
 
 export type Metadata = BaseDocumentType<"metadata", {
@@ -290,7 +311,7 @@ export type Dropdown = string;
 export type Textstring = string;
 export type MultipleImageMediaPicker = MediaPickerItem<Image>[];
 export type LabelDatetime = string;
-export type MultipleMediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type MultipleMediaPicker = (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 export type ImageCropper = {
     url: string;
     focalPoint: {
@@ -307,7 +328,7 @@ export type MemberPicker = string | null;
 export type UploadVectorGraphics = string;
 export type Numeric = number;
 export type ListViewMedia = unknown;
-export type MediaPicker = (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+export type MediaPicker = (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 export type DatePicker = string;
 export type MetaTitleTextbox = string;
 export type LabelPixels = number;
@@ -343,6 +364,27 @@ export type LabelString = string;
 export type DropdownMultiple = string[];
 export type CheckboxList = string[];
 export type ContentPicker = PickableDocumentType | null;
+
+export type ImageWithProps = BaseMediaType<"ImageWithProps", {
+    altText?: string;
+    umbracoHeight: number;
+    copyright: boolean;
+    umbracoWidth: number;
+    umbracoFile: {
+        url: string;
+        focalPoint: {
+            left: number;
+            top: number;
+        } | null;
+        crops: [
+            Crop<"16:9", 1600, 900>,
+            Crop<"4:3", 800, 600>,
+            Crop<"4:5", 800, 1000>
+        ];
+    };
+    umbracoBytes: number;
+    umbracoExtension: string;
+}>;
 
 export type File = BaseMediaType<"File", {
     umbracoFile: string;
@@ -395,7 +437,7 @@ export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
     umbracoBytes: number;
 }>;
 
-export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
+export type PickableMediaType = ImageWithProps | File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
 
 export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
@@ -420,7 +462,7 @@ export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["prop
 }>;
 
 export type MediaBlock = BaseDocumentType<"mediaBlock", {
-    media: (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+    media: (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 }>;
 
 export type Metadata = BaseDocumentType<"metadata", {
@@ -520,6 +562,27 @@ export type RichtextEditor = {
     ];
 };
 
+export type ImageWithProps = BaseMediaType<"ImageWithProps", {
+    altText?: string;
+    umbracoHeight: number;
+    copyright: boolean;
+    umbracoWidth: number;
+    umbracoFile: {
+        url: string;
+        focalPoint: {
+            left: number;
+            top: number;
+        } | null;
+        crops: [
+            Crop<"16:9", 1600, 900>,
+            Crop<"4:3", 800, 600>,
+            Crop<"4:5", 800, 1000>
+        ];
+    };
+    umbracoBytes: number;
+    umbracoExtension: string;
+}>;
+
 export type File = BaseMediaType<"File", {
     umbracoFile: string;
     umbracoExtension: string;
@@ -571,7 +634,7 @@ export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
     umbracoBytes: number;
 }>;
 
-export type PickableMediaType = File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
+export type PickableMediaType = ImageWithProps | File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
 
 export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
@@ -596,7 +659,7 @@ export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["prop
 }>;
 
 export type MediaBlock = BaseDocumentType<"mediaBlock", {
-    media: (MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
+    media: (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 }>;
 
 export type Metadata = BaseDocumentType<"metadata", {
