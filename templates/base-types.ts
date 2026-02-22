@@ -24,7 +24,7 @@ export interface BaseMediaType<
 	properties: Properties;
 }
 
-export type Crop<Alias extends string = string, Width extends number = number, Height extends number = number> = {
+export interface Crop<Alias extends string = string, Width extends number = number, Height extends number = number> {
 	alias: Alias;
 	width: Width;
 	height: Height;
@@ -54,18 +54,18 @@ export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends C
 		: null;
 	crops: ExtractProps<T['properties'], 'umbracoFile'> extends { umbracoFile: { crops: Crop[] } }
 		? (
-			// Test that local crops are provided
-			C extends Crop[]
-				? [...ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops'], ...C]
-				: ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops']
-		)
+				// Test that local crops are provided
+				C extends Crop[]
+					? [...ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops'], ...C]
+					: ExtractProps<T['properties'], 'umbracoFile'>['umbracoFile']['crops']
+			)
 		: C;
-}
+};
 
 export interface BaseDocumentType<
 	Alias extends string = string,
 	Properties extends ObjectType = ObjectType,
-	Cultures extends { [culture: string]: ContentRoute; } = EmptyObjectType
+	Cultures extends { [culture: string]: ContentRoute } = EmptyObjectType,
 > {
 	id: string;
 	name: string;
@@ -94,11 +94,11 @@ export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseDocumentT
 export interface BaseGridBlockType<
 	Content extends BaseDocumentType = BaseDocumentType,
 	Setting extends BaseDocumentType | null = BaseDocumentType | null,
-	Areas extends BaseGridBlockAreaType[] = never[]
+	Areas extends BaseGridBlockAreaType[] = never[],
 > extends BaseBlockType<Content, Setting> {
 	rowSpan: number;
 	columnSpan: number;
-	areaGridColumns: number,
+	areaGridColumns: number;
 	areas: Areas;
 }
 

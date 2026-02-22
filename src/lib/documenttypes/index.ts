@@ -1,14 +1,15 @@
-import ts, { factory } from 'typescript';
-import type { DocumentType } from '../types/document-type';
 import { pascalCase } from 'change-case';
-import { parseUdi } from '../helpers/parse-udi';
-import { collectProperties } from '../helpers/build-properties';
-import { exportToken } from '../helpers/ast/export-token';
-import type { HandlerContext } from '../build-types';
-import { parseTypeNode } from '../helpers/ast/parse-type';
-import { resolveDataTypeHandler } from '../datatypes';
+import ts, { factory } from 'typescript';
 
-export type HandlerConfig = {
+import type { HandlerContext } from '../build-types';
+import { resolveDataTypeHandler } from '../datatypes';
+import { exportToken } from '../helpers/ast/export-token';
+import { parseTypeNode } from '../helpers/ast/parse-type';
+import { collectProperties } from '../helpers/build-properties';
+import { parseUdi } from '../helpers/parse-udi';
+import type { DocumentType } from '../types/document-type';
+
+export interface HandlerConfig {
 	build: (dataType: DocumentType, context: HandlerContext) => ts.Node[];
 	reference: (dataType: DocumentType, context: HandlerContext) => ts.TypeReferenceNode;
 }
@@ -16,14 +17,14 @@ export type HandlerConfig = {
 export const documentHandler: HandlerConfig = {
 	build,
 	reference,
-}
+};
 
 function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: HandlerContext): ts.Node[] {
 	const variableIdentifier = pascalCase(documentType.Alias);
 
 	// TODO: Handle cultures
 	const properties = collectProperties(documentType)
-		.map(propertyType => {
+		.map((propertyType) => {
 			const { id: dataTypeId } = parseUdi(propertyType.DataType);
 			const artifact = artifacts['data-type'].get(dataTypeId);
 
@@ -77,10 +78,10 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
 					properties.length === 0
 						? factory.createTypeReferenceNode(factory.createIdentifier('EmptyObjectType'))
-						: factory.createTypeLiteralNode(properties)
-				]
-			)
-		)
+						: factory.createTypeLiteralNode(properties),
+				],
+			),
+		),
 	];
 }
 
@@ -88,6 +89,6 @@ function reference(documentType: DocumentType): ts.TypeReferenceNode {
 	const variableIdentifier = pascalCase(documentType.Alias);
 
 	return factory.createTypeReferenceNode(
-		factory.createIdentifier(variableIdentifier)
+		factory.createIdentifier(variableIdentifier),
 	);
 }

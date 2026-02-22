@@ -1,14 +1,15 @@
-import ts, { factory } from 'typescript';
-import type { HandlerConfig } from '.';
-import type { DataType } from '../types/data-type';
 import { pascalCase } from 'change-case';
-import { createModernEnumHandler } from '../helpers/ast/modern-enum';
+import ts, { factory } from 'typescript';
+
+import type { HandlerConfig } from '.';
 import { maybeNull } from '../helpers/ast/maybe-null';
+import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { parseBooleanConfigValue } from '../helpers/parse-boolean';
+import type { DataType } from '../types/data-type';
 
-type Item = { label: string; value: string };
+interface Item { label: string; value: string }
 
-export type ColorPickerConfig = {
+export interface ColorPickerConfig {
 	useLabel?: boolean | '0' | '1';
 	items?: Item[];
 }
@@ -17,7 +18,7 @@ export const colorPickerHandler = {
 	editorAlias: 'Umbraco.ColorPicker' as const,
 	build,
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 export function build(dataType: DataType): ts.Node[] {
 	const variableIdentifier = pascalCase(dataType.Name);
@@ -49,7 +50,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 	if (items.length === 0) {
 		if (!useLabel) {
 			return maybeNull(
-				factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+				factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 			);
 		}
 
@@ -67,13 +68,13 @@ export function reference(dataType: DataType): ts.TypeNode {
 					undefined,
 					factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 				),
-			])
+			]),
 		);
 	}
 
 	const dropDownType = factory.createTypeReferenceNode(
 		factory.createIdentifier(variableIdentifier),
-		undefined
+		undefined,
 	);
 
 	if (!useLabel) {
@@ -90,7 +91,7 @@ export function reference(dataType: DataType): ts.TypeNode {
 	 * 	value: Enum;
 	 * 	label: keyof typeof Enum
 	 * } | null;
-	*/
+	 */
 	return maybeNull(
 		factory.createTypeLiteralNode([
 			factory.createPropertySignature(
@@ -107,11 +108,11 @@ export function reference(dataType: DataType): ts.TypeNode {
 					ts.SyntaxKind.KeyOfKeyword,
 					factory.createTypeQueryNode(
 						factory.createIdentifier(variableIdentifier),
-						undefined
-					)
-				)
+						undefined,
+					),
+				),
 			),
-		])
+		]),
 	);
 }
 
@@ -121,12 +122,12 @@ function getItems(config: Partial<ColorPickerConfig>): Item[] {
 	}
 
 	return config.items
-		.filter(item => typeof item.value === 'string');
+		.filter((item) => typeof item.value === 'string');
 }
 
 function decodeColorPickerValue({ label, value }: Item, index: number): Item {
 	return {
 		label: label ? pascalCase(label) : `Color${index + 1}`,
-		value: value,
+		value,
 	};
 }

@@ -1,31 +1,32 @@
 import ts, { factory } from 'typescript';
-import type { HandlerConfig } from '.';
-import type{ DataType } from '../types/data-type';
-import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 
-type SliderConfig = {
-	enableRange: boolean | '0' | '1',
+import type { HandlerConfig } from '.';
+import { parseBooleanConfigValue } from '../helpers/parse-boolean';
+import type { DataType } from '../types/data-type';
+
+interface SliderConfig {
+	enableRange: boolean | '0' | '1';
 
 	/* Unused */
-	initVal1: number,
-	initVal2: number,
-	minVal: number,
-	maxVal: number,
-	step: number
-};
+	initVal1: number;
+	initVal2: number;
+	minVal: number;
+	maxVal: number;
+	step: number;
+}
 
 export const sliderHandler = {
 	editorAlias: 'Umbraco.Slider' as const,
 	build: () => [],
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 export function reference(dataType: DataType): ts.TypeNode {
 	const config = (dataType.Configuration || {}) as Partial<SliderConfig>;
 	const enableRange = parseBooleanConfigValue(config.enableRange) ?? false;
 
 	if (!enableRange) {
-		return factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+		return factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword);
 	}
 
 	return factory.createTypeLiteralNode([
@@ -33,13 +34,13 @@ export function reference(dataType: DataType): ts.TypeNode {
 			undefined,
 			factory.createStringLiteral('minimum'),
 			undefined,
-			factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+			factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
 		),
 		factory.createPropertySignature(
 			undefined,
 			factory.createStringLiteral('maximum'),
 			undefined,
-			factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
-		)
+			factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+		),
 	]);
 }

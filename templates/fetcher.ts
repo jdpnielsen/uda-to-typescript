@@ -1,6 +1,6 @@
-import { BaseDocumentType } from './base-types';
-import { ExpandParam, ExpandResult } from './utils';
+import type { BaseDocumentType } from './base-types';
 import { buildDeliveryApiUrl } from './delivery-api';
+import type { ExpandParam, ExpandResult } from './utils';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -42,23 +42,23 @@ function buildQueryParams<T extends BaseDocumentType>(options: QueryOptions<T>) 
 	}
 
 	if (options.fetch?.ancestors) {
-		queryParams.set('fetch', 'ancestors:' + options.fetch.ancestors);
+		queryParams.set('fetch', `ancestors:${options.fetch.ancestors}`);
 	}
 
 	if (options.fetch?.descendants) {
-		queryParams.set('fetch', 'descendants:' + options.fetch.descendants);
+		queryParams.set('fetch', `descendants:${options.fetch.descendants}`);
 	}
 
 	if (options.fetch?.children) {
-		queryParams.set('fetch', 'children:' + options.fetch?.children);
+		queryParams.set('fetch', `children:${options.fetch?.children}`);
 	}
 
 	if (options.filter?.contentType) {
-		queryParams.append('filter', 'contentType:' + options.filter.contentType);
+		queryParams.append('filter', `contentType:${options.filter.contentType}`);
 	}
 
 	if (options.filter?.name) {
-		queryParams.append('filter', 'name:' + options.filter.name);
+		queryParams.append('filter', `name:${options.filter.name}`);
 	}
 
 	if (options.sort) {
@@ -85,7 +85,7 @@ type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
 	'Api-Key'?: string;
 	'Start-Item'?: string;
 	'Accept-Language'?: string;
-}
+};
 
 /**
  * A function that fetches data from a url.
@@ -101,18 +101,18 @@ type UmbracoHeaders = [string, string][] | Record<string, string> | Headers | {
  * }
  * ```
  */
-export type FetchFunction<O = RequestInit & { headers?: UmbracoHeaders }> = <T>({ url, options }: { url: URL, options?: O }) => Promise<T>;
+export type FetchFunction<O = RequestInit & { headers?: UmbracoHeaders }> = <T>({ url, options }: { url: URL; options?: O }) => Promise<T>;
 
 /**
  * Default network implementation used by generated fetchers.
  */
-const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: URL, options?: RequestInit }) => {
+const defaultFetchFunction: FetchFunction = async <T>({ url, options }: { url: URL; options?: RequestInit }) => {
 	const response = await fetch(url, options);
 	if (!response.ok) {
 		throw new Error(response.statusText);
 	}
 	return response.json() as T;
-}
+};
 
 /**
  * Normalizes content item identifier/path values for endpoint construction.
@@ -151,7 +151,7 @@ function buildContentItemEndpoint(idOrPath: string | undefined): string {
  */
 export function buildContentFetcher<Doc extends BaseDocumentType>(
 	host: string,
-	fetchFunction: FetchFunction = defaultFetchFunction
+	fetchFunction: FetchFunction = defaultFetchFunction,
 ) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
 	return async <T extends ExpandParam<Doc> = undefined>(opts?: { expand?: T } & QueryOptions<Doc>, fetchOptions?: RequestInit | undefined) => {
@@ -160,8 +160,8 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
 		const url = buildDeliveryApiUrl(host, '/api/v2/content');
 		url.search = queryParams.toString();
 
-		return fetchFunction<{ total: number, items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions });
-	}
+		return fetchFunction<{ total: number; items: ExpandResult<Doc, T>[] }>({ url, options: fetchOptions });
+	};
 }
 
 /**
@@ -187,7 +187,7 @@ export function buildContentFetcher<Doc extends BaseDocumentType>(
  */
 export function buildContentItemFetcher<Doc extends BaseDocumentType>(
 	host: string,
-	fetchFunction: FetchFunction = defaultFetchFunction
+	fetchFunction: FetchFunction = defaultFetchFunction,
 ) {
 	// We need to return a function that takes the expand options, because Typescript doesn't support partial type inference yet.
 	return async <T extends ExpandParam<Doc> = undefined>(id?: string, opts?: { expand?: T }, fetchOptions?: RequestInit | undefined) => {
@@ -197,5 +197,5 @@ export function buildContentItemFetcher<Doc extends BaseDocumentType>(
 		url.search = queryParams.toString();
 
 		return fetchFunction<ExpandResult<Doc, T>>({ url, options: fetchOptions });
-	}
+	};
 }

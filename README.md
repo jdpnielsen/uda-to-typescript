@@ -58,16 +58,16 @@ Examples:
 import { defineConfig } from '@jdpnielsen/uda-to-typescript';
 
 export default defineConfig({
-  input: './petstore.yaml',
-  output: './src/petstore.ts',
+	input: './UmbracoProject/umbraco/Deploy/Revision/*.uda',
+	output: './src/umbraco/output.ts',
 });
 ```
 
 ## Provide custom datatypes
 
 ```js
+import { dataTypes, defineConfig, HandlerConfig } from '@jdpnielsen/uda-to-typescript';
 import { factory } from 'typescript';
-import { defineConfig, dataTypes, HandlerConfig } from '@jdpnielsen/uda-to-typescript';
 
 export default defineConfig({
 	input: '../umbraco-boilerplate/src/UmbracoProject/umbraco/Deploy/Revision/*.uda',
@@ -155,7 +155,7 @@ export default defineConfig({
 ### Custom handler example using EditorUiAlias
 
 ```ts
-import { defineConfig, dataTypes } from '@jdpnielsen/uda-to-typescript';
+import { dataTypes, defineConfig } from '@jdpnielsen/uda-to-typescript';
 
 export default defineConfig({
 	input: '../umbraco/Deploy/Revision/*.uda',
@@ -214,7 +214,8 @@ Recommended semantics:
 - Any other value (or unset): keep normal/default caching behavior.
 
 ```ts
-import { buildContentFetcher, type FetchFunction } from './fetcher';
+import { buildContentFetcher } from './fetcher';
+import type { FetchFunction } from './fetcher';
 
 const noCache = process.env.UMBRACO_NO_CACHE === 'true' || process.env.UMBRACO_NO_CACHE === '1';
 
@@ -246,13 +247,12 @@ Practical guidance:
 - Keep it off in production unless you explicitly need real-time freshness over cache efficiency.
 - If your platform adds caching upstream (CDN/reverse proxy), pair this with appropriate cache-control headers in your hosting layer.
 
-
 [build-img]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml/badge.svg
 [build-url]:https://github.com/jdpnielsen/uda-to-typescript/actions/workflows/release.yml
-[downloads-img]:https://img.shields.io/npm/dt/uda-to-typescript
-[downloads-url]:https://www.npmtrends.com/uda-to-typescript
-[npm-img]:https://img.shields.io/npm/v/uda-to-typescript
-[npm-url]:https://www.npmjs.com/package/uda-to-typescript
+[downloads-img]:https://img.shields.io/npm/dt/@jdpnielsen/uda-to-typescript
+[downloads-url]:https://npmtrends.com/@jdpnielsen/uda-to-typescript
+[npm-img]:https://img.shields.io/npm/v/@jdpnielsen/uda-to-typescript
+[npm-url]:https://www.npmjs.com/package/@jdpnielsen/uda-to-typescript
 [issues-img]:https://img.shields.io/github/issues/jdpnielsen/uda-to-typescript
 [issues-url]:https://github.com/jdpnielsen/uda-to-typescript/issues
 [semantic-release-img]:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg

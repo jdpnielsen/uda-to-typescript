@@ -1,5 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { defineConfig, UDAConvertConfiguration } from './define-config';
+import { describe, expect, it } from 'vitest';
+
+import type { UDAConvertConfiguration } from './define-config';
+import { defineConfig } from './define-config';
 
 describe('defineConfig', () => {
 	it('should return the same configuration object', () => {

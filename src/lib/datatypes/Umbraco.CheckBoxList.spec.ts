@@ -1,9 +1,11 @@
 import ts from 'typescript';
-import { describe, it, expect } from 'vitest';
-import { checkboxListHandler, type CheckboxListConfig } from './Umbraco.CheckBoxList';
-import type { DataType } from '../types/data-type';
+import { describe, expect, it } from 'vitest';
 
-describe('Umbraco.CheckBoxList', () => {
+import type { DataType } from '../types/data-type';
+import { checkboxListHandler } from './Umbraco.CheckBoxList';
+import type { CheckboxListConfig } from './Umbraco.CheckBoxList';
+
+describe('umbraco.CheckBoxList', () => {
 	describe('legacy data format', () => {
 		it('should handle build and reference enum', () => {
 			const dataType = createDataType<CheckboxListConfig>('Umbraco.CheckBoxList', {
@@ -95,7 +97,7 @@ function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
 			.printList(
 				ts.ListFormat.None,
 				typeNode as ts.NodeArray<ts.Node>,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 			);
 	}
 
@@ -103,6 +105,6 @@ function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
 		.printNode(
 			ts.EmitHint.Unspecified,
 			typeNode as ts.Node,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 		);
 }

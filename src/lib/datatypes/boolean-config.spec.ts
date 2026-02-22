@@ -1,10 +1,10 @@
 import ts from 'typescript';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
+import type { DataType } from '../types/data-type';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { sliderHandler } from './Umbraco.Slider';
-import type { DataType } from '../types/data-type';
 
 describe('boolean-like datatype config values', () => {
 	describe('dropdownHandler.reference', () => {
@@ -113,6 +113,6 @@ function printType(typeNode: ts.TypeNode): string {
 		.printNode(
 			ts.EmitHint.Unspecified,
 			typeNode,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest)
+			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
 		);
 }

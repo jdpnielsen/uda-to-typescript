@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import type ts from 'typescript';
 
 import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import type { DataType } from '../types/data-type';
@@ -6,6 +6,7 @@ import { blockGridHandler } from './Umbraco.BlockGrid';
 import { blockListHandler } from './Umbraco.BlockList';
 import { checkboxListHandler } from './Umbraco.CheckBoxList';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
+import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
 import { contentPickerHandler } from './Umbraco.ContentPicker';
 import { dateOnlyHandler } from './Umbraco.DateOnly';
 import { dateTimeHandler } from './Umbraco.DateTime';
@@ -14,10 +15,6 @@ import { dateTimeWithTimeZoneHandler } from './Umbraco.DateTimeWithTimeZone';
 import { decimalHandler } from './Umbraco.Decimal';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { emailAddressHandler } from './Umbraco.EmailAddress';
-import { eyedropperHandler } from './Umbraco.ColorPicker.EyeDropper';
-import { folderPickerHandler } from './UmbracoForms.FolderPicker';
-import { formDetailsPickerHandler } from './UmbracoForms.FormDetailsPicker';
-import { formsFormPickerHandler } from './UmbracoForms.FormPicker';
 import { imageCropperHandler } from './Umbraco.ImageCropper';
 import { integerHandler } from './Umbraco.Integer';
 import { labelHandler } from './Umbraco.Label';
@@ -41,11 +38,14 @@ import { sliderHandler } from './Umbraco.Slider';
 import { tagsHandler } from './Umbraco.Tags';
 import { textareaHandler } from './Umbraco.TextArea';
 import { textboxHandler } from './Umbraco.TextBox';
-import { themePickerHandler } from './UmbracoForms.ThemePicker';
 import { timeOnlyHandler } from './Umbraco.TimeOnly';
 import { tinyMCEHandler } from './Umbraco.TinyMCE';
 import { trueFalseHandler } from './Umbraco.TrueFalse';
 import { uploadFieldHandler } from './Umbraco.UploadField';
+import { folderPickerHandler } from './UmbracoForms.FolderPicker';
+import { formDetailsPickerHandler } from './UmbracoForms.FormDetailsPicker';
+import { formsFormPickerHandler } from './UmbracoForms.FormPicker';
+import { themePickerHandler } from './UmbracoForms.ThemePicker';
 
 /**
  * Contract implemented by each datatype handler.
@@ -54,7 +54,7 @@ import { uploadFieldHandler } from './Umbraco.UploadField';
  * - `build` runs for every matching datatype artifact.
  * - `reference` returns the type used when a property references the datatype.
  */
-export type HandlerConfig = {
+export interface HandlerConfig {
 	editorAlias: string;
 	init?: (artifacts: ArtifactContainer) => string | ts.Node[];
 	build: (dataType: DataType, artifacts: ArtifactContainer) => string | ts.Node[];
@@ -66,11 +66,11 @@ export type HandlerConfig = {
  *
  * Custom handlers can also be keyed by `EditorUiAlias`.
  */
-export type DataTypeConfig = {
-	[EditorAlias: string]: HandlerConfig
-};
+export interface DataTypeConfig {
+	[EditorAlias: string]: HandlerConfig;
+}
 
-export type ResolvedHandlerConfig = {
+export interface ResolvedHandlerConfig {
 	key: string;
 	handler: HandlerConfig;
 }

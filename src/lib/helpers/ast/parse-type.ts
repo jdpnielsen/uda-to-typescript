@@ -12,7 +12,7 @@ export function parseTypeNode(input: string): ts.TypeNode {
 		`type __ParsedType__ = ${input}`,
 		ts.ScriptTarget.Latest,
 		true,
-		ts.ScriptKind.TS
+		ts.ScriptKind.TS,
 	);
 
 	const statement = source.statements[0];

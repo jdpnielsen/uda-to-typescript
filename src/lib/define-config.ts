@@ -3,7 +3,7 @@ import type { DataTypeConfig } from './datatypes';
 /**
  * Runtime configuration consumed by the CLI and conversion pipeline.
  */
-export type UDAConvertConfiguration = {
+export interface UDAConvertConfiguration {
 	/** Input glob */
 	input: string;
 
@@ -41,7 +41,7 @@ export type UDAConvertConfiguration = {
 	 * generated declarations were emitted.
 	 */
 	emitDataTypeAliases?: boolean;
-};
+}
 
 /**
  * Identity helper that preserves literal inference for config objects.
@@ -54,7 +54,6 @@ export type UDAConvertConfiguration = {
  * });
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
 export function defineConfig(config: UDAConvertConfiguration): UDAConvertConfiguration {
 	return config;
 }

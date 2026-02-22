@@ -1,6 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { buildContentFetcher, buildContentItemFetcher, FetchFunction } from '../../../templates/fetcher';
-import { BaseBlockListType, BaseDocumentType, BaseMediaType } from '../../../templates/base-types';
+import { describe, expect, it } from 'vitest';
+
+import type { BaseBlockListType, BaseDocumentType, BaseMediaType } from '../../../templates/base-types';
+import { buildContentFetcher, buildContentItemFetcher } from '../../../templates/fetcher';
+import type { FetchFunction } from '../../../templates/fetcher';
 
 type TemplateTestDocument = BaseDocumentType<'siteRoot', {
 	blocks: BaseBlockListType;

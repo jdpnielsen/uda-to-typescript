@@ -1,12 +1,13 @@
-import ts, { factory } from 'typescript';
 import { pascalCase } from 'change-case';
+import ts, { factory } from 'typescript';
+
 import type { HandlerConfig } from '.';
-import type { DataType } from '../types/data-type';
 import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { convertGuidToId, parseUdi } from '../helpers/parse-udi';
+import type { DataType } from '../types/data-type';
 import type { GUID } from '../types/utils';
 
-type MultiNodeTreePickerConfiguration = {
+interface MultiNodeTreePickerConfiguration {
 	startNode?: {
 		type: 'content' | 'media' | 'member';
 	};
@@ -24,7 +25,7 @@ export const multiNodePickerHandler = {
 	editorAlias: 'Umbraco.MultiNodeTreePicker' as const,
 	build,
 	reference,
-} satisfies HandlerConfig
+} satisfies HandlerConfig;
 
 export function build(): ts.Node[] {
 	return [];
@@ -36,13 +37,12 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 	// if StartNode is undefined it should default to content behavior
 	const startNodeType = config.startNode?.type || 'content';
 
-
 	if (startNodeType === 'member') {
 		/**
 		 * Output: unkown[];
 		 */
 		return factory.createArrayTypeNode(
-			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
+			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
 		);
 	}
 
@@ -54,7 +54,7 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 			return factory.createArrayTypeNode(
 				factory.createTypeReferenceNode(
 					factory.createIdentifier('PickableMediaType'),
-				)
+				),
 			);
 		}
 
@@ -64,37 +64,37 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 		return factory.createArrayTypeNode(
 			factory.createTypeReferenceNode(
 				factory.createIdentifier('PickableDocumentType'),
-			)
+			),
 		);
 	}
 
 	const typeMap = startNodeType === 'content'
 		? new Map(Array
-			.from(artifacts['document-type'])
-			.map(([, docType]) => [parseUdi(docType.Udi).id, docType]))
+				.from(artifacts['document-type'])
+				.map(([, docType]) => [parseUdi(docType.Udi).id, docType]))
 		: new Map(Array
-			.from(artifacts['media-type'])
-			.map(([, mediaType]) => [parseUdi(mediaType.Udi).id, mediaType]));
+				.from(artifacts['media-type'])
+				.map(([, mediaType]) => [parseUdi(mediaType.Udi).id, mediaType]));
 
 	const items = config.filter
 		.split(',')
-		.map(key => convertGuidToId(key.trim() as GUID))
+		.map((key) => convertGuidToId(key.trim() as GUID))
 		.filter((alias) => alias !== '')
-		.map(key => {
+		.map((key) => {
 			const item = typeMap.get(key);
 			if (!item) {
 				console.warn(`Could not find document type with alias "${key}".`);
 				return undefined;
 			}
 
-			return item
+			return item;
 		})
 		.filter((docType): docType is NonNullable<typeof docType> => !!docType);
 
 	if (items.length === 0) {
 		return factory.createArrayTypeNode(
-			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword)
-		)
+			factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+		);
 	}
 
 	if (items.length === 1) {
@@ -104,7 +104,7 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 		return factory.createArrayTypeNode(
 			factory.createTypeReferenceNode(
 				factory.createIdentifier(pascalCase(items[0].Alias)),
-			)
+			),
 		);
 	}
 
@@ -116,8 +116,8 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 			items.map((item) =>
 				factory.createTypeReferenceNode(
 					factory.createIdentifier(pascalCase(item.Alias)),
-				)
-			)
-		)
+				),
+			),
+		),
 	);
 }

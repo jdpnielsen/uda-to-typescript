@@ -1,6 +1,8 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+
 import { glob } from 'glob';
-import path from 'path';
-import { readFile } from 'fs/promises';
+
 import type { DataType } from '../types/data-type';
 import type { DocumentType } from '../types/document-type';
 import type { MediaType } from '../types/media-type';
@@ -9,11 +11,11 @@ import type { MediaType } from '../types/media-type';
 /**
  * In-memory artifact maps keyed by normalized artifact id (UDI id without prefix).
  */
-export type ArtifactContainer = {
+export interface ArtifactContainer {
 	'data-type': Map<string, DataType>;
 	'document-type': Map<string, DocumentType>;
 	'media-type': Map<string, MediaType>;
-};
+}
 
 /**
  * Collects and parses supported UDA artifacts from a glob expression.

@@ -11,7 +11,7 @@ describe('parseTypeNode', () => {
 			.printNode(
 				ts.EmitHint.Unspecified,
 				node,
-				ts.createSourceFile('test.ts', '', ts.ScriptTarget.Latest, false, ts.ScriptKind.TS)
+				ts.createSourceFile('test.ts', '', ts.ScriptTarget.Latest, false, ts.ScriptKind.TS),
 			);
 
 		expect(output).toBe('UrlItem');
@@ -24,7 +24,7 @@ describe('parseTypeNode', () => {
 			.printNode(
 				ts.EmitHint.Unspecified,
 				node,
-				ts.createSourceFile('test.ts', '', ts.ScriptTarget.Latest, false, ts.ScriptKind.TS)
+				ts.createSourceFile('test.ts', '', ts.ScriptTarget.Latest, false, ts.ScriptKind.TS),
 			);
 
 		expect(output).toBe('(CustomExternalLink | CustomContentLink)[]');

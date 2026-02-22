@@ -1,6 +1,6 @@
 import type { PropertyGroup, PropertyType } from '../types/shared';
 
-type Collectable = {
+interface Collectable {
 	PropertyGroups: PropertyGroup[];
 	PropertyTypes: PropertyType[];
 }

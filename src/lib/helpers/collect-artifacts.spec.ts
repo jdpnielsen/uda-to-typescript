@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { collectArtifacts } from './collect-artifacts';
 
 describe('collectArtifacts', () => {
-	it('Should handle a glob', async () => {
+	it('should handle a glob', async () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
 		expect(output['data-type'].size).toBe(48);
@@ -11,7 +11,7 @@ describe('collectArtifacts', () => {
 		expect(output['media-type'].size).toBe(7);
 	});
 
-	it('Should handle a file path', async () => {
+	it('should handle a file path', async () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/data-type__f38f0ac71d27439c9f3f089cd8825a53.uda');
 
 		expect(output['data-type'].size).toBe(1);
@@ -19,7 +19,7 @@ describe('collectArtifacts', () => {
 		expect(output['media-type'].size).toBe(0);
 	});
 
-	it('Should reject unsupported artifact versions', async () => {
+	it('should reject unsupported artifact versions', async () => {
 		await expect(collectArtifacts('./src/__tests__/__fixtures__/invalid/data-type__unsupported-version.uda'))
 			.rejects
 			.toThrow('Unsupported Umbraco artifact version');
