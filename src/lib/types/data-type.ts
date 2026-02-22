@@ -15,6 +15,4 @@ export interface DataType {
 	__version: string;
 }
 
-interface Configuration {
-	[key: string]: unknown;
-}
+interface Configuration {}

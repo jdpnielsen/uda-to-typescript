@@ -55,7 +55,7 @@
 		"cm": "cz",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"start": "TS_NODE_FILES=true ts-node ./src/cli.ts",
+		"start": "tsx ./src/cli.ts",
 		"prepare": "husky install",
 		"semantic-release": "semantic-release",
 		"test": "vitest",
@@ -65,7 +65,8 @@
 		"change-case": "^4.1.2",
 		"commander": "^7.2.0",
 		"cosmiconfig": "^8.3.6",
-		"glob": "^10.2.7"
+		"glob": "^10.2.7",
+		"typescript": "^5.9.3"
 	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^7.4.3",
@@ -79,9 +80,8 @@
 		"husky": "^6.0.0",
 		"lint-staged": "^13.2.1",
 		"semantic-release": "^21.0.1",
-		"ts-node": "^10.2.1",
 		"tsdown": "^0.20.3",
-		"typescript": "^5.2.2",
+		"tsx": "^4.21.0",
 		"vitest": "^4.0.18"
 	},
 	"config": {

@@ -55,7 +55,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		ts.factory.createImportDeclaration(
 			undefined,
 			ts.factory.createImportClause(
-				false,
+				undefined,
 				undefined,
 				ts.factory.createNamedImports([
 					ts.factory.createImportSpecifier(
@@ -115,7 +115,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		ts.factory.createImportDeclaration(
 			undefined,
 			ts.factory.createImportClause(
-				false,
+				undefined,
 				undefined,
 				ts.factory.createNamedImports([
 					ts.factory.createImportSpecifier(
@@ -155,10 +155,14 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		if (resolvedHandler) {
 			const nodes = resolvedHandler.handler.build(dataType, artifacts);
 
+			if (!nodes.length) {
+				continue;
+			}
+
 			if (typeof nodes === 'string') {
-				statements.push(...parseStringStatements(nodes));
+				statements.push(newLineAST, ...parseStringStatements(nodes));
 			} else {
-				statements.push(...nodes);
+				statements.push(newLineAST, ...nodes);
 			}
 		}
 	}
@@ -173,7 +177,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 
 		if (aliasNodes.length !== 0) {
 			statements.push(
-				ts.factory.createIdentifier('\n'),
+				newLineAST,
 				...aliasNodes,
 			);
 		}
@@ -189,7 +193,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 
 		if (nodes) {
 			statements.push(
-				ts.factory.createIdentifier('\n'),
+				newLineAST,
 				...nodes,
 			);
 		}
@@ -198,7 +202,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 	/** Build union of pickable mediaTypes */
 	if (mediaTypes.length !== 0) {
 		statements.push(
-			ts.factory.createIdentifier('\n'),
+			newLineAST,
 			ts.factory.createTypeAliasDeclaration(
 				[factory.createToken(ts.SyntaxKind.ExportKeyword)],
 				factory.createIdentifier('PickableMediaType'),
@@ -221,7 +225,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 
 		if (nodes) {
 			statements.push(
-				ts.factory.createIdentifier('\n'),
+				newLineAST,
 				...nodes,
 			);
 		}
@@ -230,7 +234,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 	/** Build union of pickable datatypes */
 	if (documentTypes.length !== 0) {
 		statements.push(
-			ts.factory.createIdentifier('\n'),
+			newLineAST,
 			ts.factory.createTypeAliasDeclaration(
 				[factory.createToken(ts.SyntaxKind.ExportKeyword)],
 				factory.createIdentifier('PickableDocumentType'),
