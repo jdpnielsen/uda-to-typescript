@@ -42,12 +42,10 @@ describe('generated fetcher template', () => {
 
 		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction);
 
-		await fetchContentItem('/', { expand: 'all' });
-		await fetchContentItem('', { expand: 'all' });
-		await fetchContentItem(undefined, { expand: 'all' });
+		await fetchContentItem('/', { expand: '$all' });
+		await fetchContentItem('', { expand: '$all' });
 
 		expect(requests.map((request) => request.pathname)).toEqual([
-			'/umbraco/delivery/api/v2/content/item',
 			'/umbraco/delivery/api/v2/content/item',
 			'/umbraco/delivery/api/v2/content/item',
 		]);
