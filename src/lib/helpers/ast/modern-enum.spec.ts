@@ -1,4 +1,5 @@
 import ts from 'typescript';
+import { describe, expect, it } from 'vitest';
 import { createModernEnumHandler } from './modern-enum';
 
 describe('createModernEnumHandler', () => {

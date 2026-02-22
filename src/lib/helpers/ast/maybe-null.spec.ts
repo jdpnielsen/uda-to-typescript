@@ -1,5 +1,7 @@
-import { maybeNull } from './maybe-null';
+import { describe, expect, it } from 'vitest';
 import ts from 'typescript';
+
+import { maybeNull } from './maybe-null';
 
 describe('maybeNull', () => {
 	it('should create a union type with the given type and null', () => {

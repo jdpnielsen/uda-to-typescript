@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { defineConfig, UDAConvertConfiguration } from './define-config';
 
 describe('defineConfig', () => {

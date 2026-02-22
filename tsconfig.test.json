@@ -1,16 +1,9 @@
 {
 	"extends": "./tsconfig.json",
-	"compilerOptions": {
-		"types": [
-			"node",
-			"jest"
-		],
-		"resolveJsonModule": true
-	},
 	"include": [
 		"*.ts",
 		"*.js",
-		"src/**/*.spec.ts",
+		"**/*.spec.ts",
 		"**/*.ts",
 		"**/*.js"
 	],

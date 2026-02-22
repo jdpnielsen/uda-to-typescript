@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import { collectArtifacts } from './collect-artifacts';
 import { getPickableTypes } from './pickable-document-type';
 
@@ -23,6 +25,6 @@ describe('getPickableTypes', () => {
 		const documentTypes = Array.from(artifacts['document-type'].values());
 
 		const pickable = getPickableTypes(documentTypes);
-		expect(pickable).toHaveLength(2);
+		expect(pickable).toHaveLength(3);
 	});
 });

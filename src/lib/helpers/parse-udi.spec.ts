@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import { convertGuidToId, parseUdi } from './parse-udi';
 import { GUID, UDI } from '../types/utils';
 

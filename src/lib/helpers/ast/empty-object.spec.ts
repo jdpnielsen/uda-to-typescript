@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { emptyObjectAST } from './empty-object';
 import ts from 'typescript';
 

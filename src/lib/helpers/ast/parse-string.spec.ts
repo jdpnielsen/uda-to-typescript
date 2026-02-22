@@ -1,4 +1,6 @@
 import ts from 'typescript';
+import { describe, expect, it } from 'vitest';
+
 import { parseStringStatements } from './parse-string';
 
 describe('parseStringStatements', () => {

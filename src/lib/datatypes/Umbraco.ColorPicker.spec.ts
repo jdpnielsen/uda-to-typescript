@@ -1,5 +1,5 @@
 import ts from 'typescript';
-
+import { describe, it, expect } from 'vitest';
 import { colorPickerHandler, type ColorPickerConfig } from './Umbraco.ColorPicker';
 import type { DataType } from '../types/data-type';
 

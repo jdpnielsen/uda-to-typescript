@@ -1,6 +1,7 @@
+import { describe, it, expect, vi } from 'vitest';
+import ts from 'typescript';
 import { collectArtifacts } from './helpers/collect-artifacts';
 import { buildTypes } from './build-types';
-import ts from 'typescript';
 import { dataTypeMap } from './datatypes';
 
 describe('buildTypes', () => {
@@ -24,7 +25,7 @@ describe('buildTypes', () => {
 
 	it('Should handle current fixtures without throwing', async () => {
 		const artifacts = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
-		const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
 		const output = buildTypes({
 			artifacts,
