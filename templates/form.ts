@@ -81,7 +81,9 @@ export interface FormFieldTypeDto {
 	renderInputType: string;
 }
 
-export interface FormFieldDtoSettings { [key: string]: string }
+export interface FormFieldDtoSettings {
+	[key: string]: string;
+}
 
 export interface FormFieldDto {
 	id: string;

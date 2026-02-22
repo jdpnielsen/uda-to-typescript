@@ -1,13 +1,16 @@
 import { pascalCase } from 'change-case';
 import ts, { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { maybeNull } from '../helpers/ast/maybe-null';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { parseBooleanConfigValue } from '../helpers/parse-boolean';
 import type { DataType } from '../types/data-type';
+import type { HandlerConfig } from '.';
 
-interface Item { label: string; value: string }
+interface Item {
+	label: string;
+	value: string;
+}
 
 export interface ColorPickerConfig {
 	useLabel?: boolean | '0' | '1';

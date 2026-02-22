@@ -1,12 +1,12 @@
 import { pascalCase } from 'change-case';
 import ts, { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { buildCrops } from '../helpers/ast/media-object';
 import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { parseUdi } from '../helpers/parse-udi';
 import type { DataType } from '../types/data-type';
 import type { MediaType } from '../types/media-type';
+import type { HandlerConfig } from '.';
 
 interface mediaPickerConfig {
 	/**

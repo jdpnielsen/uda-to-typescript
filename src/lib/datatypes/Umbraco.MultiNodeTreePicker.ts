@@ -1,11 +1,11 @@
 import { pascalCase } from 'change-case';
 import ts, { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { convertGuidToId, parseUdi } from '../helpers/parse-udi';
 import type { DataType } from '../types/data-type';
 import type { GUID } from '../types/utils';
+import type { HandlerConfig } from '.';
 
 interface MultiNodeTreePickerConfiguration {
 	startNode?: {
@@ -70,11 +70,11 @@ export function reference(dataType: DataType, artifacts: ArtifactContainer): ts.
 
 	const typeMap = startNodeType === 'content'
 		? new Map(Array
-				.from(artifacts['document-type'])
-				.map(([, docType]) => [parseUdi(docType.Udi).id, docType]))
+			.from(artifacts['document-type'])
+			.map(([, docType]) => [parseUdi(docType.Udi).id, docType]))
 		: new Map(Array
-				.from(artifacts['media-type'])
-				.map(([, mediaType]) => [parseUdi(mediaType.Udi).id, mediaType]));
+			.from(artifacts['media-type'])
+			.map(([, mediaType]) => [parseUdi(mediaType.Udi).id, mediaType]));
 
 	const items = config.filter
 		.split(',')

@@ -2,13 +2,13 @@ import { pascalCase } from 'change-case';
 import type ts from 'typescript';
 import { factory } from 'typescript';
 
-import type { HandlerConfig } from '.';
 import { exportToken } from '../helpers/ast/export-token';
 import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { convertGuidToId } from '../helpers/parse-udi';
 import type { DataType } from '../types/data-type';
 import type { DocumentType } from '../types/document-type';
 import type { GUID } from '../types/utils';
+import type { HandlerConfig } from '.';
 
 interface BlockConfiguration {
 	blocks?: Block[];
