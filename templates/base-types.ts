@@ -62,22 +62,28 @@ export type MediaPickerItem<T extends BaseMediaType = BaseMediaType, C extends C
 		: C;
 };
 
-export interface BaseDocumentType<
+export interface BaseElementType<
+	Alias extends string = string,
+	Properties extends ObjectType = ObjectType,
+> {
+	id: string;
+	contentType: Alias;
+	properties: Properties;
+}
+
+export type BaseDocumentType<
 	Alias extends string = string,
 	Properties extends ObjectType = ObjectType,
 	Cultures extends { [culture: string]: ContentRoute } = EmptyObjectType,
-> {
-	id: string;
+> = BaseElementType<Alias, Properties> & {
 	name: string;
 	createDate: string;
 	updateDate: string;
 	route: ContentRoute;
-	contentType: Alias;
 	cultures: Cultures;
-	properties: Properties;
-}
+};
 
-export interface BaseBlockType<Content extends BaseDocumentType = BaseDocumentType, Setting extends BaseDocumentType | null = BaseDocumentType | null> {
+export interface BaseBlockType<Content extends BaseElementType = BaseElementType, Setting extends BaseElementType | null = BaseElementType | null> {
 	content: Content;
 	settings: Setting;
 }
@@ -86,14 +92,14 @@ export interface BaseBlockListType<Block extends BaseBlockType = BaseBlockType> 
 	items: Block[];
 }
 
-export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, BaseGridBlockAreaType[]> = BaseGridBlockType> {
+export interface BaseBlockGridType<Block extends BaseGridBlockType<BaseElementType, BaseElementType | null, BaseGridBlockAreaType[]> = BaseGridBlockType> {
 	gridColumns: number;
 	items: Block[];
 }
 
 export interface BaseGridBlockType<
-	Content extends BaseDocumentType = BaseDocumentType,
-	Setting extends BaseDocumentType | null = BaseDocumentType | null,
+	Content extends BaseElementType = BaseElementType,
+	Setting extends BaseElementType | null = BaseElementType | null,
 	Areas extends BaseGridBlockAreaType[] = never[],
 > extends BaseBlockType<Content, Setting> {
 	rowSpan: number;

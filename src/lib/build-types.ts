@@ -66,6 +66,11 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
+						ts.factory.createIdentifier('BaseElementType'),
+					),
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
 						ts.factory.createIdentifier('EmptyObjectType'),
 					),
 					ts.factory.createImportSpecifier(

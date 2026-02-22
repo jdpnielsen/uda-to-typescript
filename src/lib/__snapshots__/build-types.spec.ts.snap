@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`buildTypes > should handle current fixtures without throwing 1`] = `
-"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
 import { type UmbracoForm } from "./form";
 
 export interface UrlItem {
@@ -182,21 +182,21 @@ export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
 
 export type PickableMediaType = ImageWithProps | File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
 
-export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
+export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseElementType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
 export type ContentPage = BaseDocumentType<"contentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: ContentBlockList;
 }>;
 
-export type LinkItem = BaseDocumentType<"linkItem", {
+export type LinkItem = BaseElementType<"linkItem", {
     link: unknown;
 }>;
 
-export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+export type RichtextBlock = BaseElementType<"richtextBlock", {
     content?: RichtextEditor;
 }>;
 
-export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRichTextBlock", {
+export type UmbBlockGridDemoRichTextBlock = BaseElementType<"umbBlockGridDemoRichTextBlock", {
     richText: RichtextEditor;
 }>;
 
@@ -204,11 +204,11 @@ export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["prop
     blocks?: GridContentPageBlocksBlockGrid;
 }>;
 
-export type MediaBlock = BaseDocumentType<"mediaBlock", {
+export type MediaBlock = BaseElementType<"mediaBlock", {
     media: (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 }>;
 
-export type Metadata = BaseDocumentType<"metadata", {
+export type Metadata = BaseElementType<"metadata", {
     meta_description?: string;
     meta_image?: MediaPickerItem<Image, [
         Crop<"minimal", 1200, 630>
@@ -224,29 +224,29 @@ export type SiteRoot = BaseDocumentType<"siteRoot", Metadata["properties"] & Pag
     footer_bottom_menu?: UrlItem[];
 }>;
 
-export type UmbBlockGridDemoImageBlock = BaseDocumentType<"umbBlockGridDemoImageBlock", {
+export type UmbBlockGridDemoImageBlock = BaseElementType<"umbBlockGridDemoImageBlock", {
     image: MediaPickerItem<Image>[];
 }>;
 
-export type PageSettings = BaseDocumentType<"pageSettings", {
+export type PageSettings = BaseElementType<"pageSettings", {
     umbracoUrlName?: string;
     excludeSearchResult?: boolean;
 }>;
 
-export type UmbBlockGridDemoHeadlineBlock = BaseDocumentType<"umbBlockGridDemoHeadlineBlock", {
+export type UmbBlockGridDemoHeadlineBlock = BaseElementType<"umbBlockGridDemoHeadlineBlock", {
     headline: string;
 }>;
 
-export type LinkGroup = BaseDocumentType<"linkGroup", {
+export type LinkGroup = BaseElementType<"linkGroup", {
     title: string;
     items?: NavigationBlockList;
 }>;
 
-export type RteBlock = BaseDocumentType<"rteBlock", {
+export type RteBlock = BaseElementType<"rteBlock", {
     nestedProperty: string;
 }>;
 
-export type FormBlock = BaseDocumentType<"formBlock", {
+export type FormBlock = BaseElementType<"formBlock", {
     form: {
         id: string;
         form: UmbracoForm;
@@ -258,7 +258,7 @@ export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
 `;
 
 exports[`buildTypes > should resolve custom handlers by EditorUiAlias 1`] = `
-"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
 import { type UmbracoForm } from "./form";
 
 export interface UrlItem {
@@ -439,21 +439,21 @@ export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
 
 export type PickableMediaType = ImageWithProps | File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
 
-export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
+export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseElementType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
 export type ContentPage = BaseDocumentType<"contentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: ContentBlockList;
 }>;
 
-export type LinkItem = BaseDocumentType<"linkItem", {
+export type LinkItem = BaseElementType<"linkItem", {
     link: UrlItem;
 }>;
 
-export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+export type RichtextBlock = BaseElementType<"richtextBlock", {
     content?: RichtextEditor;
 }>;
 
-export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRichTextBlock", {
+export type UmbBlockGridDemoRichTextBlock = BaseElementType<"umbBlockGridDemoRichTextBlock", {
     richText: RichtextEditor;
 }>;
 
@@ -461,11 +461,11 @@ export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["prop
     blocks?: GridContentPageBlocksBlockGrid;
 }>;
 
-export type MediaBlock = BaseDocumentType<"mediaBlock", {
+export type MediaBlock = BaseElementType<"mediaBlock", {
     media: (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 }>;
 
-export type Metadata = BaseDocumentType<"metadata", {
+export type Metadata = BaseElementType<"metadata", {
     meta_description?: string;
     meta_image?: MediaPickerItem<Image, [
         Crop<"minimal", 1200, 630>
@@ -481,29 +481,29 @@ export type SiteRoot = BaseDocumentType<"siteRoot", Metadata["properties"] & Pag
     footer_bottom_menu?: UrlItem[];
 }>;
 
-export type UmbBlockGridDemoImageBlock = BaseDocumentType<"umbBlockGridDemoImageBlock", {
+export type UmbBlockGridDemoImageBlock = BaseElementType<"umbBlockGridDemoImageBlock", {
     image: MediaPickerItem<Image>[];
 }>;
 
-export type PageSettings = BaseDocumentType<"pageSettings", {
+export type PageSettings = BaseElementType<"pageSettings", {
     umbracoUrlName?: string;
     excludeSearchResult?: boolean;
 }>;
 
-export type UmbBlockGridDemoHeadlineBlock = BaseDocumentType<"umbBlockGridDemoHeadlineBlock", {
+export type UmbBlockGridDemoHeadlineBlock = BaseElementType<"umbBlockGridDemoHeadlineBlock", {
     headline: string;
 }>;
 
-export type LinkGroup = BaseDocumentType<"linkGroup", {
+export type LinkGroup = BaseElementType<"linkGroup", {
     title: string;
     items?: NavigationBlockList;
 }>;
 
-export type RteBlock = BaseDocumentType<"rteBlock", {
+export type RteBlock = BaseElementType<"rteBlock", {
     nestedProperty: string;
 }>;
 
-export type FormBlock = BaseDocumentType<"formBlock", {
+export type FormBlock = BaseElementType<"formBlock", {
     form: {
         id: string;
         form: UmbracoForm;
@@ -515,7 +515,7 @@ export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
 `;
 
 exports[`buildTypes > should support disabling data type alias emission 1`] = `
-"import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
 import { type UmbracoForm } from "./form";
 
 export interface UrlItem {
@@ -636,21 +636,21 @@ export type UmbracoMediaVideo = BaseMediaType<"umbracoMediaVideo", {
 
 export type PickableMediaType = ImageWithProps | File | UmbracoMediaArticle | UmbracoMediaAudio | UmbracoMediaVectorGraphics | Image | Folder | UmbracoMediaVideo;
 
-export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseDocumentType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
+export type UmbBlockGridDemoTwoColumnLayoutBlock = BaseElementType<"umbBlockGridDemoTwoColumnLayoutBlock", EmptyObjectType>;
 
 export type ContentPage = BaseDocumentType<"contentPage", Metadata["properties"] & PageSettings["properties"] & {
     blocks?: ContentBlockList;
 }>;
 
-export type LinkItem = BaseDocumentType<"linkItem", {
+export type LinkItem = BaseElementType<"linkItem", {
     link: unknown;
 }>;
 
-export type RichtextBlock = BaseDocumentType<"richtextBlock", {
+export type RichtextBlock = BaseElementType<"richtextBlock", {
     content?: RichtextEditor;
 }>;
 
-export type UmbBlockGridDemoRichTextBlock = BaseDocumentType<"umbBlockGridDemoRichTextBlock", {
+export type UmbBlockGridDemoRichTextBlock = BaseElementType<"umbBlockGridDemoRichTextBlock", {
     richText: RichtextEditor;
 }>;
 
@@ -658,11 +658,11 @@ export type GridContentPage = BaseDocumentType<"gridContentPage", Metadata["prop
     blocks?: GridContentPageBlocksBlockGrid;
 }>;
 
-export type MediaBlock = BaseDocumentType<"mediaBlock", {
+export type MediaBlock = BaseElementType<"mediaBlock", {
     media: (MediaPickerItem<ImageWithProps> | MediaPickerItem<File> | MediaPickerItem<UmbracoMediaArticle> | MediaPickerItem<UmbracoMediaAudio> | MediaPickerItem<UmbracoMediaVectorGraphics> | MediaPickerItem<Image> | MediaPickerItem<Folder> | MediaPickerItem<UmbracoMediaVideo>)[];
 }>;
 
-export type Metadata = BaseDocumentType<"metadata", {
+export type Metadata = BaseElementType<"metadata", {
     meta_description?: string;
     meta_image?: MediaPickerItem<Image, [
         Crop<"minimal", 1200, 630>
@@ -678,29 +678,29 @@ export type SiteRoot = BaseDocumentType<"siteRoot", Metadata["properties"] & Pag
     footer_bottom_menu?: UrlItem[];
 }>;
 
-export type UmbBlockGridDemoImageBlock = BaseDocumentType<"umbBlockGridDemoImageBlock", {
+export type UmbBlockGridDemoImageBlock = BaseElementType<"umbBlockGridDemoImageBlock", {
     image: MediaPickerItem<Image>[];
 }>;
 
-export type PageSettings = BaseDocumentType<"pageSettings", {
+export type PageSettings = BaseElementType<"pageSettings", {
     umbracoUrlName?: string;
     excludeSearchResult?: boolean;
 }>;
 
-export type UmbBlockGridDemoHeadlineBlock = BaseDocumentType<"umbBlockGridDemoHeadlineBlock", {
+export type UmbBlockGridDemoHeadlineBlock = BaseElementType<"umbBlockGridDemoHeadlineBlock", {
     headline: string;
 }>;
 
-export type LinkGroup = BaseDocumentType<"linkGroup", {
+export type LinkGroup = BaseElementType<"linkGroup", {
     title: string;
     items?: NavigationBlockList;
 }>;
 
-export type RteBlock = BaseDocumentType<"rteBlock", {
+export type RteBlock = BaseElementType<"rteBlock", {
     nestedProperty: string;
 }>;
 
-export type FormBlock = BaseDocumentType<"formBlock", {
+export type FormBlock = BaseElementType<"formBlock", {
     form: {
         id: string;
         form: UmbracoForm;
