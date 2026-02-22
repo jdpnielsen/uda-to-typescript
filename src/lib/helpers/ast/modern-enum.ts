@@ -1,7 +1,6 @@
 import ts, { factory } from 'typescript';
 
 import { exportToken } from './export-token';
-import { newLineAST } from './newline';
 
 /**
  * Creates a const object and a type alias that act like an enum.
@@ -54,7 +53,6 @@ export function createModernEnumHandler(name: string, items: { key: string; valu
 				ts.NodeFlags.Const,
 			),
 		),
-		newLineAST,
 		factory.createTypeAliasDeclaration(
 			shouldExport
 				? [exportToken]

@@ -1,7 +1,6 @@
-import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
-import type { DataType } from '../types/data-type';
+import { createDataType, printType } from '../helpers/test';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import { sliderHandler } from './Umbraco.Slider';
@@ -95,24 +94,3 @@ describe('boolean-like datatype config values', () => {
 		});
 	});
 });
-
-function createDataType(editorAlias: string, configuration: Record<string, unknown>): DataType {
-	return {
-		Name: 'Test',
-		EditorAlias: editorAlias,
-		Configuration: configuration,
-		Udi: 'umb://data-type/test',
-		Dependencies: [],
-		__type: 'Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact',
-		__version: '17.0.1',
-	};
-}
-
-function printType(typeNode: ts.TypeNode): string {
-	return ts.createPrinter()
-		.printNode(
-			ts.EmitHint.Unspecified,
-			typeNode,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-		);
-}

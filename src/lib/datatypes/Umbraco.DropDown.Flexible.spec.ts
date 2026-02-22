@@ -1,7 +1,6 @@
-import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
-import type { DataType } from '../types/data-type';
+import { createDataType, printType } from '../helpers/test';
 import { dropdownHandler } from './Umbraco.DropDown.Flexible';
 import type { DropdownConfig } from './Umbraco.DropDown.Flexible';
 
@@ -19,14 +18,15 @@ describe('umbraco.DropDown.Flexible', () => {
 
 			const buildValue = dropdownHandler.build(dataType);
 
-			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    Value_1: "Value 1",
-    Value_2: "Value 2",
-    Value_3: "Value 3"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+			expect(printType(buildValue)).toMatchInlineSnapshot(`
+				"export const Test = {
+				    Value_1: "Value 1",
+				    Value_2: "Value 2",
+				    Value_3: "Value 3"
+				} as const;
+				export type Test = (typeof Test)[keyof typeof Test];
+				"
+			`);
 
 			const reference = dropdownHandler.reference(dataType);
 
@@ -45,14 +45,15 @@ export type Test = (typeof Test)[keyof typeof Test];"
 
 			const buildValue = dropdownHandler.build(dataType);
 
-			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    Value_1: "Value 1",
-    Value_2: "Value 2",
-    Value_3: "Value 3"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+			expect(printType(buildValue)).toMatchInlineSnapshot(`
+				"export const Test = {
+				    Value_1: "Value 1",
+				    Value_2: "Value 2",
+				    Value_3: "Value 3"
+				} as const;
+				export type Test = (typeof Test)[keyof typeof Test];
+				"
+			`);
 
 			const reference = dropdownHandler.reference(dataType);
 			expect(printType(reference)).toBe('Test');
@@ -64,7 +65,7 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			});
 
 			const buildValue = dropdownHandler.build(datatype);
-			expect(printType(ts.factory.createNodeArray(buildValue))).toBe('');
+			expect(printType(buildValue)).toBe('');
 
 			const value = dropdownHandler.reference(datatype);
 			expect(printType(value)).toBe('string[]');
@@ -83,14 +84,15 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			});
 
 			const buildValue = dropdownHandler.build(dataType);
-			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    Value_1: "Value 1",
-    Value_2: "Value 2",
-    Value_3: "Value 3"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+			expect(printType(buildValue)).toMatchInlineSnapshot(`
+				"export const Test = {
+				    Value_1: "Value 1",
+				    Value_2: "Value 2",
+				    Value_3: "Value 3"
+				} as const;
+				export type Test = (typeof Test)[keyof typeof Test];
+				"
+			`);
 
 			const reference = dropdownHandler.reference(dataType);
 			expect(printType(reference)).toBe('Test[]');
@@ -107,14 +109,15 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			});
 
 			const buildValue = dropdownHandler.build(datatype);
-			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    Value_1: "Value 1",
-    Value_2: "Value 2",
-    Value_3: "Value 3"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+			expect(printType(buildValue)).toMatchInlineSnapshot(`
+				"export const Test = {
+				    Value_1: "Value 1",
+				    Value_2: "Value 2",
+				    Value_3: "Value 3"
+				} as const;
+				export type Test = (typeof Test)[keyof typeof Test];
+				"
+			`);
 
 			const value = dropdownHandler.reference(datatype);
 			expect(printType(value)).toBe('Test');
@@ -132,15 +135,16 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			});
 
 			const buildValue = dropdownHandler.build(datatype);
-			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    ["0Value"]: "0 Value",
-    Value_1: "Value 1",
-    Value_2: "Value 2",
-    Value_3: "Value 3"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+			expect(printType(buildValue)).toMatchInlineSnapshot(`
+				"export const Test = {
+				    ["0Value"]: "0 Value",
+				    Value_1: "Value 1",
+				    Value_2: "Value 2",
+				    Value_3: "Value 3"
+				} as const;
+				export type Test = (typeof Test)[keyof typeof Test];
+				"
+			`);
 		});
 
 		it('should handle missing items', () => {
@@ -149,40 +153,10 @@ export type Test = (typeof Test)[keyof typeof Test];"
 			});
 
 			const buildValue = dropdownHandler.build(datatype);
-			expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot('""');
+			expect(printType(buildValue)).toMatchInlineSnapshot('""');
 
 			const value = dropdownHandler.reference(datatype);
 			expect(printType(value)).toBe('string[]');
 		});
 	});
 });
-
-function createDataType<Config extends Record<string, unknown>>(editorAlias: string, configuration: Config): DataType {
-	return {
-		Name: 'Test',
-		EditorAlias: editorAlias,
-		Configuration: configuration,
-		Udi: 'umb://data-type/test',
-		Dependencies: [],
-		__type: 'Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact',
-		__version: '17.0.1',
-	};
-}
-
-function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
-	if (Array.isArray(typeNode)) {
-		return ts.createPrinter()
-			.printList(
-				ts.ListFormat.None,
-				typeNode as ts.NodeArray<ts.Node>,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			);
-	}
-
-	return ts.createPrinter()
-		.printNode(
-			ts.EmitHint.Unspecified,
-			typeNode as ts.Node,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-		);
-}
