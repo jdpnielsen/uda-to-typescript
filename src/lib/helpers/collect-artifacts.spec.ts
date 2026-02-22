@@ -8,7 +8,7 @@ describe('collectArtifacts', () => {
 
 		expect(output['data-type'].size).toBe(49);
 		expect(output['document-type'].size).toBe(15);
-		expect(output['media-type'].size).toBe(7);
+		expect(output['media-type'].size).toBe(8);
 	});
 
 	it('should handle a file path', async () => {
