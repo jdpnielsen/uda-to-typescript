@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { buildTypes } from './build-types';
 import { dataTypeMap } from './datatypes';
 import { collectArtifacts } from './helpers/collect-artifacts';
+import { printType } from './helpers/test';
 
 describe('buildTypes', () => {
 	it('should handle a glob with no files', async () => {
@@ -13,15 +14,10 @@ describe('buildTypes', () => {
 			artifacts,
 			dataTypeHandlers: dataTypeMap,
 		});
-		const expected = ts.createPrinter()
-			.printList(
-				ts.ListFormat.SingleLine,
-				output,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			);
 
-		expect(expected.trim())
-			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";import { type UmbracoForm } from "./form";');
+		const actual = printType(output.map((e) => e));
+		expect(actual.trim())
+			.toBe('import { type BaseDocumentType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";\nimport { type UmbracoForm } from "./form";');
 	});
 
 	it('should handle current fixtures without throwing', async () => {
@@ -33,12 +29,7 @@ describe('buildTypes', () => {
 			dataTypeHandlers: dataTypeMap,
 		});
 
-		const actual = ts.createPrinter()
-			.printList(
-				ts.ListFormat.MultiLine,
-				output,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			);
+		const actual = printType(output.map((e) => e));
 
 		expect(warnSpy).not.toHaveBeenCalled();
 		expect(actual).toContain('import { type BaseDocumentType');
@@ -64,13 +55,7 @@ describe('buildTypes', () => {
 			emitDataTypeAliases: false,
 		});
 
-		const actual = ts.createPrinter()
-			.printList(
-				ts.ListFormat.MultiLine,
-				output,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			);
-
+		const actual = printType(output.map((e) => e));
 		expect(actual).not.toContain('export type ApprovedColor =');
 	});
 
@@ -89,13 +74,7 @@ describe('buildTypes', () => {
 			},
 		});
 
-		const actual = ts.createPrinter()
-			.printList(
-				ts.ListFormat.MultiLine,
-				output,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			);
-
+		const actual = printType(output.map((e) => e));
 		expect(actual).toContain('link: UrlItem;');
 	});
 });

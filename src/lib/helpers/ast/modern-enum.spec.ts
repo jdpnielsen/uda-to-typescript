@@ -1,6 +1,7 @@
 import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
+import { printType } from '../test';
 import { createModernEnumHandler } from './modern-enum';
 
 describe('createModernEnumHandler', () => {
@@ -9,20 +10,17 @@ describe('createModernEnumHandler', () => {
 			{ key: 'foo', value: 'bar' },
 			{ key: 'baz', value: ts.factory.createStringLiteral('qux') },
 		];
-		const nodes = createModernEnumHandler('MyEnum', items);
-		const printer = ts.createPrinter();
-		const result = nodes
-			.map((node) => printer.printNode(
-				ts.EmitHint.Unspecified,
-				node,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			))
-			.join('');
 
-		expect(result).toEqual(`export const MyEnum = {
-    foo: "bar",
-    baz: "qux"
-} as const;
-export type MyEnum = (typeof MyEnum)[keyof typeof MyEnum];`);
+		const nodes = createModernEnumHandler('MyEnum', items);
+		const result = printType(nodes);
+
+		expect(result).toMatchInlineSnapshot(`
+			"export const MyEnum = {
+			    foo: "bar",
+			    baz: "qux"
+			} as const;
+			export type MyEnum = (typeof MyEnum)[keyof typeof MyEnum];
+			"
+		`);
 	});
 });

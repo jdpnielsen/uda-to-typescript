@@ -1,7 +1,6 @@
-import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
-import type { DataType } from '../types/data-type';
+import { createDataType, printType } from '../helpers/test';
 import { colorPickerHandler } from './Umbraco.ColorPicker';
 import type { ColorPickerConfig } from './Umbraco.ColorPicker';
 
@@ -21,13 +20,14 @@ describe('umbraco.ColorPicker', () => {
 		});
 
 		const buildValue = colorPickerHandler.build(dataType);
-		expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    Red: "e90707",
-    Blue: "2157d4"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+		expect(printType(buildValue)).toMatchInlineSnapshot(`
+			"export const Test = {
+			    Red: "e90707",
+			    Blue: "2157d4"
+			} as const;
+			export type Test = (typeof Test)[keyof typeof Test];
+			"
+		`);
 
 		const reference = colorPickerHandler.reference(dataType);
 		expect(printType(reference)).toMatchInlineSnapshot('"Test | null"');
@@ -49,13 +49,14 @@ export type Test = (typeof Test)[keyof typeof Test];"
 		});
 
 		const buildValue = colorPickerHandler.build(dataType);
-		expect(printType(ts.factory.createNodeArray(buildValue))).toMatchInlineSnapshot(`
-"export const Test = {
-    Red: "e90707",
-    Blue: "2157d4"
-} as const;
-export type Test = (typeof Test)[keyof typeof Test];"
-`);
+		expect(printType(buildValue)).toMatchInlineSnapshot(`
+			"export const Test = {
+			    Red: "e90707",
+			    Blue: "2157d4"
+			} as const;
+			export type Test = (typeof Test)[keyof typeof Test];
+			"
+		`);
 
 		const reference = colorPickerHandler.reference(dataType);
 		expect(printType(reference)).toMatchInlineSnapshot(`
@@ -71,39 +72,9 @@ export type Test = (typeof Test)[keyof typeof Test];"
 		});
 
 		const buildValue = colorPickerHandler.build(datatype);
-		expect(printType(ts.factory.createNodeArray(buildValue))).toBe('');
+		expect(printType(buildValue)).toBe('');
 
 		const value = colorPickerHandler.reference(datatype);
 		expect(printType(value)).toBe('string | null');
 	});
 });
-
-function createDataType<Config extends Record<string, unknown>>(editorAlias: string, configuration: Config): DataType {
-	return {
-		Name: 'Test',
-		EditorAlias: editorAlias,
-		Configuration: configuration,
-		Udi: 'umb://data-type/test',
-		Dependencies: [],
-		__type: 'Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact',
-		__version: '17.0.1',
-	};
-}
-
-function printType(typeNode: ts.TypeNode | ts.NodeArray<ts.Node>): string {
-	if (Array.isArray(typeNode)) {
-		return ts.createPrinter()
-			.printList(
-				ts.ListFormat.None,
-				typeNode as ts.NodeArray<ts.Node>,
-				ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-			);
-	}
-
-	return ts.createPrinter()
-		.printNode(
-			ts.EmitHint.Unspecified,
-			typeNode as ts.Node,
-			ts.createSourceFile('', '', ts.ScriptTarget.Latest),
-		);
-}
