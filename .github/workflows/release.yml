@@ -8,12 +8,13 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: write
       issues: write
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Setup Node.js
@@ -22,6 +23,8 @@ jobs:
           node-version-file: .nvmrc
       - name: Install dependencies
         run: npm ci
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
       - name: Build
         run: npm run build
       - name: Test
@@ -29,5 +32,4 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
