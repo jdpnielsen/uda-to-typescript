@@ -1,6 +1,6 @@
 import ts, { factory } from 'typescript'
 
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 import { buildCrops } from '../helpers/ast/media-object';
 
 import type { HandlerConfig } from '.';

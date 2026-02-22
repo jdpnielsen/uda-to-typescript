@@ -1,6 +1,6 @@
-import { UDI } from '../types/utils';
-import { DocumentType } from '../types/document-type';
-import { MediaType } from '../types/media-type';
+import type { UDI } from '../types/utils';
+import type { DocumentType } from '../types/document-type';
+import type { MediaType } from '../types/media-type';
 
 /**
  * Returns types that can be selected in pickers.

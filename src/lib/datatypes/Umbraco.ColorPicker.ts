@@ -1,6 +1,6 @@
 import ts, { factory } from 'typescript';
 import type { HandlerConfig } from '.';
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 import { pascalCase } from 'change-case';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';
 import { maybeNull } from '../helpers/ast/maybe-null';

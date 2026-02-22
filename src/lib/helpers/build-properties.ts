@@ -1,4 +1,4 @@
-import { PropertyGroup, PropertyType } from '../types/shared';
+import type { PropertyGroup, PropertyType } from '../types/shared';
 
 type Collectable = {
 	PropertyGroups: PropertyGroup[];

@@ -1,15 +1,15 @@
 import ts, { factory } from 'typescript';
 import { pascalCase } from 'change-case';
 
-import { ArtifactContainer } from './helpers/collect-artifacts';
-import { DataTypeConfig, resolveDataTypeHandler } from './datatypes';
+import type { ArtifactContainer } from './helpers/collect-artifacts';
+import { type DataTypeConfig, resolveDataTypeHandler } from './datatypes';
 import { documentHandler } from './documenttypes';
 import { newLineAST } from './helpers/ast/newline';
 import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 import { parseStringStatements } from './helpers/ast/parse-string';
 import { parseTypeNode } from './helpers/ast/parse-type';
-import { DataType } from './types/data-type';
+import type { DataType } from './types/data-type';
 
 /**
  * Shared context passed to artifact handlers while generating AST nodes.

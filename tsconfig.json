@@ -5,6 +5,7 @@
 		"strict": true,
 		"outDir": "lib/",
 		"esModuleInterop": true,
+		"verbatimModuleSyntax": true,
 		"skipLibCheck": true,
 		"declaration": true,
 		"declarationMap": true,

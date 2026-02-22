@@ -1,10 +1,10 @@
 import ts, { factory } from 'typescript';
-import { DocumentType } from '../types/document-type';
+import type { DocumentType } from '../types/document-type';
 import { pascalCase } from 'change-case';
 import { parseUdi } from '../helpers/parse-udi';
 import { collectProperties } from '../helpers/build-properties';
 import { exportToken } from '../helpers/ast/export-token';
-import { HandlerContext } from '../build-types';
+import type { HandlerContext } from '../build-types';
 import { parseTypeNode } from '../helpers/ast/parse-type';
 import { resolveDataTypeHandler } from '../datatypes';
 

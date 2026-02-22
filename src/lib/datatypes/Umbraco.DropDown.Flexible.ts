@@ -1,7 +1,7 @@
 import { pascalCase } from 'change-case';
 import ts, { factory } from 'typescript'
 
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 
 import type { HandlerConfig } from '.';
 import { createModernEnumHandler } from '../helpers/ast/modern-enum';

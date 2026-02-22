@@ -1,4 +1,4 @@
-import { DataTypeConfig } from './datatypes';
+import type { DataTypeConfig } from './datatypes';
 
 /**
  * Runtime configuration consumed by the CLI and conversion pipeline.

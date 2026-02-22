@@ -1,7 +1,7 @@
 import ts from 'typescript';
 
-import { ArtifactContainer } from '../helpers/collect-artifacts';
-import { DataType } from '../types/data-type';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
+import type { DataType } from '../types/data-type';
 import { blockGridHandler } from './Umbraco.BlockGrid';
 import { blockListHandler } from './Umbraco.BlockList';
 import { checkboxListHandler } from './Umbraco.CheckBoxList';

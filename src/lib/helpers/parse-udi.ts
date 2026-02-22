@@ -1,4 +1,4 @@
-import { Artifact, GUID, typedUDI } from '../types/utils';
+import type { Artifact, GUID, typedUDI } from '../types/utils';
 
 /**
  * Splits a UDI into artifact type and id parts.

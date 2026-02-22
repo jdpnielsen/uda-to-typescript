@@ -1,7 +1,7 @@
 import ts from 'typescript';
 
 import { dropdownHandler, type DropdownConfig } from './Umbraco.DropDown.Flexible';
-import { DataType } from '../types/data-type';
+import type { DataType } from '../types/data-type';
 
 describe('Umbraco.DropDown.Flexible', () => {
 	describe('legacy data format', () => {

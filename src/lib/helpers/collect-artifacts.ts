@@ -1,9 +1,9 @@
 import { glob } from 'glob';
 import path from 'path';
 import { readFile } from 'fs/promises';
-import { DataType } from '../types/data-type';
-import { DocumentType } from '../types/document-type';
-import { MediaType } from '../types/media-type';
+import type { DataType } from '../types/data-type';
+import type { DocumentType } from '../types/document-type';
+import type { MediaType } from '../types/media-type';
 
 // TODO: Implement culture artifact
 /**

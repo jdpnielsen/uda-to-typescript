@@ -2,11 +2,11 @@ import ts, { factory } from 'typescript'
 import { pascalCase } from 'change-case';
 
 
-import { DataType } from '../types/data-type';
-import { ArtifactContainer } from '../helpers/collect-artifacts';
+import type { DataType } from '../types/data-type';
+import type { ArtifactContainer } from '../helpers/collect-artifacts';
 import { buildCrops } from '../helpers/ast/media-object';
 import { parseUdi } from '../helpers/parse-udi';
-import { MediaType } from '../types/media-type';
+import type { MediaType } from '../types/media-type';
 
 import type { HandlerConfig } from '.';
 

@@ -1,4 +1,4 @@
-import { UDI } from './utils';
+import type { UDI } from './utils';
 
 export interface Dependency {
 	Udi: UDI;
