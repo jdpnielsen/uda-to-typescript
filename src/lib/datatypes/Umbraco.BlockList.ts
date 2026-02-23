@@ -1,6 +1,5 @@
 import { pascalCase } from 'change-case';
-import type ts from 'typescript';
-import { factory } from 'typescript';
+import ts, { factory } from 'typescript';
 
 import { exportToken } from '../helpers/ast/export-token';
 import type { ArtifactContainer } from '../helpers/collect-artifacts';
@@ -9,15 +8,16 @@ import type { DataType } from '../types/data-type';
 import type { GUID } from '../types/utils';
 import type { HandlerConfig } from '.';
 
-interface BlockConfiguration {
+export interface BlockConfiguration {
 	blocks?: Block[];
 	validationLimit?: {
 		min?: number | null;
 		max?: number | null;
 	};
-	useSingleBlockMode?: false;
-	useLiveEditing?: false;
-	useInlineEditingAsDefault?: false;
+	useSingleBlockMode?: boolean;
+	useLiveEditing?: boolean;
+	useInlineEditingAsDefault?: boolean;
+	maxPropertyWidth?: string;
 }
 
 interface Block {
@@ -73,7 +73,9 @@ function build(dataType: DataType, artifacts: ArtifactContainer): ts.Node[] {
 			undefined,
 			factory.createTypeReferenceNode(
 				factory.createIdentifier('BaseBlockListType'),
-				[factory.createUnionTypeNode(blocks)],
+				blocks.length
+					? [factory.createUnionTypeNode(blocks)]
+					: [factory.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword)],
 			),
 		),
 	];
