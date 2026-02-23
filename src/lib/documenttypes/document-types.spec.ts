@@ -160,4 +160,55 @@ describe('documentHandler', async () => {
 			"
 		`);
 	});
+
+	it('should output typed cultures', () => {
+		const output = documentHandler.build({
+			Name: 'Content page',
+			Alias: 'contentPage',
+			DefaultTemplate: 'umb://template/2f23da3887f44c9da0e198ef889b4b56',
+			AllowedTemplates: [],
+			HistoryCleanup: {},
+			Icon: 'icon-globe color-black',
+			Thumbnail: 'folder.png',
+			Permissions: {
+				AllowedAtRoot: false,
+				AllowVaryingByCulture: true,
+				AllowedChildContentTypes: [],
+			},
+			Parent: 'umb://document-type-container/040eb249f729475dbeaa4eaf0ceb276c',
+			CompositionContentTypes: [],
+			PropertyGroups: [
+				{
+					Key: 'e396388b-1c3f-4b4e-9853-76094e86fa48',
+					Name: 'Content',
+					Alias: 'content',
+					PropertyTypes: [
+						{
+							Key: '050f1ab7-8aff-4f7c-90a1-3b24ad20d50a',
+							Alias: 'content',
+							DataType: 'umb://data-type/ca90c9500aff4e72b976a30b1ac57dad',
+							Name: 'Richtext content',
+						},
+					],
+				},
+			],
+			PropertyTypes: [],
+			Udi: 'umb://document-type/5f9ec17739a24d339bcf9d1409630509',
+			Dependencies: [],
+			__type: 'Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.ContentType.DocumentTypeArtifact',
+			__version: '17.0.1',
+		}, {
+			artifacts,
+			dataTypeHandlers: dataTypeMap,
+		});
+
+		const value = printType(output);
+
+		expect(value).toMatchInlineSnapshot(`
+			"export type ContentPage = BaseDocumentType<"contentPage", {
+			    content?: RichtextEditor;
+			}, Cultures>;
+			"
+		`);
+	});
 });

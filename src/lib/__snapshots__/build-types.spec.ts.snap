@@ -1,9 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`buildTypes > should handle current fixtures without throwing 1`] = `
-"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type ContentRoute, type Crop, type MediaPickerItem } from "./base-types";
 import { type UmbracoForm } from "./form";
 
+export const Language = {
+    EnglishUnitedStates: "en-US"
+} as const;
+export type Language = (typeof Language)[keyof typeof Language];
+export type Cultures = {
+    ["en-US"]?: ContentRoute;
+};
 export interface UrlItem {
     url: string | null;
     title: string;
@@ -258,9 +265,16 @@ export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
 `;
 
 exports[`buildTypes > should resolve custom handlers by EditorUiAlias 1`] = `
-"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type ContentRoute, type Crop, type MediaPickerItem } from "./base-types";
 import { type UmbracoForm } from "./form";
 
+export const Language = {
+    EnglishUnitedStates: "en-US"
+} as const;
+export type Language = (typeof Language)[keyof typeof Language];
+export type Cultures = {
+    ["en-US"]?: ContentRoute;
+};
 export interface UrlItem {
     url: string | null;
     title: string;
@@ -515,9 +529,16 @@ export type PickableDocumentType = ContentPage | GridContentPage | SiteRoot;
 `;
 
 exports[`buildTypes > should support disabling data type alias emission 1`] = `
-"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type Crop, type MediaPickerItem } from "./base-types";
+"import { type BaseDocumentType, type BaseElementType, type EmptyObjectType, type BaseGridBlockType, type BaseBlockType, type BaseGridBlockAreaType, type BaseBlockListType, type BaseBlockGridType, type BaseMediaType, type ContentRoute, type Crop, type MediaPickerItem } from "./base-types";
 import { type UmbracoForm } from "./form";
 
+export const Language = {
+    EnglishUnitedStates: "en-US"
+} as const;
+export type Language = (typeof Language)[keyof typeof Language];
+export type Cultures = {
+    ["en-US"]?: ContentRoute;
+};
 export interface UrlItem {
     url: string | null;
     title: string;

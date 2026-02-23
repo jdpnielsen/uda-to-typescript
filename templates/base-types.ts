@@ -74,7 +74,7 @@ export interface BaseElementType<
 export type BaseDocumentType<
 	Alias extends string = string,
 	Properties extends ObjectType = ObjectType,
-	Cultures extends { [culture: string]: ContentRoute } = EmptyObjectType,
+	Cultures extends { [culture: string]: ContentRoute } = { [culture: string]: ContentRoute },
 > = BaseElementType<Alias, Properties> & {
 	name: string;
 	createDate: string;

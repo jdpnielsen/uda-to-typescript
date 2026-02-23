@@ -22,7 +22,6 @@ export const documentHandler: HandlerConfig = {
 function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: HandlerContext): ts.Node[] {
 	const variableIdentifier = pascalCase(documentType.Alias);
 
-	// TODO: Handle cultures
 	const properties = collectProperties(documentType)
 		.map((propertyType) => {
 			const { id: dataTypeId } = parseUdi(propertyType.DataType);
@@ -93,6 +92,8 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 			: []),
 	]);
 
+	const hasCultures = documentType.Permissions.AllowVaryingByCulture && !documentType.Permissions.IsElementType;
+
 	return [
 		factory.createTypeAliasDeclaration(
 			[exportToken],
@@ -102,10 +103,16 @@ function build(documentType: DocumentType, { artifacts, dataTypeHandlers }: Hand
 				documentType.Permissions.IsElementType
 					? factory.createIdentifier('BaseElementType')
 					: factory.createIdentifier('BaseDocumentType'),
-				[
-					factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
-					documentProperties,
-				],
+				hasCultures
+					? [
+							factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
+							documentProperties,
+							factory.createTypeReferenceNode('Cultures'),
+						]
+					: [
+							factory.createLiteralTypeNode(factory.createStringLiteral(documentType.Alias)),
+							documentProperties,
+						],
 			),
 		),
 	];

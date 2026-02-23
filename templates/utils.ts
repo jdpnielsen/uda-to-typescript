@@ -172,7 +172,7 @@ export type UnexpandElementExpandables<Elm extends BaseElementType, BlackListedK
  * @param BlackListedKeys The keys that should not be unexpanded.
  */
 export type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys extends ExpandableElementKeys<Doc> | undefined> = Doc extends unknown
-	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
+	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>, Doc['cultures']>
 	: never;
 
 export type ExpandParam<Doc extends BaseDocumentType> = ExpandableElementKeys<Doc>[] | '$all' | undefined | [];
