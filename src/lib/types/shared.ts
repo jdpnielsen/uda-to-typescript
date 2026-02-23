@@ -43,7 +43,7 @@ export interface Permissions {
 }
 
 export interface HistoryCleanup {
-	preventCleanup: boolean;
+	preventCleanup?: boolean;
 	keepAllVersionsNewerThanDays?: boolean;
 	keepLatestVersionPerDayForDays?: boolean;
 }
