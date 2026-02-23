@@ -11,6 +11,7 @@ import type { ArtifactContainer } from './helpers/collect-artifacts';
 import { getPickableTypes } from './helpers/pickable-document-type';
 import { mediaTypeHandler } from './media-types';
 import type { DataType } from './types/data-type';
+import { languageHandler } from './language-types';
 
 /**
  * Shared context passed to artifact handlers while generating AST nodes.
@@ -47,6 +48,7 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		dataTypeHandlers,
 		emitDataTypeAliases = true,
 	} = context;
+
 	const dataTypes = Array
 		.from(artifacts['data-type'].values())
 		.sort((a, b) => a.Udi.localeCompare(b.Udi));
@@ -106,6 +108,11 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 					ts.factory.createImportSpecifier(
 						true,
 						undefined,
+						ts.factory.createIdentifier('ContentRoute'),
+					),
+					ts.factory.createImportSpecifier(
+						true,
+						undefined,
 						ts.factory.createIdentifier('Crop'),
 					),
 					ts.factory.createImportSpecifier(
@@ -134,6 +141,11 @@ export function buildTypes(context: HandlerContext & BuildTypesOptions): ts.Node
 		),
 		newLineAST,
 	];
+
+	const languages = languageHandler.build(context);
+	if (languages.length) {
+		statements.push(...languages);
+	}
 
 	/** Initialize datatypes */
 	const initializedHandlers = new Set<string>();

@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest';
 
-import type { BaseBlockListType, BaseBlockType, BaseDocumentType, BaseElementType, BaseMediaType, Crop, EmptyObjectType, MediaPickerItem } from '../../../templates/base-types';
+import type { BaseBlockListType, BaseBlockType, BaseDocumentType, BaseElementType, BaseMediaType, ContentRoute, Crop, EmptyObjectType, MediaPickerItem } from '../../../templates/base-types';
 import { buildContentFetcher, buildContentItemFetcher } from '../../../templates/fetcher';
 import type { FetchFunction } from '../../../templates/fetcher';
 
@@ -50,6 +50,9 @@ const fixture = {
 				},
 			}],
 		},
+	},
+	cultures: {
+		'en-US': {},
 	},
 };
 
@@ -154,5 +157,23 @@ describe('generated fetcher template', () => {
 		expectTypeOf(data.properties.content.properties).toEqualTypeOf<ContentPage['properties']>();
 		expectTypeOf(data.properties.content.properties.media[0].properties.alt).toEqualTypeOf<string>();
 		expectTypeOf(data.properties.media[0].properties.alt).toEqualTypeOf<never>();
+	});
+
+	it('should support multi language setup', async () => {
+		type ContentPage = BaseDocumentType<'contentPage', {
+			media: Image[];
+		}, {
+			['en-US']: ContentRoute;
+			['da-DK']?: ContentRoute;
+		}>;
+
+		const fetchFunction = vi.fn().mockResolvedValue(fixture);
+		const fetchContentItem = buildContentItemFetcher<ContentPage>('https://localhost:44321', fetchFunction);
+
+		const data = await fetchContentItem('');
+
+		expectTypeOf(data.cultures).toEqualTypeOf<ContentPage['cultures']>();
+		expectTypeOf(data.cultures['en-US'].path).toEqualTypeOf<string>();
+		expectTypeOf(data.cultures['da-DK']).toEqualTypeOf<ContentRoute | undefined>();
 	});
 });
