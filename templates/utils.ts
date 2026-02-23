@@ -28,15 +28,15 @@ type MaybeUnexpand<U extends BaseDocumentType | null> = U extends null
 	? null
 	: UnexpandDocumentType<NonNullable<U>>;
 
-type MaybeUnexpandDoc<Doc extends BaseDocumentType | null, BlackListedKeys extends ExpandableDocumentKeys<NonNullable<Doc>> | undefined> = Doc extends null
+type MaybeUnexpandDoc<Doc extends BaseDocumentType | null, BlackListedKeys extends ExpandableElementKeys<NonNullable<Doc>> | undefined> = Doc extends null
 	? null
 	: NonNullable<Doc> extends BaseDocumentType<string, EmptyObjectType, EmptyObjectType>
 		? BaseDocumentType<string, EmptyObjectType, EmptyObjectType>
 		: UnexpandDocumentExpandables<NonNullable<Doc>, BlackListedKeys>;
 
-export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends ExpandableDocumentKeys<NonNullable<Block['content']>> | undefined> = Block extends unknown
+export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends ExpandableElementKeys<NonNullable<Block['content']>> | undefined> = Block extends unknown
 	? BaseBlockType<
-		UnexpandDocumentExpandables<Block['content'], BlackListedKeys>,
+		UnexpandElementExpandables<Block['content'], BlackListedKeys>,
 		Block['settings'] extends BaseDocumentType
 			? UnexpandDocumentExpandables<Block['settings'], BlackListedKeys>
 			: null
@@ -45,27 +45,27 @@ export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends E
 
 export type UnexpandBlockList<
 	BlockList extends BaseBlockListType,
-	BlackListedKeys extends ExpandableDocumentKeys<BlockList['items'][number]['content']> | undefined,
+	BlackListedKeys extends ExpandableElementKeys<BlockList['items'][number]['content']> | undefined,
 > = BaseBlockListType<
 	UnexpandBlock<BlockList['items'][number], BlackListedKeys>
 >;
 
 export type UnexpandBlockGrid<
 	BlockGrid extends BaseBlockGridType,
-	BlackListedContentKeys extends ExpandableDocumentKeys<BlockGrid['items'][number]['content']> | undefined,
-	BlackListedSettingsKeys extends ExpandableDocumentKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined,
+	BlackListedContentKeys extends ExpandableElementKeys<BlockGrid['items'][number]['content']> | undefined,
+	BlackListedSettingsKeys extends ExpandableElementKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined,
 > = BaseBlockGridType<
 	BaseGridBlockType<
-		UnexpandDocumentExpandables<BlockGrid['items'][number]['content'], BlackListedContentKeys>,
+		UnexpandElementExpandables<BlockGrid['items'][number]['content'], BlackListedContentKeys>,
 		BlockGrid['items'][number]['settings'] extends null
 			? null
-			: UnexpandDocumentExpandables<NonNullable<BlockGrid['items'][number]['settings']>, BlackListedSettingsKeys>
+			: UnexpandElementExpandables<NonNullable<BlockGrid['items'][number]['settings']>, BlackListedSettingsKeys>
 	>
 >;
 
 /**
- * Gets all expandable properties of a document type.
- * @param Doc The Document to get the expandable keys from.
+ * Gets all expandable properties of an element type.
+ * @param Elm The element to get the expandable keys from.
  * @returns The expandable keys.
  * @example
  * ```ts
@@ -75,12 +75,12 @@ export type UnexpandBlockGrid<
  * 	baz: string;
  * }>;
  *
- * type ExpandableKeys = ExpandableDocumentKeys<Page>;
+ * type ExpandableKeys = ExpandableElementKeys<Page>;
  * // type ExpandableKeys = 'foo' | 'bar';
  * ```
  */
-export type ExpandableDocumentKeys<Doc extends BaseElementType> = Doc extends unknown
-	? ExpandablePropertyKeys<Doc['properties']>
+export type ExpandableElementKeys<Elm extends BaseElementType> = Elm extends unknown
+	? ExpandablePropertyKeys<Elm['properties']>
 	: never;
 
 /**
@@ -115,13 +115,13 @@ export type ExpandablePropertyKeys<Properties extends ObjectType> = Properties e
 type UnexpandNestedProperty<Prop> = Prop extends BaseDocumentType | null
 	// By setting the blacklist to undefined, we can limit the expand to the top level properties.
 	// Note that we are using UnexpandDocumentExpandables here, instead of UnexpandDocumentType.
-	? MaybeUnexpandDoc<Prop, ExpandableDocumentKeys<NonNullable<Prop>>>
+	? MaybeUnexpandDoc<Prop, ExpandableElementKeys<NonNullable<Prop>>>
 	: Prop extends BaseDocumentType[]
-		? UnexpandDocumentExpandables<Prop[number], ExpandableDocumentKeys<Prop[number]>>[]
+		? UnexpandDocumentExpandables<Prop[number], ExpandableElementKeys<Prop[number]>>[]
 		: Prop extends BaseBlockGridType
-			? UnexpandBlockGrid<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>, ExpandableDocumentKeys<NonNullable<Prop['items'][number]['settings']>>>
+			? UnexpandBlockGrid<Prop, ExpandableElementKeys<Prop['items'][number]['content']>, ExpandableElementKeys<NonNullable<Prop['items'][number]['settings']>>>
 			: Prop extends BaseBlockListType
-				? UnexpandBlockList<Prop, ExpandableDocumentKeys<Prop['items'][number]['content']>>
+				? UnexpandBlockList<Prop, ExpandableElementKeys<Prop['items'][number]['content']>>
 				: Prop;
 
 export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
@@ -158,20 +158,29 @@ export type UnexpandPropertyExpandables<Doc extends ObjectType, BlackListedKeys 
 };
 
 /**
+ * Unexpands all expandable properties of an element type.
+ * @param Elm The element type to unexpand.
+ * @param BlackListedKeys The keys that should not be unexpanded.
+ */
+export type UnexpandElementExpandables<Elm extends BaseElementType, BlackListedKeys extends ExpandableElementKeys<Elm> | undefined> = Elm extends unknown
+	? BaseElementType<Elm['contentType'], UnexpandPropertyExpandables<Elm['properties'], BlackListedKeys>>
+	: never;
+
+/**
  * Unexpands all expandable properties of a document type.
  * @param Doc The document type to unexpand.
  * @param BlackListedKeys The keys that should not be unexpanded.
  */
-export type UnexpandDocumentExpandables<Doc extends BaseElementType, BlackListedKeys extends ExpandableDocumentKeys<Doc> | undefined> = Doc extends unknown
-	? BaseElementType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
+export type UnexpandDocumentExpandables<Doc extends BaseDocumentType, BlackListedKeys extends ExpandableElementKeys<Doc> | undefined> = Doc extends unknown
+	? BaseDocumentType<Doc['contentType'], UnexpandPropertyExpandables<Doc['properties'], BlackListedKeys>>
 	: never;
 
-export type ExpandParam<Doc extends BaseDocumentType> = ExpandableDocumentKeys<Doc>[] | '$all' | undefined | [];
+export type ExpandParam<Doc extends BaseDocumentType> = ExpandableElementKeys<Doc>[] | '$all' | undefined | [];
 export type ExpandResult<Doc extends BaseDocumentType, Param extends ExpandParam<Doc>> = Param extends [] | undefined
 	? UnexpandDocumentExpandables<Doc, undefined>
 	: Param extends '$all'
-		? UnexpandDocumentExpandables<Doc, ExpandableDocumentKeys<Doc>>
-		: Param extends ExpandableDocumentKeys<Doc>[]
+		? UnexpandDocumentExpandables<Doc, ExpandableElementKeys<Doc>>
+		: Param extends ExpandableElementKeys<Doc>[]
 			? Param[number] extends never
 				? Doc
 				: UnexpandDocumentExpandables<Doc, Param[number]>
@@ -180,7 +189,7 @@ export type ExpandResult<Doc extends BaseDocumentType, Param extends ExpandParam
 type DocFields<T extends BaseElementType> = keyof T['properties'];
 
 export type Fields<T extends BaseElementType> = ['$all'] | (DocFields<T> | {
-	[K in Exclude<ExpandableDocumentKeys<T>, undefined>]?: NonNullable<T['properties'][K]> extends BaseElementType[]
+	[K in Exclude<ExpandableElementKeys<T>, undefined>]?: NonNullable<T['properties'][K]> extends BaseElementType[]
 		? Fields<NonNullable<T['properties'][K]>[number]>
 		: NonNullable<T['properties'][K]> extends BaseElementType
 			? Fields<NonNullable<T['properties'][K]>>

@@ -1,14 +1,57 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it, vi } from 'vitest';
 
-import type { BaseBlockListType, BaseDocumentType, BaseMediaType } from '../../../templates/base-types';
+import type { BaseBlockListType, BaseBlockType, BaseDocumentType, BaseElementType, BaseMediaType, Crop, EmptyObjectType, MediaPickerItem } from '../../../templates/base-types';
 import { buildContentFetcher, buildContentItemFetcher } from '../../../templates/fetcher';
 import type { FetchFunction } from '../../../templates/fetcher';
 
-type TemplateTestDocument = BaseDocumentType<'siteRoot', {
-	blocks: BaseBlockListType;
-	meta_image: BaseMediaType[];
-	media: BaseMediaType[];
+type Image = MediaPickerItem<BaseMediaType<'Image', { alt: string }>, [
+	Crop<'1:1', 500, 500>,
+	Crop<'2:1', 1000, 500>,
+]>;
+
+type ContentPage = BaseDocumentType<'contentPage', {
+	media: Image[];
 }>;
+
+type TextBlock = BaseElementType<'textBlock', {
+	headline: string;
+	contentRef: ContentPage;
+}>;
+
+type TemplateTestDocument = BaseDocumentType<'siteRoot', {
+	blocks: BaseBlockListType<BaseBlockType<TextBlock, null>>;
+	content: ContentPage;
+	meta_image: Image[];
+	media: MediaPickerItem<Image>[];
+}>;
+
+// Fixtures does not actually represent api output
+// it's just used to allow property access in our type tests.
+const fixture = {
+	properties: {
+		content: {
+			properties: {
+				media: [{
+					properties: {},
+				}],
+			},
+		},
+		media: [{
+			properties: {},
+		}],
+		blocks: {
+			items: [{
+				content: {
+					properties: {
+						contentRef: {
+							properties: {},
+						},
+					},
+				},
+			}],
+		},
+	},
+};
 
 describe('generated fetcher template', () => {
 	it('should use Delivery API v2 routes and expand syntax', async () => {
@@ -49,5 +92,67 @@ describe('generated fetcher template', () => {
 			'/umbraco/delivery/api/v2/content/item',
 			'/umbraco/delivery/api/v2/content/item',
 		]);
+	});
+
+	it('should unexpand properties when no expand parameter is provided', async () => {
+		const fetchFunction = vi.fn().mockResolvedValue(fixture);
+		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction);
+
+		const data = await fetchContentItem('', {});
+
+		expectTypeOf(data.properties.content.properties).toEqualTypeOf<EmptyObjectType>();
+		expectTypeOf(data.properties.media[0].properties.alt).toEqualTypeOf<never>();
+		expectTypeOf(data.properties.blocks.items[0].content.properties.contentRef.properties).toEqualTypeOf<EmptyObjectType>();
+	});
+
+	it('should expand all properties when $all expand parameter is provided', async () => {
+		const fetchFunction = vi.fn().mockResolvedValue(fixture);
+		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction);
+
+		const data = await fetchContentItem('', {
+			expand: '$all',
+		});
+
+		expectTypeOf(data.properties.content.properties).toEqualTypeOf<ContentPage['properties']>();
+		expectTypeOf(data.properties.media[0].properties.alt).toEqualTypeOf<string>();
+		expectTypeOf(data.properties.blocks.items[0].content.properties.contentRef.properties).toEqualTypeOf<ContentPage['properties']>();
+	});
+
+	it('should unexpand all but blocks property when only blocks is expanded', async () => {
+		const fetchFunction = vi.fn().mockResolvedValue(fixture);
+		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction);
+
+		const data = await fetchContentItem('', {
+			expand: ['blocks'],
+		});
+
+		expectTypeOf(data.properties.content.properties).toEqualTypeOf<EmptyObjectType>();
+		expectTypeOf(data.properties.media[0].properties.alt).toEqualTypeOf<never>();
+		expectTypeOf(data.properties.blocks.items[0].content.properties.contentRef.properties).toEqualTypeOf<ContentPage['properties']>();
+	});
+
+	it('should unexpand all but content property when only media is expanded', async () => {
+		const fetchFunction = vi.fn().mockResolvedValue(fixture);
+		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction);
+
+		const data = await fetchContentItem('', {
+			expand: ['media'],
+		});
+
+		expectTypeOf(data.properties.content.properties).toEqualTypeOf<EmptyObjectType>();
+		expectTypeOf(data.properties.media[0].properties.alt).toEqualTypeOf<string>();
+	});
+
+	it('should unexpand all but media properties when only content is expanded', async () => {
+		const fetchFunction = vi.fn().mockResolvedValue(fixture);
+		const fetchContentItem = buildContentItemFetcher<TemplateTestDocument>('https://localhost:44321', fetchFunction);
+
+		const data = await fetchContentItem('', {
+			expand: ['content'],
+		});
+
+		expectTypeOf(data.properties.content.properties).toEqualTypeOf<ContentPage['properties']>();
+		expectTypeOf(data.properties.content.properties.media[0].properties.alt).toEqualTypeOf<string>();
+		expectTypeOf(data.properties.media[0].properties.alt).toEqualTypeOf<never>();
 	});
 });
