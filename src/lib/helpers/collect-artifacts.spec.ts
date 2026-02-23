@@ -7,16 +7,24 @@ describe('collectArtifacts', () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/*.uda');
 
 		expect(output['data-type'].size).toBe(49);
+		expect(output['data-type-container'].size).toBe(5);
 		expect(output['document-type'].size).toBe(15);
+		expect(output['document-type-container'].size).toBe(6);
 		expect(output['media-type'].size).toBe(8);
+		expect(output.language.size).toBe(1);
+		expect(output.template.size).toBe(1);
 	});
 
 	it('should handle a file path', async () => {
 		const output = await collectArtifacts('./src/__tests__/__fixtures__/current/data-type__f38f0ac71d27439c9f3f089cd8825a53.uda');
 
 		expect(output['data-type'].size).toBe(1);
+		expect(output['data-type-container'].size).toBe(0);
 		expect(output['document-type'].size).toBe(0);
+		expect(output['document-type-container'].size).toBe(0);
 		expect(output['media-type'].size).toBe(0);
+		expect(output.language.size).toBe(0);
+		expect(output.template.size).toBe(0);
 	});
 
 	it('should reject unsupported artifact versions', async () => {

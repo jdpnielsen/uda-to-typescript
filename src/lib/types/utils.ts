@@ -5,6 +5,8 @@ export const ARTIFACTS = [
 	'document-type',
 	'media-type',
 	'template',
+	'language',
+	'data-type-container',
 	'document-type-container',
 ] as const;
 export type Artifact = typeof ARTIFACTS[number];
