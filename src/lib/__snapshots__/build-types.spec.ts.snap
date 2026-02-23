@@ -88,7 +88,6 @@ export type MetaDescriptionTextarea = string;
 export type TrueFalse = boolean;
 export type LabelBigint = number;
 export type LabelTime = string;
-export type ListViewMembers = unknown;
 export type ImageMediaPicker = MediaPickerItem<Image>[];
 export type MultiUrlPicker = UrlItem[];
 export type Tags = string[];
@@ -107,6 +106,7 @@ export type LabelString = string;
 export type DropdownMultiple = string[];
 export type CheckboxList = string[];
 export type ContentPicker = PickableDocumentType | null;
+export type ListViewMembers = unknown;
 
 export type ImageWithProps = BaseMediaType<"ImageWithProps", {
     altText?: string;
@@ -345,7 +345,6 @@ export type MetaDescriptionTextarea = string;
 export type TrueFalse = boolean;
 export type LabelBigint = number;
 export type LabelTime = string;
-export type ListViewMembers = unknown;
 export type ImageMediaPicker = MediaPickerItem<Image>[];
 export type MultiUrlPicker = UrlItem[];
 export type Tags = string[];
@@ -364,6 +363,7 @@ export type LabelString = string;
 export type DropdownMultiple = string[];
 export type CheckboxList = string[];
 export type ContentPicker = PickableDocumentType | null;
+export type ListViewMembers = unknown;
 
 export type ImageWithProps = BaseMediaType<"ImageWithProps", {
     altText?: string;
