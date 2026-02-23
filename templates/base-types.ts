@@ -108,7 +108,7 @@ export interface BaseGridBlockType<
 	areas: Areas;
 }
 
-export interface BaseGridBlockAreaType<Alias extends string = string, Block extends BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, never[]> = BaseGridBlockType<BaseDocumentType, BaseDocumentType | null, never[]>> {
+export interface BaseGridBlockAreaType<Alias extends string = string, Block extends BaseGridBlockType<BaseElementType, BaseElementType | null, never[]> = BaseGridBlockType<BaseElementType, BaseElementType | null, never[]>> {
 	alias: Alias;
 	rowSpan: number;
 	columnSpan: number;

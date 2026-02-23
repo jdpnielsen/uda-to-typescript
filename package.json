@@ -58,7 +58,7 @@
 		"start": "tsx ./src/cli.ts",
 		"prepare": "husky",
 		"semantic-release": "semantic-release",
-		"test": "vitest",
+		"test": "vitest --typecheck",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
