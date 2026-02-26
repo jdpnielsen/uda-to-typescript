@@ -37,8 +37,8 @@ type MaybeUnexpandDoc<Doc extends BaseDocumentType | null, BlackListedKeys exten
 export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends ExpandableElementKeys<NonNullable<Block['content']>> | undefined> = Block extends unknown
 	? BaseBlockType<
 		UnexpandElementExpandables<Block['content'], BlackListedKeys>,
-		Block['settings'] extends BaseDocumentType
-			? UnexpandDocumentExpandables<Block['settings'], BlackListedKeys>
+		Block['settings'] extends BaseElementType
+			? UnexpandElementExpandables<Block['settings'], BlackListedKeys>
 			: null
 	>
 	: never;

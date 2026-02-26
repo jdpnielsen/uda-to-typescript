@@ -85,7 +85,9 @@ export type BaseDocumentType<
 
 export interface BaseBlockType<Content extends BaseElementType = BaseElementType, Setting extends BaseElementType | null = BaseElementType | null> {
 	content: Content;
-	settings: Setting;
+	settings: Setting extends unknown
+		? Setting
+		: never;
 }
 
 export interface BaseBlockListType<Block extends BaseBlockType = BaseBlockType> {
