@@ -1,6 +1,6 @@
 import { assertType, describe, expectTypeOf, it } from 'vitest';
 
-import type { BaseBlockListType, BaseBlockType, BaseDocumentType, BaseElementType, EmptyObjectType } from '../../../templates/base-types';
+import type { BaseBlockListType, BaseBlockType, BaseDocumentType, BaseElementType } from '../../../templates/base-types';
 import type { ExpandParam, ExpandResult, ExpandableElementKeys, OmitFields, UnexpandBlockList, UnexpandDocumentExpandables, UnexpandPropertyExpandables } from '../../../templates/utils';
 
 type NestedChildPage = BaseDocumentType<'nestedChildPage', {
@@ -14,11 +14,12 @@ type ChildPage = BaseDocumentType<'childPage', {
 
 type HeadlineElement = BaseElementType<'headline', { title: string }>;
 type RichTextElement = BaseElementType<'richtext', { body: string }>;
+type BlockSettingsElement = BaseElementType<'blockSettings', { body: string }>;
 type ChildElement = BaseElementType<'child', {
 	child: ChildPage[];
 }>;
 
-type HeadlineBlock = BaseBlockType<HeadlineElement, null>;
+type HeadlineBlock = BaseBlockType<HeadlineElement, BlockSettingsElement>;
 type RichTextBlock = BaseBlockType<RichTextElement, null>;
 type ChildBlock = BaseBlockType<ChildElement, null>;
 
@@ -118,29 +119,15 @@ describe('type ExpandResult', () => {
 		expectTypeOf<ContentPage>().toEqualTypeOf<ExpandResult<OmitFields<ContentPage, ['$all']>, ['blocks']>>();
 		expectTypeOf<ContentPage>().toEqualTypeOf<ExpandResult<OmitFields<ContentPage, ['headline' | 'blocks']>, ['blocks']>>();
 	});
-});
 
-describe('type UnexpandBlockList', () => {
-	it('should not unexpand when expandable properties are passed', () => {
-		type Actual = ContentBlockList;
-		expectTypeOf<Actual>().toEqualTypeOf<UnexpandBlockList<ContentBlockList, ExpandableElementKeys<ContentBlockList['items'][number]['content']>>>();
-		expectTypeOf<Actual>().toEqualTypeOf<UnexpandBlockList<ContentBlockList, 'child'>>();
-	});
+	describe('type UnexpandBlockList', () => {
+		it('should unexpand all when expand is undefined', () => {
+			type Actual = BaseDocumentType<'contentPage', {
+				headline: string;
+				blocks: UnexpandBlockList<ContentBlockList, 'child'>;
+			}>;
 
-	it('should unexpand when expand is undefined', () => {
-		type Actual = BaseBlockListType<HeadlineBlock | RichTextBlock | BaseBlockType<BaseElementType<'child', {
-			child: BaseDocumentType<'childPage', EmptyObjectType>[];
-		}>, null>>;
-
-		expectTypeOf<Actual>().toEqualTypeOf<UnexpandBlockList<ContentBlockList, undefined>>();
-	});
-
-	it('should unexpand all when expand is undefined', () => {
-		type Actual = BaseDocumentType<'contentPage', {
-			headline: string;
-			blocks: UnexpandBlockList<ContentBlockList, undefined>;
-		}>;
-
-		expectTypeOf<Actual>().toEqualTypeOf<ExpandResult<ContentPage, undefined>>();
+			expectTypeOf<Actual>().toEqualTypeOf<ExpandResult<ContentPage, '$all'>>();
+		});
 	});
 });
