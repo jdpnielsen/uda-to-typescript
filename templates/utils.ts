@@ -34,7 +34,7 @@ type MaybeUnexpandDoc<Doc extends BaseDocumentType | null, BlackListedKeys exten
 		? BaseDocumentType<string, EmptyObjectType, EmptyObjectType>
 		: UnexpandDocumentExpandables<NonNullable<Doc>, BlackListedKeys>;
 
-export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends ExpandableElementKeys<NonNullable<Block['content']>> | undefined> = Block extends unknown
+export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends ExpandableBlockKeys<NonNullable<Block>> | undefined> = Block extends unknown
 	? BaseBlockType<
 		UnexpandElementExpandables<Block['content'], BlackListedKeys>,
 		Block['settings'] extends BaseElementType
@@ -45,21 +45,21 @@ export type UnexpandBlock<Block extends BaseBlockType, BlackListedKeys extends E
 
 export type UnexpandBlockList<
 	BlockList extends BaseBlockListType,
-	BlackListedKeys extends ExpandableElementKeys<BlockList['items'][number]['content']> | undefined,
+	BlackListedKeys extends ExpandableBlockKeys<BlockList['items'][number]> | undefined,
 > = BaseBlockListType<
 	UnexpandBlock<BlockList['items'][number], BlackListedKeys>
 >;
 
 export type UnexpandBlockGrid<
 	BlockGrid extends BaseBlockGridType,
-	BlackListedContentKeys extends ExpandableElementKeys<BlockGrid['items'][number]['content']> | undefined,
-	BlackListedSettingsKeys extends ExpandableElementKeys<NonNullable<BlockGrid['items'][number]['settings']>> | undefined,
+	BlackListedKeys extends ExpandableBlockKeys<BlockGrid['items'][number]> | undefined,
 > = BaseBlockGridType<
 	BaseGridBlockType<
-		UnexpandElementExpandables<BlockGrid['items'][number]['content'], BlackListedContentKeys>,
+		UnexpandElementExpandables<BlockGrid['items'][number]['content'], BlackListedKeys>,
 		BlockGrid['items'][number]['settings'] extends null
 			? null
-			: UnexpandElementExpandables<NonNullable<BlockGrid['items'][number]['settings']>, BlackListedSettingsKeys>
+			: UnexpandElementExpandables<NonNullable<BlockGrid['items'][number]['settings']>, BlackListedKeys>,
+		BlockGrid['items'][number]['areas']
 	>
 >;
 
@@ -81,6 +81,17 @@ export type UnexpandBlockGrid<
  */
 export type ExpandableElementKeys<Elm extends BaseElementType> = Elm extends unknown
 	? ExpandablePropertyKeys<Elm['properties']>
+	: never;
+
+/**
+ * Gets all expandable properties of a block type.
+ * Note that this is a single list for a Block content & settings even though they are structurally divided.
+ * See below [Umbraco property expansion docs](https://docs.umbraco.com/umbraco-cms/reference/content-delivery-api/property-expansion-and-limiting#working-with-block-based-editors) for more.
+ */
+export type ExpandableBlockKeys<Block extends BaseBlockType> = Block extends unknown
+	? Block['settings'] extends BaseElementType
+		? ExpandableElementKeys<Block['content']> | ExpandableElementKeys<Block['settings']>
+		: ExpandableElementKeys<Block['content']>
 	: never;
 
 /**
@@ -119,9 +130,9 @@ type UnexpandNestedProperty<Prop> = Prop extends BaseDocumentType | null
 	: Prop extends BaseDocumentType[]
 		? UnexpandDocumentExpandables<Prop[number], ExpandableElementKeys<Prop[number]>>[]
 		: Prop extends BaseBlockGridType
-			? UnexpandBlockGrid<Prop, ExpandableElementKeys<Prop['items'][number]['content']>, ExpandableElementKeys<NonNullable<Prop['items'][number]['settings']>>>
+			? UnexpandBlockGrid<Prop, ExpandableBlockKeys<Prop['items'][number]>>
 			: Prop extends BaseBlockListType
-				? UnexpandBlockList<Prop, ExpandableElementKeys<Prop['items'][number]['content']>>
+				? UnexpandBlockList<Prop, ExpandableBlockKeys<Prop['items'][number]>>
 				: Prop;
 
 export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
@@ -129,7 +140,7 @@ export type UnexpandProperty<Prop> = Prop extends BaseDocumentType | null
 	: Prop extends BaseDocumentType[]
 		? UnexpandDocumentType<Prop[number]>[]
 		: Prop extends BaseBlockGridType
-			? UnexpandBlockGrid<Prop, undefined, undefined>
+			? UnexpandBlockGrid<Prop, undefined>
 			: Prop extends BaseBlockListType
 				? UnexpandBlockList<Prop, undefined>
 				: Prop extends BaseBlockType
